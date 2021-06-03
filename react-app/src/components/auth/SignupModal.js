@@ -20,7 +20,7 @@ function SignupModal() {
         <h3 className='navbar__modal-button' onClick={() => setShowModal(true)}>Create Account</h3>
         {showModal && (
         <Modal onClose={() => setShowModal(false)}>
-            <SignupForm />
+            <SignupForm setShowModal={setShowModal}/>
         </Modal>
         )}
     </>
