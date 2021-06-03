@@ -1,61 +1,84 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { login } from "../../services/auth";
+import { login } from "../../store/session";
 
-const LoginForm = ({ authenticated, setAuthenticated }) => {
-  const [errors, setErrors] = useState([]);
-  const [email, setEmail] = useState("");
+const LoginForm = ({setShowModal}) => {
+  const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState([]);
+
+  const user = useSelector(state => state.session.user);
+  const dispatch = useDispatch();
 
   const onLogin = async (e) => {
     e.preventDefault();
-    const user = await login(email, password);
-    if (!user.errors) {
-      setAuthenticated(true);
-    } else {
-      setErrors(user.errors);
+    const data = await dispatch(login(credential, password));
+    if (data.errors) {
+      setErrors(data.errors);
     }
   };
 
-  const updateEmail = (e) => {
-    setEmail(e.target.value);
+  const demoLogin = async (e) => {
+    e.preventDefault();
+    const data = await dispatch(login('Demo', 'password'));
+    if (data.errors) {
+      setErrors(data.errors);
+    }
+  };
+
+  const updateCredential = (e) => {
+    setCredential(e.target.value);
   };
 
   const updatePassword = (e) => {
     setPassword(e.target.value);
   };
 
-  if (authenticated) {
+  if (user) {
     return <Redirect to="/" />;
   }
 
   return (
-    <form onSubmit={onLogin}>
-      <div>
+    <form onSubmit={onLogin} className='auth__form-container'>
+      <div className='auth__form-header'>
+        <div className='auth__form-header-image'>
+          <img src='/images/Log-On.png'></img>
+        </div>
+      </div>
+      <div className='auth__form-errors'>
         {errors.map((error) => (
           <div>{error}</div>
         ))}
       </div>
-      <div>
-        <label htmlFor="email">Email</label>
+      <div className='auth__form-divs'>
+        <label className='auth__form-labels' htmlFor="credential">Username/Email</label>
         <input
-          name="email"
+          name="credential"
           type="text"
-          placeholder="Email"
-          value={email}
-          onChange={updateEmail}
-        />
+          value={credential}
+          onChange={updateCredential}
+          placeholder="Username/Email"
+          className="auth__form-input"
+          required
+          />
       </div>
-      <div>
-        <label htmlFor="password">Password</label>
+      <div className='auth__form-divs'>
+        <label className='auth__form-labels' htmlFor="password">Password</label>
         <input
           name="password"
           type="password"
-          placeholder="Password"
           value={password}
           onChange={updatePassword}
+          placeholder="Password"
+          className="auth__form-input"
+          required
         />
-        <button type="submit">Login</button>
+      </div>
+      <button type="submit" className='auth__form-button'>Login</button>
+      <button type="submit" className='auth__form-button' onClick={demoLogin}>Demo</button>
+      <div className='auth__form-cancel' onClick={()=>setShowModal(false)}>
+        <i className="fas fa-times"></i>
       </div>
     </form>
   );

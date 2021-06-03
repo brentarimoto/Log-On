@@ -1,13 +1,14 @@
 import React from "react";
-import { logout } from "../../services/auth";
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/session";
 
-const LogoutButton = ({setAuthenticated}) => {
+const LogoutButton = () => {
+  const dispatch = useDispatch();
   const onLogout = async (e) => {
-    await logout();
-    setAuthenticated(false);
+    dispatch(logout());
   };
 
-  return <button onClick={onLogout}>Logout</button>;
+  return <h3 className='navbar__modal-button' onClick={onLogout}>Logout</h3>;
 };
 
 export default LogoutButton;
