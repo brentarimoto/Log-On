@@ -6,10 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 /*************************** COMPONENT IMPORTS ***************************/
 import NavBar from "./components/Navbar/NavBar";
+import Splash from "./components/Splash/Splash";
+import Home from "./components/Home/Home";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import UsersList from "./components/UsersList";
-import User from "./components/User";
+
 import { authenticate } from "./store/session";
+import background from "./images/background_image.jpg";
 
 
 /*************************** COMPONENTS ***************************/
@@ -30,26 +32,27 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <NavBar />
-      <Switch>
-        <Route path="/" exact={true}>
-          {user ?
-            <p>Home</p> :
-            <p>Splash</p>
-          }
-        </Route>
-        <ProtectedRoute path="/users" exact={true} >
-          <UsersList/>
-        </ProtectedRoute>
-        <ProtectedRoute path="/users/:userId" exact={true} >
-          <User />
-        </ProtectedRoute>
-        <ProtectedRoute path="/" exact={true} >
-          <h1>My Home Page</h1>
-        </ProtectedRoute>
-      </Switch>
-    </BrowserRouter>
+    <div className='main' style={{backgroundImage: `url(${background})`}}>
+      <BrowserRouter>
+        <NavBar />
+        <div className='content'>
+          <Switch>
+            <Route path="/" exact={true}>
+              {user ?
+                <Home />:
+                <Splash />
+              }
+            </Route>
+            <ProtectedRoute path="/friends" exact={true} >
+              Friends
+            </ProtectedRoute>
+            <ProtectedRoute path="messages" exact={true} >
+              Messages
+            </ProtectedRoute>
+          </Switch>
+        </div>
+      </BrowserRouter>
+    </div>
   );
 }
 

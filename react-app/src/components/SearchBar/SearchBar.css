@@ -8,6 +8,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+    animation: 1s ease 0s 1 fadeIn;
 }
 
 .navbar__search-input{

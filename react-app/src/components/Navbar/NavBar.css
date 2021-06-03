@@ -5,6 +5,10 @@
     grid-template-rows: 64px;
     width: 100%;
     box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 /* SEARCH */
@@ -32,6 +36,7 @@
     height: 100%;
     width: 150px;
     position: relative;
+    animation: 1s ease 0s 1 fadeIn;
 }
 
 .navbar__logo{
@@ -48,6 +53,7 @@
     align-items: center;
     width: 100%;
 	margin-right: 15px;
+    animation: 1s ease 0s 1 fadeIn;
     /* border: 1px solid rgba(0,0,0,.15);
     border-radius: 12px;
     background-color: white; */

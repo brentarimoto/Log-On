@@ -1,8 +1,16 @@
+/*************************** REACT IMPORTS ***************************/
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import { Redirect } from 'react-router-dom';
-import { signUp } from '../../store/session';
 
+
+/*************************** COMPONENT IMPORTS ***************************/
+import { signUp } from '../../store/session';
+import { useSearch } from "../../context/Search";
+import logo from '../../images/Log-On.png'
+
+
+/*************************** COMPONENTS ***************************/
 const SignUpForm = ({setShowModal}) => {
 
   const [username, setUsername] = useState("");
@@ -16,12 +24,14 @@ const SignUpForm = ({setShowModal}) => {
 
 
   const user = useSelector(state => state.session.user);
+  const {setModalOpen} = useSearch()
   const dispatch = useDispatch();
 
   const onSignUp = async (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
 			await dispatch(signUp({username, email, firstname, lastname, photo, password}))
+      setModalOpen(false)
     } else {
       setErrors(['Passwords Do Not Match'])
     }
@@ -56,15 +66,16 @@ const SignUpForm = ({setShowModal}) => {
     setConfirmPassword(e.target.value);
   };
 
-  if (user) {
-    return <Redirect to="/" />;
+  const handleCancel = ()=>{
+    setShowModal(false)
+    setModalOpen(false)
   }
 
   return (
     <form onSubmit={onSignUp} className='auth__form-container'>
       <div className='auth__form-header'>
         <div className='auth__form-header-image'>
-          <img alt='logo' src='/images/Log-On.png'></img>
+          <img alt='logo' src={logo}></img>
         </div>
         <h2 className='auth__form-header-text'>
           Signup and Play!
@@ -165,7 +176,7 @@ const SignUpForm = ({setShowModal}) => {
         ></input>
       </div>
       <button type="submit" className='auth__form-button'>Sign Up</button>
-      <div className='auth__form-cancel' onClick={()=>setShowModal(false)}>
+      <div className='auth__form-cancel' onClick={handleCancel}>
         <i className="fas fa-times"></i>
       </div>
     </form>

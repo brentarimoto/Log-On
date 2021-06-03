@@ -4,35 +4,23 @@ import React, { useState } from 'react';
 
 /*************************** OTHER FILE IMPORTS ***************************/
 import { Modal } from '../../context/Modal';
-import { useSearch } from '../../context/Search';
-import LoginForm from './LoginForm';
+import ProfilePhoto from '../ProfilePhoto/ProfilePhoto';
+import User from './User';
 
 /*************************** COMPONENTS ***************************/
-import './LoginSignupModal.css'
+import './UserModal.css'
 
 /*************************** COMPONENTS ***************************/
 
-function LoginModal({classname}) {
+function LoginModal({friend}) {
   const [showModal, setShowModal] = useState(false);
-
-  const {setModalOpen} = useSearch()
-
-  const handleModalClick=()=>{
-    setShowModal(true)
-    setModalOpen(true)
-  }
-
-  const handleModalClose=()=>{
-    setShowModal(false)
-    setModalOpen(false)
-  }
 
   return (
     <>
-        <h3 className={classname} onClick={handleModalClick}>Login</h3>
+        <ProfilePhoto profileUser={friend} onClick={()=>setShowModal(true)}/>
         {showModal && (
-        <Modal onClose={handleModalClose}>
-            <LoginForm setShowModal={setShowModal} setModalOpen={setModalOpen}/>
+        <Modal onClose={()=>setShowModal(false)}>
+            <User setShowModal={setShowModal} profileUser={friend}/>
         </Modal>
         )}
     </>

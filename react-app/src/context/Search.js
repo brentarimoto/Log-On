@@ -8,10 +8,11 @@ export const SearchProvider = (props) => {
 
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <SearchContext.Provider
-      value={{ search, setSearch, searchResults, setSearchResults }}
+      value={{ search, setSearch, searchResults, setSearchResults, modalOpen, setModalOpen }}
     >
       {props.children}
     </SearchContext.Provider>

@@ -7,6 +7,8 @@
     text-align: center;
     padding: 0 10px;
     font-size: 100%;
+    color: var(--navbarButtonColor);
+    animation: 1s ease 0s 1 fadeIn;
 }
 
 .navbar__modal-button:hover{
@@ -55,17 +57,7 @@
     display: grid;
     grid-template-columns: auto auto;
     width: 100%;
-    grid-row-gap: 10px;
-}
-
-.auth__form-firstname{
-    padding-right: 5px;
-    box-sizing: border-box;
-}
-
-.auth__form-lastname{
-    padding-left: 5px;
-    box-sizing: border-box;
+    column-gap: 10px;
 }
 
 .auth__form-divs{
@@ -94,6 +86,7 @@
     grid-template-columns: 1fr 115px;
     align-items: center;
     width: 100%;
+    column-gap: 10px;
 }
 
 .auth__form-profpic-text{

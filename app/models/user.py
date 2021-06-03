@@ -74,7 +74,6 @@ class User(db.Model, UserMixin):
       'friends_accepted' : [user.to_dict_basic() for user in self.friends_accepted],
       'messages_sent' : [message.to_dict_basic() for message in self.messages_sent],
       'stats' : [game.to_dict() for game in self.stats],
-      'game_patterns' : [pattern.to_dict() for pattern in self.game_patterns],
     }
 
   def to_dict_basic(self):

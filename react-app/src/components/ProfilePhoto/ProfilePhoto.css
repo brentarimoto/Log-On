@@ -1,0 +1,14 @@
+.profile-photo{
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    font-size: inherit;
+    background-color: var(--defaultProfPicColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-photo-pic{
+
+}

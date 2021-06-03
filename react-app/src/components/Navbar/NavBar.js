@@ -9,6 +9,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import LogoutButton from '../auth/LogoutButton';
 import LoginModal from '../auth/LoginModal'
 import SignupModal from '../auth/SignupModal'
+import logo from '../../images/Log-On-Icon.png'
 
 
 /*************************** CSS ***************************/
@@ -24,9 +25,9 @@ const NavBar = () => {
         {user && <SearchBar />}
       </div>
       <div className='navbar__logo-div'>
-        <NavLink to="/" exact={true} activeClassName="active" className='navbar__logo-link'>
-            <img className='navbar__logo'alt='logo' src='/images/Log-On.png'></img>
-        </NavLink>
+        {user && <NavLink to="/" exact={true} activeClassName="active" className='navbar__logo-link'>
+            <img className='navbar__logo'alt='logo' src={logo}></img>
+        </NavLink>}
       </div>
       <div className='navbar__links-div'>
         {user ?
@@ -34,8 +35,8 @@ const NavBar = () => {
           <LogoutButton />
         </> :
         <>
-          <LoginModal />
-          <SignupModal />
+          <LoginModal classname='navbar__modal-button'/>
+          <SignupModal classname='navbar__modal-button'/>
         </>}
       </div>
     </nav>
