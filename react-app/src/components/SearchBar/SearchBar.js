@@ -1,5 +1,5 @@
 /*************************** REACT IMPORTS ***************************/
-import React, { useState } from 'react';
+import React from 'react';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
@@ -12,9 +12,7 @@ import './SearchBar.css'
 /*************************** COMPONENTS ***************************/
 const SearchBar = () => {
 
-    const {searchAllParam, setSearchAllParam, matchingEles, setMatchingEles} = useSearch()
-
-    const [search, setSearch] = useState()
+    const {search, setSearch, searchResults, setSearchResults} = useSearch()
 
     return (
         <form className='navbar__search'>

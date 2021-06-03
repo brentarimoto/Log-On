@@ -64,7 +64,7 @@ const SignUpForm = ({setShowModal}) => {
     <form onSubmit={onSignUp} className='auth__form-container'>
       <div className='auth__form-header'>
         <div className='auth__form-header-image'>
-          <img src='/images/Log-On.png'></img>
+          <img alt='logo' src='/images/Log-On.png'></img>
         </div>
         <h2 className='auth__form-header-text'>
           Signup and Play!

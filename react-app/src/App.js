@@ -5,8 +5,6 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 /*************************** COMPONENT IMPORTS ***************************/
-import LoginForm from "./components/auth/LoginForm";
-import SignUpForm from "./components/auth/SignUpForm";
 import NavBar from "./components/Navbar/NavBar";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UsersList from "./components/UsersList";
@@ -21,11 +19,11 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async() => {
-      await dispatch(authenticate());
+    (() => {
+      dispatch(authenticate());
       setLoaded(true);
     })();
-  }, []);
+  }, [dispatch]);
 
   if (!loaded) {
     return null;
@@ -36,7 +34,10 @@ function App() {
       <NavBar />
       <Switch>
         <Route path="/" exact={true}>
-          Home
+          {user ?
+            <p>Home</p> :
+            <p>Splash</p>
+          }
         </Route>
         <ProtectedRoute path="/users" exact={true} >
           <UsersList/>

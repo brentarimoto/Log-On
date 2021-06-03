@@ -43,7 +43,7 @@ const LoginForm = ({setShowModal}) => {
     <form onSubmit={onLogin} className='auth__form-container'>
       <div className='auth__form-header'>
         <div className='auth__form-header-image'>
-          <img src='/images/Log-On.png'></img>
+          <img alt='logo' src='/images/Log-On.png'></img>
         </div>
       </div>
       <div className='auth__form-errors'>
