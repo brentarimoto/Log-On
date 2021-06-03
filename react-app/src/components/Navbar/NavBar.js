@@ -9,7 +9,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import LogoutButton from '../auth/LogoutButton';
 import LoginModal from '../auth/LoginModal'
 import SignupModal from '../auth/SignupModal'
-import logo from '../../images/Log-On.png'
+import logo from '../../images/Log-On-Icon.png'
 
 
 /*************************** CSS ***************************/

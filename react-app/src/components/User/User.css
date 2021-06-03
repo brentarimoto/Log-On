@@ -1,0 +1,83 @@
+/* User */
+.user{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 250px 500px;
+    grid-template-rows: 250px 300px;
+    grid-template-areas:
+    "pic info"
+    "stats stats";
+}
+
+/* Photo */
+.user__profile-photo{
+    grid-area: pic;
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    font-size: 400%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+/* Info */
+.user__info-container{
+    grid-area: info;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.user__info{
+    grid-area: info;
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    background-color: var(--friendsListBackground);
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.user__info-name{
+    display: grid;
+    grid-template-columns: auto auto;
+    width: 100%;
+    column-gap: 10px;
+}
+
+.user__info-firstname{
+    box-sizing: border-box;
+}
+
+.user__info-lastname{
+    box-sizing: border-box;
+}
+
+.user__info-divs{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.user__info-labels{
+    color: rgba(0,0,0,.35);
+    font-size: 75%;
+}
+
+.user__info-text{
+	height: 35px;
+	border-radius: 5px;
+	outline: 0;
+	border: 1px solid #cccccc;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    color: grey;
+    font-size: 100%;
+}

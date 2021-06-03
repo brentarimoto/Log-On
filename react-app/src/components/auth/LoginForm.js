@@ -7,6 +7,7 @@ import { Redirect } from "react-router-dom";
 
 /*************************** COMPONENT IMPORTS ***************************/
 import { login } from "../../store/session";
+import { useSearch } from "../../context/Search";
 import logo from '../../images/Log-On.png'
 
 
@@ -18,6 +19,7 @@ const LoginForm = ({setShowModal}) => {
   const [errors, setErrors] = useState([]);
 
   const user = useSelector(state => state.session.user);
+  const {setModalOpen} = useSearch()
   const dispatch = useDispatch();
 
   const onLogin = async (e) => {
@@ -31,6 +33,7 @@ const LoginForm = ({setShowModal}) => {
   const demoLogin = async (e) => {
     e.preventDefault();
     const data = await dispatch(login('Demo', 'password'));
+    setModalOpen(false)
     if (data.errors) {
       setErrors(data.errors);
     }
@@ -44,8 +47,9 @@ const LoginForm = ({setShowModal}) => {
     setPassword(e.target.value);
   };
 
-  if (user) {
-    return <Redirect to="/" />;
+  const handleCancel = ()=>{
+    setShowModal(false)
+    setModalOpen(false)
   }
 
   return (
@@ -86,7 +90,7 @@ const LoginForm = ({setShowModal}) => {
       </div>
       <button type="submit" className='auth__form-button'>Login</button>
       <button type="submit" className='auth__form-button' onClick={demoLogin}>Demo</button>
-      <div className='auth__form-cancel' onClick={()=>setShowModal(false)}>
+      <div className='auth__form-cancel' onClick={handleCancel}>
         <i className="fas fa-times"></i>
       </div>
     </form>

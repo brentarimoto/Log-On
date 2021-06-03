@@ -1,0 +1,16 @@
+.user__profile-button{
+    cursor: pointer;
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    transform: translateX(0);
+    transition: 1s;
+    width: none;
+    border-radius: inherit;
+    font-size: inherit;
+}
+
+.user__profile-button:hover{
+    text-decoration: underline;
+}

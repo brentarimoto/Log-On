@@ -1,4 +1,6 @@
 #################### IMPORTS ####################
+## DEPENDENCIES
+from flask import session
 ## FILES
 from .db import db
 
@@ -35,8 +37,8 @@ class Friend(db.Model):
       "request_id": self.request_id,
       "accept_id": self.accept_id,
       'accepted' : self.accepted,
-      'requester' : self.requester.to_dict(),
-      'accepter' :self.accepter.to_dict(),
+      'requester' : self.requester.to_dict() if self.requester.id!=int(session['_user_id']) else None,
+      'accepter' : self.accepter.to_dict() if self.accepter.id!=int(session['_user_id']) else None,
       'messages' : [message.to_dict_basic() for message in self.messages],
     }
 

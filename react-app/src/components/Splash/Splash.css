@@ -20,19 +20,8 @@
     max-width: 500px;
     justify-self: center;
     align-self: center;
-    animation: 2.5s ease 0s 1 fadeInEight;
+    animation: 2s ease 0s 1 fadeInEight;
     transition: 1s;
-}
-
-.splash__logo--hidden{
-    grid-area: logo;
-    opacity: .8;
-    max-width: 500px;
-    justify-self: center;
-    align-self: center;
-    animation: 2.5s ease 0s 1 fadeInEight;
-    opacity: 0;
-    transition: .2s;
 }
 
 .splash__login{
@@ -41,7 +30,7 @@
     height: 100%;
     width: 100%;
     justify-self:baseline;
-    animation: 2.5s ease 0s 1 fadeIn, 2s ease 0s 1 slightInFromLeft;
+    animation: 2s ease 0s 1 fadeIn, 1.5s ease 0s 1 slightInFromLeft;
 }
 
 .splash__signup{
@@ -73,7 +62,6 @@
     font-size: 200%;
     color: var(--splashButtonColor);
     opacity: 0;
-    transition: .2s;
 }
 
 .splash__modal-button:hover{

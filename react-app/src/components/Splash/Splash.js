@@ -1,7 +1,6 @@
 /*************************** REACT IMPORTS ***************************/
 
-import React, { useState, useEffect } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import React from "react";
 import { useSelector } from "react-redux";
 
 /*************************** COMPONENT IMPORTS ***************************/
@@ -21,7 +20,7 @@ function Splash() {
 
   return (
     <div className='splash'>
-        <img className={modalOpen ? 'splash__logo--hidden' : 'splash__logo'} alt='logo' src={logo}></img>
+        {!modalOpen && <img className='splash__logo' alt='logo' src={logo}></img>}
         <div className='splash__login'>
             <LoginModal classname={modalOpen ? 'splash__modal-button--hidden' : 'splash__modal-button'}/>
         </div>

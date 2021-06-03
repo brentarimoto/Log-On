@@ -7,10 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 /*************************** COMPONENT IMPORTS ***************************/
 import NavBar from "./components/Navbar/NavBar";
 import Splash from "./components/Splash/Splash";
-
+import Home from "./components/Home/Home";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import UsersList from "./components/UsersList";
-import User from "./components/User";
+
 import { authenticate } from "./store/session";
 import background from "./images/background_image.jpg";
 
@@ -33,25 +32,22 @@ function App() {
   }
 
   return (
-    <div className='main' style={{backgroundImage: user ? 'none': `url(${background})`}}>
+    <div className='main' style={{backgroundImage: `url(${background})`}}>
       <BrowserRouter>
         <NavBar />
         <div className='content'>
           <Switch>
             <Route path="/" exact={true}>
               {user ?
-                <p>Home</p> :
+                <Home />:
                 <Splash />
               }
             </Route>
-            <ProtectedRoute path="/users" exact={true} >
-              <UsersList/>
+            <ProtectedRoute path="/friends" exact={true} >
+              Friends
             </ProtectedRoute>
-            <ProtectedRoute path="/users/:userId" exact={true} >
-              <User />
-            </ProtectedRoute>
-            <ProtectedRoute path="/" exact={true} >
-              <h1>My Home Page</h1>
+            <ProtectedRoute path="messages" exact={true} >
+              Messages
             </ProtectedRoute>
           </Switch>
         </div>
