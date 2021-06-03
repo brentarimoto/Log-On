@@ -1,6 +1,9 @@
+/*************************** REACT IMPORTS ***************************/
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+
+/*************************** COMPONENT IMPORTS ***************************/
 function User() {
   const [user, setUser] = useState({});
   // Notice we use useParams here instead of getting the params
@@ -36,4 +39,7 @@ function User() {
     </ul>
   );
 }
+
+
+/*************************** EXPORT ***************************/
 export default User;

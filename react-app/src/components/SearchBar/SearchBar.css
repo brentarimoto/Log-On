@@ -1,0 +1,22 @@
+/* SEARCH */
+
+.navbar__search {
+	width: 100%;
+	position: relative;
+	justify-self: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.navbar__search-input{
+	width: 100%;
+	border-radius: 7px;
+	outline: none;
+	height: 24px;
+	border: 1px solid #cccccc;
+	padding: 0 0 0 10px;
+
+	font-size: 100%;
+}

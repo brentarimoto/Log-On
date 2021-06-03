@@ -1,6 +1,9 @@
+/*************************** REACT IMPORTS ***************************/
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
+
+/*************************** COMPONENT IMPORTS ***************************/
 function UsersList() {
   const [users, setUsers] = useState([]);
 
@@ -29,4 +32,5 @@ function UsersList() {
   );
 }
 
+/*************************** EXPORT ***************************/
 export default UsersList;
