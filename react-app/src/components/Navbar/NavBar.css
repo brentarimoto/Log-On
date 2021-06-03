@@ -5,6 +5,10 @@
     grid-template-rows: 64px;
     width: 100%;
     box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 /* SEARCH */

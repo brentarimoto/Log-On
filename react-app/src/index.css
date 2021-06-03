@@ -50,9 +50,30 @@ body{
     height:100%;
 }
 
+.main{
+  width: 100%;
+  height:100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.content{
+  width: 100%;
+  height:100%;
+  position: fixed;
+  top: 65px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
 :root {
     --pastelWhite: rgba(245, 245, 244, 1);
     --deepBlue: rgb(66, 63, 253);
+    --lightBlue: rgb(82, 123, 255);
+    --lightViolet: rgb(135, 92, 255);
     --ghostWhite: rgba(248, 248, 255,1);
 
     /* General */
@@ -62,6 +83,9 @@ body{
     /* Modal */
     --modalBackground: rgba(0,0,0,.15);
     --modalContentBackground: white;
+
+    /* Splash */
+    --splashButtonColor: var(--lightViolet)
 
 
 
@@ -76,11 +100,47 @@ body{
 
 /*************** Animations ***************/
 
-@keyframes FadeIn {
+@keyframes fadeIn {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+@keyframes fadeInEight {
     0% {
         opacity: 0;
     }
     100% {
-        opacity: 1;
+        opacity: .8;
+    }
+}
+
+@keyframes slightInFromRight {
+    0% {
+      transform: translateX(20%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+}
+
+@keyframes slightInFromLeft {
+    0% {
+      transform: translateX(-20%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+}
+
+@keyframes slightInFromBottom{
+    0% {
+      transform: translateY(20%);
+    }
+    100% {
+      transform: translateX(0);
     }
 }

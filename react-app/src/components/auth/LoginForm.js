@@ -1,8 +1,17 @@
+/*************************** REACT IMPORTS ***************************/
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { login } from "../../store/session";
 
+
+
+/*************************** COMPONENT IMPORTS ***************************/
+import { login } from "../../store/session";
+import logo from '../../images/Log-On.png'
+
+
+
+/*************************** COMPONENTS ***************************/
 const LoginForm = ({setShowModal}) => {
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
@@ -43,7 +52,7 @@ const LoginForm = ({setShowModal}) => {
     <form onSubmit={onLogin} className='auth__form-container'>
       <div className='auth__form-header'>
         <div className='auth__form-header-image'>
-          <img alt='logo' src='/images/Log-On.png'></img>
+          <img alt='logo' src={logo}></img>
         </div>
       </div>
       <div className='auth__form-errors'>
