@@ -17,7 +17,7 @@ const Friend = ({friendship}) => {
     return (
     <div className='friend'>
         <div className='friend__photo'>
-            <UserModal friend={friend}/>
+            <UserModal friend={friend} friend_id={friendship.id}/>
         </div>
         <div className='friend__username'>
             {friend?.username}

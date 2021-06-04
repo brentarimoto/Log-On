@@ -26,13 +26,11 @@ const Home = () => {
         <div className='home__game-links'>
             Home
         </div>
-        <div className='home__friends-list-div'>
-            <div className='home__friends-list'>
-                {Object.entries(friends)?.map(([id, friendship])=>(
-                    <Friend key={id} friendship={friendship}/>
-                ))}
-            </div>
-        </div>
+        {Object.keys(friends).length>0 && <div className='home__friends-list'>
+            {Object.entries(friends)?.map(([id, friendship])=>(
+                <Friend key={id} friendship={friendship}/>
+            ))}
+        </div>}
     </div>
     );
 }

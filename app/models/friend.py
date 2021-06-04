@@ -28,7 +28,8 @@ class Friend(db.Model):
 
   messages = db.relationship(
     "Message",
-    back_populates="friendship"
+    back_populates="friendship",
+    cascade='all, delete-orphan'
   )
 
   def to_dict(self):
