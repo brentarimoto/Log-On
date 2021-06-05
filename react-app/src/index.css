@@ -11,6 +11,7 @@ a {
 /* * {
   box-sizing: border-box;
 } */
+textarea
 p,
 h1,
 h2,
@@ -73,13 +74,28 @@ body{
 }
 
 :root {
-    --pastelWhite: rgba(245, 245, 244, 1);
+    /* Rank Colors */
+    --Cardboard: rgb(205, 159, 97);
+    --Iron: rgb(147, 148, 155);
+    --Bronze: rgb(192, 122, 80);
+    --Silver: rgb(179, 180, 186);
+    --Gold: rgb(217, 190, 76);
+    --Platinum: rgb(209, 209, 209);
+    --Diamond: rgb(89, 219, 248);
+    --Master: rgb(151, 61, 164);
+    --Kami: rgb(255, 113, 1);
+
+
+    /* Rank Colors */
     --deepBlue: #304EE4;
     --lightBlue: rgba(133,195,253,1);
-    --lightBlueFaded: rgba(133,195,253,.5);
     --lightViolet: #8368FE;
+
+    --lightBlueFaded: rgba(133,195,253,.5);
+    --pastelWhite: rgba(245, 245, 244, 1);
     --ghostWhite: rgba(238, 238, 238,1);
-    --fadedGreyBlue: rgba(190, 202, 211,1);
+    --greyBlue: rgba(190, 202, 211,1);
+
 
     /* General */
     --background1: var(--ghostWhite);
@@ -89,7 +105,7 @@ body{
     /* Modal */
     --modalBackground: rgba(0,0,0,.15);
     --modalContentBackground: white;
-    --navbarButtonColor: var(--fadedGreyBlue);
+    --navbarButtonColor: var(--greyBlue);
 
     /* Splash */
     --splashButtonColor: var(--lightViolet);
@@ -101,10 +117,8 @@ body{
     /* User */
     --defaultProfPicColor: var(--lightBlue);
 
-
-
-
-
+    /* Scroll */
+    --scrollBar: var(--greyBlue)
 }
 
 /* h1 {

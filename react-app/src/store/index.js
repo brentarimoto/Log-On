@@ -2,10 +2,16 @@ import {createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import session from "./session"
 import friendsReducer from './friends'
+import usersReducer from './users.js'
+import messagesReducer from './messages.js'
+import activeReducer from './activeMessages'
 
 const rootReducer = combineReducers({
     session,
-    friends: friendsReducer
+    friends: friendsReducer,
+    users: usersReducer,
+    messages: messagesReducer,
+    active: activeReducer,
 });
 
 

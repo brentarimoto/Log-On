@@ -26,7 +26,7 @@ def seed_stats():
         'points': 0,},
     ]
 
-    for _ in range(20):
+    for _ in range(40):
         user = random.choice(users)
         user_id = user.id
         users.remove(user)
@@ -38,8 +38,14 @@ def seed_stats():
 
         losses=random.randint(1,value) if value else 0
         ties=value-losses if value-losses>=1 else 0
-        rank = random.choice(['Cardboard','Iron','Bronze','Silver','Gold']) if random.randint(1,30) !=1 else random.choice(['Platinum', 'Diamond', 'Master', 'Kami'])
-        points = random.randint(0,99);
+        total_points = (wins*10)+(ties*5)-(losses*10);
+        total_points = total_points if total_points>=0 else 0
+        number_ranks = 0;
+        while total_points>=100:
+            total_points-=100
+            number_ranks+=1
+        points=total_points;
+        rank = ['Cardboard','Iron','Bronze','Silver','Gold', 'Platinum', 'Diamond', 'Master', 'Kami'][number_ranks]
 
         stats.append(
             {'user_id': user_id,

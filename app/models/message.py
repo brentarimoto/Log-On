@@ -32,7 +32,7 @@ class Message(db.Model):
       "sender_id": self.sender_id,
       "friend_id": self.friend_id,
       'message' : self.message,
-      'created_at' : self.created_at,
+      'created_at' : str(self.created_at),
       'sender' : self.sender.to_dict(),
       'friendship' :self.friendship.to_dict_basic(),
     }
@@ -43,5 +43,5 @@ class Message(db.Model):
       "sender_id": self.sender_id,
       "friend_id": self.friend_id,
       'message' : self.message,
-      'created_at' : self.created_at,
+      'created_at' : str(self.created_at),
     }

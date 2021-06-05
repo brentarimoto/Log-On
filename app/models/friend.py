@@ -13,6 +13,7 @@ class Friend(db.Model):
   request_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
   accept_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
   accepted = db.Column(db.Boolean, nullable = False, default = False)
+  declined = db.Column(db.Boolean, nullable = False, default = False)
 
   requester = db.relationship(
     "User",
@@ -28,7 +29,8 @@ class Friend(db.Model):
 
   messages = db.relationship(
     "Message",
-    back_populates="friendship"
+    back_populates="friendship",
+    cascade='all, delete-orphan'
   )
 
   def to_dict(self):
@@ -37,6 +39,7 @@ class Friend(db.Model):
       "request_id": self.request_id,
       "accept_id": self.accept_id,
       'accepted' : self.accepted,
+      'declined' : self.declined,
       'requester' : self.requester.to_dict() if self.requester.id!=int(session['_user_id']) else None,
       'accepter' : self.accepter.to_dict() if self.accepter.id!=int(session['_user_id']) else None,
       'messages' : [message.to_dict_basic() for message in self.messages],
@@ -48,4 +51,5 @@ class Friend(db.Model):
       "request_id": self.request_id,
       "accept_id": self.accept_id,
       'accepted' : self.accepted,
+      'declined' : self.declined,
     }

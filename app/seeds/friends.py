@@ -16,12 +16,13 @@ def seed_friends():
 
     friends = [
         {'request_id': 1, 'accept_id': 2, 'accepted': True},
-        {'request_id': 1, 'accept_id': 3, 'accepted': True},
+        {'request_id': 3, 'accept_id': 1, 'accepted': False, 'declined':False},
         {'request_id': 1, 'accept_id': 4, 'accepted': True},
         {'request_id': 1, 'accept_id': 5, 'accepted': True},
         {'request_id': 1, 'accept_id': 6, 'accepted': True},
         {'request_id': 1, 'accept_id': 7, 'accepted': True},
         {'request_id': 1, 'accept_id': 8, 'accepted': True},
+        {'request_id': 1, 'accept_id': 9, 'accepted': False, 'declined':True},
     ]
 
     for _ in range(200):

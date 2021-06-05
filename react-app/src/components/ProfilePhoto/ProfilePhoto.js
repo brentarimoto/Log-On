@@ -13,7 +13,7 @@ const ProfilePhoto = ({profileUser, onClick}) => {
         <div className='profile-photo' onClick={onClick}>
             {profileUser?.profile_photo ?
             <img className='profile-photo__pic' src={profileUser?.profile_photo} alt='profile-photo'/> :
-            <i class="fas fa-user profile-photo__pic-default"></i>
+            <i className="fas fa-user profile-photo__pic-default"></i>
             }
         </div>
     );

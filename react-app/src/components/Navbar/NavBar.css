@@ -9,6 +9,7 @@
     top: 0;
     left: 0;
     right: 0;
+    z-index: 98;
 }
 
 /* SEARCH */
@@ -49,9 +50,8 @@
 /* LINKS */
 .navbar__links-div{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     align-items: center;
-    width: 100%;
 	margin-right: 15px;
     animation: 1s ease 0s 1 fadeIn;
     /* border: 1px solid rgba(0,0,0,.15);

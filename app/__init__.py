@@ -12,10 +12,14 @@ from .models import db, User
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .api.friends_routes import friends_routes
+from .api.search_routes import search_routes
+from .api.messages_routes import messages_routes
 
 from .seeds import seed_commands
 
 from .config import Config
+
+from .socket import socketio
 
 
 #################### SETUP ####################
@@ -37,6 +41,8 @@ app.cli.add_command(seed_commands)
 app.config.from_object(Config)
 db.init_app(app)
 Migrate(app, db)
+
+socketio.init_app(app)
 
 # Application Security
 CORS(app)
@@ -72,6 +78,8 @@ def inject_csrf_token(response):
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(friends_routes, url_prefix='/api/friends')
+app.register_blueprint(search_routes, url_prefix='/api/search')
+app.register_blueprint(messages_routes, url_prefix='/api/messages')
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -80,3 +88,6 @@ def react_root(path):
     if path == 'favicon.ico':
         return app.send_static_file('favicon.ico')
     return app.send_static_file('index.html')
+
+if __name__ == '__main__':
+    socketio.run(app)

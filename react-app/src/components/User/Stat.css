@@ -1,0 +1,90 @@
+/*** STATS ***/
+
+.user__stat{
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    background-color: var(--friendsListBackground);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 5fr;
+    grid-template-areas:
+    "game game game"
+    "rank img wlt";
+    justify-items: center;
+    align-items: center;
+}
+
+
+.user__stat-game{
+    grid-area: game;
+    width: 100%;
+    border-bottom: 1px solid var(--faintBorder);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user__stat-rank-info{
+    grid-area: rank;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100%;
+}
+
+.user__stat-bar{
+    background-color: lightgray;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.user__stat-bar-complete{
+    background-color: var(--button);
+}
+
+.user__stat-img{
+    grid-area: img;
+    width: 240px;
+    height: 240px;
+    font-size: 800%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.user__stat-border{
+    position: absolute;
+    top: 5%;
+    bottom: 5%;
+    right: 0;
+    left: 0;
+    border-left: 1px solid var(--faintBorder);
+    border-right: 1px solid var(--faintBorder);
+}
+
+.user__stat-wlt{
+    grid-area: wlt;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 100%;
+}
+
+.user__stat-text-div{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user__stat-labels{
+    color: grey;
+}

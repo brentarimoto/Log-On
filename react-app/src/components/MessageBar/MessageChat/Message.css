@@ -1,0 +1,53 @@
+/*** Message ***/
+.message{
+    display: grid;
+    grid-template-rows: auto;
+    padding: 10px 10px;
+}
+
+.message--friend{
+    grid-template-columns: 30px 1fr;
+    grid-template-areas:
+    "pic message";
+}
+
+.message--user{
+    grid-template-columns: 1fr 30px;
+    grid-template-areas:
+    "message pic";
+
+}
+
+.message__profpic{
+    grid-area: pic;
+    align-self: flex-end;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.message__text{
+    position: relative;
+    grid-area: message;
+    display: flex;
+    align-items: flex-end;
+    background-color: lightgray;
+    padding-bottom: 2px;
+}
+
+.message__text--friend{
+    padding-left: 15px;
+    margin-right: 30px;
+    margin-left: 1px;
+    margin-bottom: 7.5px;
+    border-radius: 5px 5px 5px 0;
+}
+
+.message__text--user{
+    padding-right: 15px;
+    margin-left: 30px;
+    margin-right: 1px;
+    margin-bottom: 7.5px;
+    flex-direction: row-reverse;
+    border-radius: 5px 5px 0 5px;
+}

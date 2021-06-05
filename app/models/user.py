@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
   __tablename__ = 'users'
 
   id = db.Column(db.Integer, primary_key = True)
-  username = db.Column(db.String(40), nullable = False, unique = True)
+  username = db.Column(db.String(28), nullable = False, unique = True)
   email = db.Column(db.String(255), nullable = False, unique = True)
   hashed_password = db.Column(db.String(255), nullable = False)
   firstname = db.Column(db.String(40), nullable=True)
@@ -62,6 +62,7 @@ class User(db.Model, UserMixin):
   def check_password(self, password):
     return check_password_hash(self.password, password)
 
+
   def to_dict(self):
     return {
       "id": self.id,
@@ -70,8 +71,8 @@ class User(db.Model, UserMixin):
       'firstname' : self.firstname,
       'lastname' : self.lastname,
       'profile_photo' : self.profile_photo,
-      'friends_requested' : [user.to_dict_basic() for user in self.friends_requested],
-      'friends_accepted' : [user.to_dict_basic() for user in self.friends_accepted],
+      'friends_requested' : {user.accepter.id:user.to_dict_basic() for user in self.friends_requested},
+      'friends_accepted' : {user.requester.id:user.to_dict_basic() for user in self.friends_accepted},
       'messages_sent' : [message.to_dict_basic() for message in self.messages_sent],
       'stats' : [game.to_dict() for game in self.stats],
     }
