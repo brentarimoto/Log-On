@@ -1,0 +1,64 @@
+/*** Navbar Search Item ***/
+.navbar__search-item{
+    width: 100%;
+    column-gap: 10px;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: 25px 15px;
+    grid-template-areas:
+    "pic username"
+    "pic extra";
+    box-sizing: border-box;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    animation: 1s ease 0s 1 fadeIn;
+}
+
+.navbar__search-item:hover{
+    background-color: var(--friendsListHover);
+}
+
+/* Photo */
+.navbar__search-photo{
+    grid-area: pic;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 2px;
+    border-radius: 50%;
+    font-size: 100%;
+}
+.navbar__search-photo{
+    grid-area: pic;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar__search-username{
+    grid-area: username;
+    display: flex;
+    align-items: center;
+    font-size: 110%;
+}
+
+.navbar__search-extra{
+    grid-area: extra;
+    display: flex;
+    align-items: center;
+    font-size: 65%;
+}
+
+.navbar__search-name{
+    display: grid;
+    grid-template-columns: min-content min-content min-content min-content;
+    row-gap: 5px;
+}
+
+.navbar__search-lastname{
+    margin-left: 3px;
+}

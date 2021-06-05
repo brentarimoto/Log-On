@@ -20,7 +20,7 @@ function UserModal({friend,friend_id}) {
         <ProfilePhoto profileUser={friend} onClick={()=>setShowModal(true)}/>
         {showModal && (
         <Modal onClose={()=>setShowModal(false)}>
-            <User setShowModal={setShowModal} profileUser={friend} friend_id={friend_id}/>
+            <User setShowModal={setShowModal} profileUserId={friend.id} friend_id={friend_id}/>
         </Modal>
         )}
     </>

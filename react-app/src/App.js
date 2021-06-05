@@ -31,8 +31,15 @@ function App() {
     return null;
   }
 
+  const handleMainClick=(e)=>{
+    // if(!e.target.className.includes('message') && !e.target.className.includes('friend')){
+    //   setCloseMessage(prev=>!prev)
+    // }
+  }
+
+
   return (
-    <div className='main' style={{backgroundImage: `url(${background})`}}>
+    <div className='main' style={{backgroundImage: `url(${background})`}} onClick={handleMainClick}>
       <BrowserRouter>
         <NavBar />
         <div className='content'>

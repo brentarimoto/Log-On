@@ -1,22 +1,35 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 /*************************** OTHER FILE IMPORTS ***************************/
-import { Modal } from '../../context/Modal';
-import ProfilePhoto from '../ProfilePhoto/ProfilePhoto';
 import User from './User';
+import { Modal } from '../../context/Modal';
+import { getUser } from '../../store/users';
+import ProfilePhoto from '../ProfilePhoto/ProfilePhoto';
 
 /*************************** COMPONENTS ***************************/
-import './UserModal.css'
+import './UserSearchModal.css'
 
 /*************************** COMPONENTS ***************************/
 
 function UserSearchModal({user, setSearch, setSearchResults}) {
+  const dispatch = useDispatch()
+  const users=useSelector(state=>state.users)
+
   const [showModal, setShowModal] = useState(false);
 
-  const handleSearchClick = ()=>{
+
+  const handleSearchClick = async()=>{
+    if(!users[user.id]){
+      user = await dispatch(getUser(user.id))
+    }
     setShowModal(true)
+  }
+
+  const handleSearchClose = ()=>{
+    setShowModal(false)
     setSearch('')
     setSearchResults([])
   }
@@ -29,16 +42,12 @@ function UserSearchModal({user, setSearch, setSearchResults}) {
             </div>
             <p className='navbar__search-username'>{user.username}</p>
             <div className='navbar__search-extra'>
-                <p className='navbar__search-email'></p>
-                <div className='navbar__search-name'>
-                    <p className='navbar__search-firstname'>{user.firstname}</p>
-                    <p className='navbar__search-lastname'>{user.lastname}</p>
-                </div>
+                <p className='navbar__search-email'>{user.email}</p>
             </div>
         </div>
         {showModal && (
-        <Modal onClose={()=>setShowModal(false)}>
-            <User setShowModal={setShowModal} profileUser={friend}/>
+        <Modal onClose={handleSearchClose}>
+            <User setShowModal={setShowModal} profileUserId={user.id}/>
         </Modal>
         )}
     </>

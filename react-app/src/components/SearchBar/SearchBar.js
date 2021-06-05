@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
+import UserSearchModal from '../User/UserSearchModal';
 import { useSearch } from '../../context/Search';
 
 
@@ -26,18 +27,19 @@ const SearchBar = () => {
     },[search])
 
     return (
-        <form className='navbar__search'>
+        <form className='navbar__search' onSubmit={(e)=>e.preventDefault()}>
             <input
             className={`navbar__search-input ${search && 'navbar__search-active'}`}
             id='navSearch'
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            autoComplete='off'
             ></input>
             <label htmlFor='navSearch' className="navbar__search-label">Search</label>
             {searchResults.length>0 && <div className='navbar__search-list'>
                 {searchResults.map(user=>(
-                    <p className='navbar__search-items'>{user.username}</p>
+                    <UserSearchModal key={user.id} user={user} setSearch={setSearch} setSearchResults={setSearchResults}/>
                 ))}
 
             </div>}

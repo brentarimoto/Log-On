@@ -13,13 +13,14 @@ def seed_users():
 
     users = [
         {'username':'Demo', 'email':'demo@aa.io', 'password':'password','firstname':'Demo','lastname':'Demo',},
-        {'username':'jesse_pokewong', 'email':'jesse@wong.com', 'password':'password','firstname':'Jesse','lastname':'Wong',},
+        {'username':'pokewong_go', 'email':'jesse@wong.com', 'password':'password','firstname':'Jesse','lastname':'Wong',},
         {'username':'super_smash_brads', 'email':'brad@simpson.com', 'password':'password','firstname':'Brad','lastname':'Simpson',},
-        {'username':'senyo_cards_to_the_graveyard', 'email':'senyo@agawu.com', 'password':'password','firstname':'Senjyo','lastname':'Agawu',},
+        {'username':'senyo_cards_to_the_graveyard', 'email':'senyo@agawu.com', 'password':'password','firstname':'Senyo','lastname':'Agawu',},
         {'username':'jesse_zee_game_ez_life', 'email':'jesse@warren.com', 'password':'password','firstname':'Jesse','lastname':'Warren',},
         {'username':'chris_oneywan_kenobi', 'email':'chris@oney.com', 'password':'password','firstname':'Chris','lastname':'Oney',},
         {'username':'wingardium_oliviosa', 'email':'olivia@byrnes.com', 'password':'password','firstname':'Olivia','lastname':'Byrnes',},
         {'username':'await_dispatch(JM)', 'email':'JM@alan.com', 'password':'password','firstname':'JM','lastname':'Alan',},
+        {'username':'extremely_famous_person', 'email':'famous@person.com', 'password':'password', 'firstname':None, 'lastname':None},
     ]
 
     for _ in range(50):

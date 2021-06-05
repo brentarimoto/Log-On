@@ -36,8 +36,8 @@ function Stat({stat}) {
               <label htmlFor='points' className='user__stat-labels'>Points</label>
               <h2 name='points' className='user__stat-points'>{stat.points}/100</h2>
             </div>
-            <div class="user__stat-bar">
-              <div class="user__stat-bar-complete" style={{height:'20px',width:`${stat.points}%`}}></div>
+            <div className="user__stat-bar">
+              <div className="user__stat-bar-complete" style={{height:'20px',width:`${stat.points}%`}}></div>
             </div>
           </div>
           <div className='user__stat-img' style={{color: `var(--${stat.rank})`}}>

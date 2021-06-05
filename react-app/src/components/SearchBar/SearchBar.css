@@ -35,7 +35,8 @@
 	transition: .2s;
 }
 
-.navbar__search-input:focus{
+.navbar__search-input:focus,
+.navbar__search-active{
 	width: 100%;
 	border-bottom: 1px solid var(--deepBlue);
 	transition: .2s;
@@ -53,7 +54,7 @@
 	position: absolute;
 	top: 30px;
 	left: 10px;
-	right: 0;
+	min-width: 250px;
 	z-index: 99;
 	background-color: var(--friendsListBackground);
 	flex-direction: column;
@@ -66,10 +67,11 @@
 .navbar__search-items{
     animation: .2s ease 0s 1 fadeIn;
 	background-color: var(--friendsListBackground);
-	z-index: 99;
+	z-index: 98;
 
 }
 
-.navbar__search-input:focus~.navbar__search-list{
+.navbar__search-input:focus~.navbar__search-list,
+.navbar__search-list:hover{
 	display: flex;
 }
