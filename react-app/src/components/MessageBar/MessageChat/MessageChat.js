@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 /*************************** COMPONENT IMPORTS ***************************/
 import Message from "./Message";
-import {addMessage} from '../../../store/messages'
 import { popActive, updateActive } from "../../../store/activeMessages";
+import { newMessageNotification } from "../../../store/notifications";
 
 import './MessageChat.css'
 
@@ -21,8 +21,9 @@ function messageHash(userId, friendId){
 
 /*************************** COMPONENTS ***************************/
 function MessageChat({closeMessage, messages, userId, socket}) {
-    const [messageOpen, setMessageOpen]=useState(false)
+    const [messageOpen, setMessageOpen]=useState(true)
     const [message, setMessage] = useState('')
+    const [initialLoad, setInitialLoad] = useState(true)
     const [temp, setTemp] = useState([])
 
     const dispatch= useDispatch()
@@ -30,28 +31,13 @@ function MessageChat({closeMessage, messages, userId, socket}) {
     const user = useSelector(state=>state.session.user)
     const friends = useSelector(state=>state.friends)
     const active = useSelector(state=>state.active)
+    const notifications = useSelector(state=>state.notifications)
     const friendship=friends[userId]
     const friend = friendship?.accepter ? friendship?.accepter : friendship?.requester
-
-    // useEffect(()=>{
-    //     socket.on('connect', () => {
-    //         socket.emit('join', {room:messageHash(user.id, dm)})
-    //     })
-    // },[])
-
-    useEffect(()=>{
-		socket.on("message", (message) => {
-            dispatch(addMessage(userId, message))
-            if(active.find(el=>el.user_id===friend.id)){
-                dispatch(updateActive(friend.id, message))
-            }
-		})
-    },[friends])
 
 
     const handleMessageClick=()=>{
         setMessageOpen(prev=>!prev)
-        console.log(messageOpen)
     }
 
     const handleMessageCancel=()=>{
@@ -62,7 +48,7 @@ function MessageChat({closeMessage, messages, userId, socket}) {
         if(e.key=='Enter'){
             e.preventDefault()
             if(message.length>0){
-                socket.emit("message", {sender_id:user.id, friend_id:friendship.id, message, room:messageHash(userId, user.id)})
+                socket.emit("message", {sender_id:user.id,receiver_id:userId,friend_id:friendship.id, message, room:messageHash(userId, user.id)})
                 setMessage('')
             }
         }

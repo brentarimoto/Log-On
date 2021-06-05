@@ -48,6 +48,7 @@ export const getFriends = (userId) => async (dispatch) => {
     })
 
     dispatch(setFriends(friendsObj))
+    return friendsObj
 }
 
 

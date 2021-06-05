@@ -55,6 +55,7 @@ export default function messagesReducer(state=initialState, action) {
           return newState
         case ADD_MESSAGE:
           newState={...state}
+          newState[action.user_id]={...newState[action.user_id]}
           newState[action.user_id][action.message.id]=action.message
           return newState
         case REMOVE_MESSAGE:

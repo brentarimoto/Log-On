@@ -46,9 +46,8 @@ def handle_chat(data):
     message = Message(sender_id = data['sender_id'], friend_id = data['friend_id'], message=data['message'])
     db.session.add(message)
     db.session.commit()
-    # print(message.to_dict_basic())
-    print(data)
-    emit("message", message.to_dict(), room=data['room'])
+
+    emit("message",{'sender_id':data['sender_id'],'receiver_id':data['receiver_id'],'message':message.to_dict()}, room=data['room'])
 
 
 @socketio.on("dm_change")

@@ -1,5 +1,5 @@
 /*************************** REACT IMPORTS ***************************/
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -11,6 +11,7 @@ import { appendActive } from '../../store/activeMessages';
 
 /*************************** CSS ***************************/
 import './Friend.css'
+import { newMessageNotification, readMessageNotification } from '../../store/notifications';
 
 /*************************** COMPONENTS ***************************/
 const Friend = ({friendship}) => {
@@ -19,8 +20,12 @@ const Friend = ({friendship}) => {
 
     const messages = useSelector(state=>state.messages)
     const active = useSelector(state=>state.active)
+    const notificationsNum = useSelector(state=>state.notifications.messages[friend.id])
 
     const handleMessageOpen =async()=>{
+        if (notificationsNum){
+            dispatch(readMessageNotification(friend.id))
+        }
         if (!messages[friend.id]){
             const messages = await dispatch(getMessages(friendship.id, friend.id))
             dispatch(appendActive(messages))
@@ -33,6 +38,9 @@ const Friend = ({friendship}) => {
     <div className='friend' onClick={handleMessageOpen}>
         <div className='friend__photo'>
             <UserModal friend={friend} friend_id={friendship.id}/>
+            {notificationsNum>0 && <div className='friend__notifications'>
+                {notificationsNum}
+            </div>}
         </div>
         <div className='friend__username'>
             {friend?.username}

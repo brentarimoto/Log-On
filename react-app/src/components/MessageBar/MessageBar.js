@@ -6,11 +6,13 @@ import { io } from "socket.io-client";
 
 /*************************** COMPONENT IMPORTS ***************************/
 import MessageChat from "./MessageChat/MessageChat";
+import {addMessage} from '../../store/messages'
 
 
 /*************************** CSS ***************************/
 import './MessageBar.css'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { newMessageNotification } from "../../store/notifications";
 
 let socket;
 
@@ -23,8 +25,11 @@ function messageHash(userId, friendId){
 
 /*************************** COMPONENTS ***************************/
 function MessageBar({closeMessage}) {
+  const dispatch = useDispatch()
   const active = useSelector(state=>state.active)
   const friends = useSelector(state=>state.friends)
+  const user = useSelector(state=>state.session.user)
+  const messages = useSelector(state=>state.messages)
 
   useEffect(()=>{
     socket = io()
@@ -35,6 +40,16 @@ function MessageBar({closeMessage}) {
         })
       }
     }
+
+    socket.on("message", (message) => {
+      const userId = message.sender_id!==user.id ? message.sender_id : message.receiver_id
+      if (messages[userId]){
+        dispatch(addMessage(userId, message))
+      } else{
+        dispatch(newMessageNotification(userId))
+      }
+    })
+
     return (()=>{
       socket.disconnect()
     })
@@ -45,7 +60,7 @@ function MessageBar({closeMessage}) {
     <div className='messagebar'>
       {active.length>0 &&
         active.map((message)=>(
-          <MessageChat key={message.user_id} closeMessage={closeMessage} messages={message.messages} userId={message.user_id} socket={socket}/>
+          <MessageChat key={message.user_id} messages={message.messages} userId={message.user_id} socket={socket}/>
         ))
       }
     </div>
