@@ -1,6 +1,6 @@
 /*************************** REACT IMPORTS ***************************/
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 /*************************** COMPONENT IMPORTS ***************************/
 import Message from "./Message";
 import { popActive, updateActive } from "../../../store/activeMessages";
-import { newMessageNotification } from "../../../store/notifications";
+import { switchActiveOpen, removeActiveOpen } from "../../../store/activeOpen";
+import { newMessageNotification, readMessageNotification } from "../../../store/notifications";
 
 import './MessageChat.css'
 
@@ -27,21 +28,32 @@ function MessageChat({closeMessage, messages, userId, socket}) {
     const [temp, setTemp] = useState([])
 
     const dispatch= useDispatch()
+    const inputRef = useRef(null)
 
     const user = useSelector(state=>state.session.user)
     const friends = useSelector(state=>state.friends)
     const active = useSelector(state=>state.active)
-    const notifications = useSelector(state=>state.notifications)
+    const open = useSelector(state=>state.open)
+    const notificationsNum = useSelector(state=>state.notifications.messages[userId])
     const friendship=friends[userId]
     const friend = friendship?.accepter ? friendship?.accepter : friendship?.requester
 
 
     const handleMessageClick=()=>{
-        setMessageOpen(prev=>!prev)
+        if(!open[userId] && notificationsNum){
+            dispatch(readMessageNotification(userId))
+        }
+        if(open[userId]){
+            inputRef.current.blur()
+        } else{
+            inputRef.current.focus()
+        }
+        dispatch(switchActiveOpen(userId))
     }
 
     const handleMessageCancel=()=>{
         dispatch(popActive(userId))
+        dispatch(removeActiveOpen(userId))
     }
 
     const onEnterPress =(e)=>{
@@ -54,13 +66,26 @@ function MessageChat({closeMessage, messages, userId, socket}) {
         }
     }
 
+    useEffect(()=>{
+        inputRef.current.focus()
+        dispatch(switchActiveOpen(userId))
+        return ()=>{
+            dispatch(removeActiveOpen(userId))
+        }
+    },[])
+
     return (
     <div className='messagechat__div'>
-        <div className={`messagechat ${messageOpen && 'messagechat--active'}`}>
+        <div className={`messagechat ${open[userId] && 'messagechat--active'}`}>
             <div className='messagechat__cancel' onClick={handleMessageCancel}>
                 <i className="fas fa-times"></i>
             </div>
-            <div className='messagechat__username' onClick={handleMessageClick}>
+            {notificationsNum>0 &&
+                <div className='messagechat__notifications'>
+                    {notificationsNum}
+                </div>
+            }
+            <div className={`messagechat__username ${notificationsNum>0 && 'messagechat__username--notification'}`}onClick={handleMessageClick}>
                 <p>{friend.username}</p>
             </div>
             <div className='messagechat__chat-div'>
@@ -74,6 +99,7 @@ function MessageChat({closeMessage, messages, userId, socket}) {
             </div>
             <div className='messagechat__input-div'>
                 <textarea
+                    ref={inputRef}
                     className='messagechat__input'
                     value={message}
                     onChange={(e)=>setMessage(e.target.value)}

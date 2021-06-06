@@ -6,6 +6,7 @@ import usersReducer from './users.js'
 import messagesReducer from './messages.js'
 import activeReducer from './activeMessages'
 import notificationsReducer from './notifications'
+import activeOpenReducer from'./activeOpen'
 
 const rootReducer = combineReducers({
     session,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
     messages: messagesReducer,
     active: activeReducer,
     notifications: notificationsReducer,
+    open: activeOpenReducer,
 });
 
 
