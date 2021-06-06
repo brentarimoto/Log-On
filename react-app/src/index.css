@@ -90,6 +90,7 @@ body{
     --deepBlue: #304EE4;
     --lightBlue: rgba(133,195,253,1);
     --lightViolet: #8368FE;
+    --lightRed: rgb(255, 105, 98);
 
     --lightBlueFaded: rgba(133,195,253,.5);
     --pastelWhite: rgba(245, 245, 244, 1);
@@ -118,7 +119,10 @@ body{
     --defaultProfPicColor: var(--lightBlue);
 
     /* Scroll */
-    --scrollBar: var(--greyBlue)
+    --scrollBar: var(--greyBlue);
+
+    /* Notification */
+    --notificationColor: var(--lightRed)
 }
 
 /* h1 {
@@ -143,6 +147,15 @@ body{
     }
     100% {
         opacity: .8;
+    }
+}
+
+@keyframes scaleUp {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
     }
 }
 

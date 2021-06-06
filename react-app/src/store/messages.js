@@ -1,4 +1,8 @@
 /*************************** OTHER FILE IMPORTS ***************************/
+
+import { updateActive } from "./activeMessages";
+import { newMessageNotification } from "./notifications";
+
 /*************************** TYPES ***************************/
 const SET_MESSAGES = "messages/SET_MESSAGES";
 
@@ -39,6 +43,27 @@ export const getMessages = (friendship_id, user_id) => async (dispatch) => {
 
     dispatch(setMessages(user_id, data.messages))
     return {user_id:user_id, messages:data.messages}
+}
+
+
+
+/*************************** SPECIAL SOCKET THUNKS ***************************/
+export const handleNewSocketMessage = (message,user) => async (dispatch, getState) => {
+    const state = getState()
+    const userId = message.sender_id!==user.id ? message.sender_id : message.receiver_id
+
+    if(!state.messages[userId] && user.id!==message.sender_id){
+        dispatch(newMessageNotification(userId))
+    } else if(state.messages[userId] && (!state.active.find(el=>el.user_id===userId) || !state.open[userId]) && user.id!==message.sender_id){
+        dispatch(addMessage(userId, message.message))
+        dispatch(newMessageNotification(userId))
+    // } else if(state.messages[userId] && state.active.find(el=>el.user_id===userId) && !state.open[userId]  && user.id!==message.sender_id){
+    //     dispatch(addMessage(userId, message.message))
+    //     dispatch(newMessageNotification(userId))
+    } else{
+        dispatch(addMessage(userId, message.message))
+        dispatch(updateActive(userId, message.message))
+    }
 }
 
 

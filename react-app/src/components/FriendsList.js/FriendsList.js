@@ -10,10 +10,6 @@ import { getFriends } from '../../store/friends';
 /*************************** CSS ***************************/
 
 /*************************** HELPER FUNCTION ***************************/
-function messageHash(userId, friendId){
-    return `Message:${userId>friendId ? userId : friendId}-${userId>friendId ? friendId : userId}`
-}
-
 /*************************** COMPONENTS ***************************/
 const FriendsList = ({classname}) => {
     const dispatch = useDispatch();

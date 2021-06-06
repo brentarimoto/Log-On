@@ -6,13 +6,14 @@ import { io } from "socket.io-client";
 
 /*************************** COMPONENT IMPORTS ***************************/
 import MessageChat from "./MessageChat/MessageChat";
-import {addMessage} from '../../store/messages'
+import {addMessage, handleNewSocketMessage} from '../../store/messages'
 
 
 /*************************** CSS ***************************/
 import './MessageBar.css'
 import { useDispatch, useSelector } from "react-redux";
 import { newMessageNotification } from "../../store/notifications";
+import { updateActive } from "../../store/activeMessages";
 
 let socket;
 
@@ -33,21 +34,16 @@ function MessageBar({closeMessage}) {
 
   useEffect(()=>{
     socket = io()
-    if(Object.keys(friends).length>0){
-      for (let id in friends) {
-        socket.on('connect', () => {
-          socket.emit('join', {room:messageHash(friends[id].accept_id, friends[id].request_id)})
-        })
-      }
-    }
+    socket.on('connect', () => {
+      if(Object.keys(friends).length>0){
+        for (let id in friends) {
+            socket.emit('join', {room:messageHash(friends[id].accept_id, friends[id].request_id)})
+          }
+        }
+    })
 
     socket.on("message", (message) => {
-      const userId = message.sender_id!==user.id ? message.sender_id : message.receiver_id
-      if (messages[userId]){
-        dispatch(addMessage(userId, message))
-      } else{
-        dispatch(newMessageNotification(userId))
-      }
+      dispatch(handleNewSocketMessage(message, user))
     })
 
     return (()=>{

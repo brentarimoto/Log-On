@@ -40,10 +40,11 @@
     right: 0;
     border-radius: 50%;
     color: white;
-    background-color: red;
+    background-color: var(--notificationColor);
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: .2s ease 0s 1 scaleUp;
 }
 
 /* Username */
