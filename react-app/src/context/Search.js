@@ -1,9 +1,12 @@
+/*************************** REACT IMPORTS ***************************/
 import React from "react";
 import { createContext, useContext, useState } from "react";
 
+/*************************** CONTEXT ***************************/
 export const SearchContext = createContext();
 export const useSearch = () => useContext(SearchContext);
 
+/*************************** PROVIDER ***************************/
 export const SearchProvider = (props) => {
 
   const [search, setSearch] = useState("");
@@ -19,4 +22,5 @@ export const SearchProvider = (props) => {
   );
 };
 
+/*************************** EXPORT ***************************/
 export default SearchProvider;

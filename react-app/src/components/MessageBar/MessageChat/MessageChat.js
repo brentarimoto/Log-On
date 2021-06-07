@@ -76,16 +76,16 @@ function MessageChat({closeMessage, messages, userId, socket}) {
     return (
     <div className='messagechat__div'>
         <div className={`messagechat ${open[userId] && 'messagechat--active'}`}>
-            {notificationsNum>0 &&
-                <div className='messagechat__notifications'>
-                    {notificationsNum}
-                </div>
-            }
             <div className={`messagechat__username ${notificationsNum>0 && 'messagechat__username--notification'}`}onClick={handleMessageClick}>
                 <p>{friend.username}</p>
                 <div className='messagechat__cancel' onClick={handleMessageCancel}>
                     <i className="fas fa-times"></i>
                 </div>
+                {notificationsNum>0 &&
+                    <div className='messagechat__notifications'>
+                        {notificationsNum}
+                    </div>
+                }
             </div>
             <div className='messagechat__chat-div'>
                 <div className='messagechat__chat'>

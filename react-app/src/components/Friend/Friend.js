@@ -8,7 +8,7 @@ import UserModal from '../User/UserModal'
 import ProfilePhoto from '../ProfilePhoto/ProfilePhoto';
 import { getMessages } from '../../store/messages';
 import { appendActive } from '../../store/activeMessages';
-import {setActiveOpen} from '../../store/activeOpen'
+import {setActiveOpen, setSpecificActiveOpen} from '../../store/activeOpen'
 
 /*************************** CSS ***************************/
 import './Friend.css'
@@ -29,8 +29,10 @@ const Friend = ({friendship}) => {
             if (notificationsNum){
                 dispatch(readMessageNotification(friend.id))
             }
-            if (!open[friend.id]){
+            if (open[friend.id]===undefined){
                 dispatch(setActiveOpen(friend.id))
+            } else if(open[friend.id]===false){
+                dispatch(setSpecificActiveOpen(friend.id, true))
             }
             if (!messages[friend.id]){
                 const messages = await dispatch(getMessages(friendship.id, friend.id))

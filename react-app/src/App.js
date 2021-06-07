@@ -32,19 +32,8 @@ function App() {
     })();
   }, [dispatch]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  const handleMainClick=(e)=>{
-    // if(!e.target.className.includes('message') && !e.target.className.includes('friend')){
-    //   setCloseMessage(prev=>!prev)
-    // }
-  }
-
-
   return (
-    <div className='main' style={{backgroundImage: `url(${background})`}} onClick={handleMainClick}>
+    <div className='main' style={{backgroundImage: `url(${background})`}}>
       <BrowserRouter>
         <NavBar />
         <div className='content'>
@@ -61,11 +50,11 @@ function App() {
             <ProtectedRoute path="/messages" exact={true} >
               Messages
             </ProtectedRoute>
-            <ProtectedRoute path="/games/:id" exact={true} >
+            <ProtectedRoute path="/games/:game_id" exact={true} >
               <Games />
             </ProtectedRoute>
           </Switch>
-          <FriendsList classname='home__friends-list'/>
+          <FriendsList />
           <MessageBar />
         </div>
       </BrowserRouter>

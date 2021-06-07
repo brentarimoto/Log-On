@@ -7,6 +7,8 @@ import messagesReducer from './messages.js'
 import activeReducer from './activeMessages'
 import activeOpenReducer from'./activeOpen'
 import notificationsReducer from './notifications'
+import gamesReducer from './games'
+import roomsReducer from './rooms'
 
 const rootReducer = combineReducers({
     session,
@@ -16,6 +18,8 @@ const rootReducer = combineReducers({
     active: activeReducer,
     open: activeOpenReducer,
     notifications: notificationsReducer,
+    games: gamesReducer,
+    rooms: roomsReducer,
 });
 
 

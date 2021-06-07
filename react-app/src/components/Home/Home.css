@@ -75,18 +75,25 @@
 
 /* Friends List */
 .home__friends-list{
-    position: absolute;
-    top: 20px;
-    bottom: 20px;
-    right: 20px;
-    width: 250px;
-    padding: 10px;
-    box-sizing: border-box;
-    overflow-y: auto;
-    border-radius: 10px;
-    border: .5px solid var(--faintBorder);
-    background-color: var(--friendsListBackground);
-    animation: 1s ease 0s 1 fadeIn;
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  right: 20px;
+  width: 250px;
+  overflow-y: auto;
+  border-radius: 10px;
+  border: .5px solid var(--faintBorder);
+  background-color: var(--friendsListBackground);
+  animation: 1s ease 0s 1 fadeIn;
+  transition: .2s;
+  border: 1.3px solid var(--faintBorder);
+  overflow-y: hidden;
+  display: grid;
+  grid-template-rows: 30px 1fr;
+}
+
+.home__friends-list .friends-list__list{
+  opacity: 1;
 }
 
 /** Scroll Bar**/

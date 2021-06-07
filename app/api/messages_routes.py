@@ -17,6 +17,4 @@ messages_routes = Blueprint('messages', __name__)
 @login_required
 def message(friendship_id):
     messages = Message.query.filter(Message.friend_id==int(friendship_id)).all()
-    print(messages)
-
     return {"messages": {f'{message.id}':message.to_dict() for message in messages}}

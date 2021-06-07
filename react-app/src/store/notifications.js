@@ -38,6 +38,7 @@ export default function notificationsReducer(state=initialState, action) {
     switch (action.type) {
         case NEW_MESSAGE_NOTIFICATION:
             newState={...state}
+            newState.messages={...newState.messages}
             if(newState.messages[action.user_id]){
                 newState.messages[action.user_id]+=1
             } else{
@@ -46,10 +47,12 @@ export default function notificationsReducer(state=initialState, action) {
             return newState;
         case READ_MESSAGE_NOTIFICATION:
             newState={...state}
+            newState.messages={...newState.messages}
             newState.messages[action.user_id]=0
             return newState;
         case REMOVE_NOTIFICATION:
             newState={...state}
+            newState.messages={...newState.messages}
             delete newState.messages[action.user_id]
             return newState;
         case RESET_NOTIFICATIONS:

@@ -12,7 +12,7 @@ def seed_games():
     ]
 
     for game in games:
-        load_game = Game(name=game['name'])
+        load_game = Game(name=game['name'], picture=game['picture'])
         db.session.add(load_game)
 
     db.session.commit()

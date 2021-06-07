@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { newMessageNotification } from "../../store/notifications";
 import { updateActive } from "../../store/activeMessages";
 
+
+/*************************** SOCKET VARIABLE ***************************/
 let socket;
 
 
@@ -46,10 +48,15 @@ function MessageBar({closeMessage}) {
       dispatch(handleNewSocketMessage(message, user))
     })
 
-    return (()=>{
+    return ()=>{
       socket.disconnect()
-    })
+    }
   },[friends])
+
+
+  if (!user){
+      return null
+  }
 
 
   return (

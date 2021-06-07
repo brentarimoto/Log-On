@@ -1,36 +1,67 @@
 /*************************** REACT IMPORTS ***************************/
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
 import FriendsList from '../FriendsList.js/FriendsList';
+import { setSpecificActiveOpen } from '../../store/activeOpen';
 
 
 /*************************** CSS ***************************/
 import './Home.css'
 
-const games = ['https://logonapp.s3-us-west-1.amazonaws.com/connect-4.jpg','','','','','','',]
+
+/*************************** HELPER VARIABLES ***************************/
 const commingSoon = 'https://image.freepik.com/free-vector/coming-soon-design_1132-70.jpg'
 
 /*************************** COMPONENTS ***************************/
 const Home = () => {
+    const dispatch = useDispatch()
+    const history = useHistory()
+
+    const listOpen = useSelector(state=>state.open.friends)
+    const user = useSelector(state=>state.session.user)
+    const games = useSelector(state=>state.games)
+
+
+    useEffect(()=>{
+        if(!listOpen){
+            dispatch(setSpecificActiveOpen('friends', true))
+        }
+    },[dispatch])
+
+    useEffect(()=>{
+        if(localStorage.getItem('authorizing') && user){
+            const pathname=localStorage.getItem('authorizing')
+            localStorage.removeItem('authorizing')
+            history.push(pathname)
+        }
+    },[user])
 
     return (
     <div className='home'>
         <div className='home__game-links-div'>
             <div className='home__game-links'>
-                {games.map((game, id)=>(
-                    <Link key={id} to={game ? `/games/${id+1}` : '/'} className={`home__game-link ${id===0 ? 'home__game-link-first' : ''}`}>
-                        <img className='home__game-link-image' src={game? game:commingSoon}></img>
+                {Object.entries(games).map(([id, game], count)=>(
+                    <Link key={id} to={`/games/${id}`} className={`home__game-link ${count===0 ? 'home__game-link-first' : ''}`}>
+                        <img className='home__game-link-image' src={game.info.picture}></img>
                         <div className='home__game-link-header'>
-                            {game ? 'Fours' : 'New Game Coming Soon'}
+                            {game.info.name}
+                        </div>
+                    </Link>
+                ))}
+                {['','','','','',''].map((el, id)=>(
+                    <Link key={id} to='/' className='home__game-link'>
+                        <img className='home__game-link-image' src={commingSoon}></img>
+                        <div className='home__game-link-header'>
+                            New Game Coming Soon
                         </div>
                     </Link>
                 ))}
             </div>
         </div>
-        <FriendsList classname='home__friends-list'/>
     </div>
     );
 }

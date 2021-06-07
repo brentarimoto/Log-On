@@ -14,6 +14,7 @@ from .api.auth_routes import auth_routes
 from .api.friends_routes import friends_routes
 from .api.search_routes import search_routes
 from .api.messages_routes import messages_routes
+from .api.games_routes import games_routes
 
 from .seeds import seed_commands
 
@@ -80,6 +81,7 @@ app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(friends_routes, url_prefix='/api/friends')
 app.register_blueprint(search_routes, url_prefix='/api/search')
 app.register_blueprint(messages_routes, url_prefix='/api/messages')
+app.register_blueprint(games_routes, url_prefix='/api/games')
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

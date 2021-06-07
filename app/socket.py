@@ -26,7 +26,6 @@ socketio = SocketIO(cors_allowed_origins=origins)
 def on_join(data):
     room=data['room']
     join_room(room)
-    # print("joined!   ", room)
 
 
 @socketio.on('leave')
@@ -47,6 +46,11 @@ def handle_chat(data):
     db.session.commit()
 
     emit("message",{'sender_id':data['sender_id'],'receiver_id':data['receiver_id'],'message':message.to_dict()}, room=data['room'])
+
+
+@socketio.on("chatroom")
+def handle_chat(data):
+    emit("chatroom",{'message':{'sender':data['sender'],'message':data['message']}}, room=data['room'])
 
 
 @socketio.on("dm_change")

@@ -19,7 +19,7 @@ function Message({message}) {
     return (
         <div className={isUser ? 'message message--user' : 'message message--friend'}>
             <div className='message__profpic'>
-                <ProfilePhoto />
+                <ProfilePhoto profileUser={message.sender}/>
             </div>
             <div className={isUser ? 'message__text message__text--user' : 'message__text message__text--friend'}>
                 {message.message}

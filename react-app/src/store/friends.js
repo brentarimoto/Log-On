@@ -27,7 +27,7 @@ const removeFriend = (friend_id) => ({
     friend_id,
 });
 
-export const resetFriends = (friend_id) => ({
+export const resetFriends = () => ({
     type: RESET_FRIENDS,
 });
 

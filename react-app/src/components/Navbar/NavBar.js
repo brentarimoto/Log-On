@@ -1,5 +1,5 @@
 /*************************** REACT IMPORTS ***************************/
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -18,6 +18,12 @@ import './NavBar.css'
 /*************************** COMPONENTS ***************************/
 const NavBar = () => {
   const user = useSelector(state=>state.session.user)
+
+  useEffect(()=>{
+    return ()=>{
+      console.log('UNMOUNT NAVBAR')
+    }
+  },[])
 
   return (
     <nav className='navbar'>

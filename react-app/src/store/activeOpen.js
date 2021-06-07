@@ -41,13 +41,16 @@ export const resetActiveOpen = () => ({
 
 
 /*************************** REDUCER ***************************/
-const initialState = {friends: true};
+const initialState = {};
 
 export default function activeOpenReducer(state=initialState, action) {
     let newState;
     switch (action.type) {
         case SET_ACTIVE_OPEN:
             newState={...state}
+            if(!newState.friends){
+                newState.friends=true
+            }
             newState[action.user_id]=false
             return newState
         case SET_SPECIFIC_ACTIVE_OPEN:
