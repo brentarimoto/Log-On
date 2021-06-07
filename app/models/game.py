@@ -9,6 +9,7 @@ class Game(db.Model):
 
   id = db.Column(db.Integer, primary_key = True)
   name = db.Column(db.String(255), nullable=False)
+  picture = db.Column(db.String(255))
 
   stats = db.relationship(
     "Stat",
@@ -24,10 +25,12 @@ class Game(db.Model):
     return {
       "id": self.id,
       "name": self.name,
+      "picture": self.picture,
     }
 
   def to_dict_basic(self):
     return {
       "id": self.id,
       "name": self.name,
+      "picture": self.picture,
     }

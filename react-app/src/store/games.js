@@ -4,20 +4,16 @@ import { updateActive } from "./activeMessages";
 import { newMessageNotification } from "./notifications";
 
 /*************************** TYPES ***************************/
-const SET_MESSAGES = "messages/SET_MESSAGES";
+const SET_GAMES = "games/SET_GAMES";
 
-const ADD_MESSAGE = "messages/ADD_MESSAGE";
 
-const REMOVE_MESSAGE = "messages/REMOVE_MESSAGE";
-
-const RESET_MESSAGES = "messages/RESET_MESSAGES";
+const RESET_GAMES = "games/RESET_GAMES";
 
 
 /*************************** ACTIONS ***************************/
-const setMessages = (user_id, messages) => ({
-    type: SET_MESSAGES,
-    user_id,
-    messages
+const setMessages = (games) => ({
+    type: SET_GAMES,
+    games
 });
 
 export const addMessage = (user_id, message) => ({

@@ -9,6 +9,9 @@ import ProfilePhoto from "../ProfilePhoto/ProfilePhoto";
 import Stat from './Stat'
 import { acceptRequest, unFriend } from "../../store/friends";
 import { cancelRequest, declineRequest, sendFriendRequest, } from "../../store/users";
+import { popActive } from "../../store/activeMessages";
+import { removeNotification } from "../../store/notifications";
+import { removeMessage } from "../../store/messages";
 
 
 /*************************** CSS ***************************/
@@ -22,6 +25,9 @@ function FriendButtons({profileUser, unfriendOpen, setUnfriendOpen, friend_id}){
 
   const dispatch=useDispatch()
   const friends = useSelector(state=>state.friends)
+  const active = useSelector(state=>state.active)
+  const notifications = useSelector(state=>state.notifications)
+  const messages = useSelector(state=>state.messages)
 
   const handleOpen=()=>{
     setUnfriendOpen(true)
@@ -32,6 +38,15 @@ function FriendButtons({profileUser, unfriendOpen, setUnfriendOpen, friend_id}){
   }
 
   const handleUnfriend=()=>{
+    if(active.find(el=>el.user_id===profileUser.id)){
+      dispatch(popActive(profileUser.id))
+    }
+    if(notifications[profileUser.id]){
+      dispatch(removeNotification(profileUser.id))
+    }
+    if(messages[profileUser.id]){
+      dispatch(removeMessage(profileUser.id))
+    }
     dispatch(unFriend(friends[profileUser.id].id))
     setUnfriendOpen(false)
   }

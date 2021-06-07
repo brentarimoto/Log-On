@@ -66,8 +66,11 @@ body{
 }
 
 .content{
+  max-width: 1600px;
+  min-width: 850;
+  margin: auto;
   position: fixed;
-  top: 65px;
+  top: 75px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -103,13 +106,19 @@ body{
     --button: var(--deepBlue);
     --faintBorder: rgba(0,0,0,.10);
 
+    /* NavBar */
+    --navLinkColor: var(--deepBlue);
+
+    /* Search */
+    --searchActiveColor: var(--lightViolet);
+
     /* Modal */
     --modalBackground: rgba(0,0,0,.15);
     --modalContentBackground: white;
     --navbarButtonColor: var(--greyBlue);
 
     /* Splash */
-    --splashButtonColor: var(--lightViolet);
+    --splashButtonColor: var(--deepBlue);
 
     /* Home */
     --friendsListBackground: var(--ghostWhite);

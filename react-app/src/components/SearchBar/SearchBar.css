@@ -11,7 +11,7 @@
 
 .navbar__search-label{
 	position: absolute;
-	color: lightgray;
+	color: var(--navLinkColor);
 	top: 0;
 	left: 10px;
 	right: 0;
@@ -28,7 +28,7 @@
 	outline: none;
 	height: 24px;
 	border: none;
-	border-bottom: 1px solid lightgray;
+	border-bottom: 1px solid var(--navLinkColor);
 	background-color: transparent;
 	color: whitesmoke;
 	font-size: 100%;
@@ -38,14 +38,14 @@
 .navbar__search-input:focus,
 .navbar__search-active{
 	width: 100%;
-	border-bottom: 1px solid var(--deepBlue);
+	border-bottom: 1px solid var(--searchActiveColor);
 	transition: .2s;
 }
 
 
 .navbar__search-input:focus+.navbar__search-label,
 .navbar__search-active+.navbar__search-label{
-	color: var(--deepBlue);
+	color: var(--searchActiveColor);
 	font-size: 65%;
 	transform: translateY(-15px);
 	transition: .3s;

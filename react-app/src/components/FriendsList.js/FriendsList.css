@@ -1,0 +1,32 @@
+
+.friends-list{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 250px;
+    height: 30px;
+    overflow-y: auto;
+    border-radius: 10px;
+    border: .5px solid var(--faintBorder);
+    background-color: var(--friendsListBackground);
+    animation: 1s ease 0s 1 fadeIn;
+    overflow-y: hidden;
+    transition-property: height;
+    transition-duration: .5s;
+    border: 1.3px solid var(--faintBorder);
+}
+
+.friends-list--active{
+    top: 20px;
+    height: auto;
+    transition: 2s;
+}
+
+.friends-list__header{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}

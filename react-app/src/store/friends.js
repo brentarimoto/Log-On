@@ -8,6 +8,8 @@ const ADD_FRIEND = "friends/ADD_FRIEND";
 
 const REMOVE_FRIEND = "friends/REMOVE_FRIEND";
 
+const RESET_FRIENDS = "friends/RESET_FRIENDS";
+
 /*************************** ACTIONS ***************************/
 const setFriends = (friendships) => ({
     type: SET_FRIENDS,
@@ -24,6 +26,11 @@ const removeFriend = (friend_id) => ({
     type: REMOVE_FRIEND,
     friend_id,
 });
+
+export const resetFriends = (friend_id) => ({
+    type: RESET_FRIENDS,
+});
+
 
 
 /*************************** THUNKS ***************************/
@@ -105,6 +112,8 @@ export default function friendsReducer(state=initialState, action) {
           newState = {...state}
           delete newState[action.friend_id]
           return newState
+        case RESET_FRIENDS:
+          return initialState
         default:
             return state;
     }
