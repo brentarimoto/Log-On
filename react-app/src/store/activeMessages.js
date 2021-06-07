@@ -7,6 +7,9 @@ const APPEND_ACTIVE = "active/APPEND_ACTIVE";
 const POP_ACTIVE = "active/POP_ACTIVE";
 
 const UPDATE_ACTIVE = "active/UPDATE_ACTIVE";
+
+const RESET_ACTIVE = "active/RESET_ACTIVE";
+
 /*************************** ACTIONS ***************************/
 export const appendActive = (messages) => ({
     type: APPEND_ACTIVE,
@@ -22,6 +25,10 @@ export const updateActive = (user_id, message) => ({
     type: UPDATE_ACTIVE,
     user_id,
     message
+});
+
+export const resetActive = () => ({
+    type: RESET_ACTIVE
 });
 
 /*************************** REDUCER ***************************/
@@ -53,6 +60,8 @@ export default function activeReducer(state=initialState, action) {
                 return value
             })
             return newState
+        case RESET_ACTIVE:
+          return initialState
         default:
             return state;
     }

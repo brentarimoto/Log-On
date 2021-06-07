@@ -1,30 +1,92 @@
+/*** Home ***/
 .home{
     position: relative;
-    max-width: 1600px;
-    min-width: 850;
-    margin: auto;
     width: 100%;
     height: 100%;
     padding: 20px;
     box-sizing: border-box;
-    display: grid;
-    grid-template-columns: 1fr 250px;
-    grid-template-rows: auto;
 }
 
+/* Game Links */
+.home__game-links-div{
+  width: 100%;
+  height: 100%;
+  padding-right: 270px;
+  box-sizing: border-box;
+  animation: 1s ease 0s 1 fadeIn;
+}
+
+.home__game-links{
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: .5px solid var(--faintBorder);
+  background-color: var(--friendsListBackground);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+  "one one two"
+  "one one three"
+  "one one four"
+  "five six seven";
+}
+
+.home__game-link{
+  border-radius: 5px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  padding:5px;
+  box-sizing: border-box;
+  background-color: var(--friendsListBackground);
+}
+
+.home__game-link-first{
+  grid-area: one;
+}
+
+.home__game-link-image{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.home__game-link-header{
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 45px;
+  background-color: rgba(0, 0, 0, .75);
+  color: white;
+  display: flex;
+  align-items: flex-end;
+  font-size: 160%;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 5px 5px 0 0 ;
+}
+
+/* Friends List */
 .home__friends-list{
     position: absolute;
     top: 20px;
     bottom: 20px;
     right: 20px;
     width: 250px;
-    max-height: 100%;
     padding: 10px;
     box-sizing: border-box;
     overflow-y: auto;
     border-radius: 10px;
     border: .5px solid var(--faintBorder);
     background-color: var(--friendsListBackground);
+    animation: 1s ease 0s 1 fadeIn;
 }
 
 /** Scroll Bar**/

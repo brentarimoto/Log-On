@@ -8,7 +8,7 @@ from app.models import db, Game
 def seed_games():
 
     games = [
-        {'name': 'Fours'},
+        {'name': 'Fours','picture':'https://logonapp.s3-us-west-1.amazonaws.com/connect-4.jpg'},
     ]
 
     for game in games:

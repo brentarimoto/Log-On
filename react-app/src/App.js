@@ -9,16 +9,21 @@ import NavBar from "./components/Navbar/NavBar";
 import Splash from "./components/Splash/Splash";
 import Home from "./components/Home/Home";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import MessageBar from "./components/MessageBar/MessageBar";
+import Games from "./components/Games/Games";
 
 import { authenticate } from "./store/session";
 import background from "./images/background_image.jpg";
+import FriendsList from "./components/FriendsList.js/FriendsList";
 
 
 /*************************** COMPONENTS ***************************/
 function App() {
-  const user = useSelector(state => state.session.user)
-  const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
+
+  const [loaded, setLoaded] = useState(false);
+
+  const user = useSelector(state => state.session.user)
 
   useEffect(() => {
     (() => {
@@ -53,10 +58,15 @@ function App() {
             <ProtectedRoute path="/friends" exact={true} >
               Friends
             </ProtectedRoute>
-            <ProtectedRoute path="messages" exact={true} >
+            <ProtectedRoute path="/messages" exact={true} >
               Messages
             </ProtectedRoute>
+            <ProtectedRoute path="/games/:id" exact={true} >
+              <Games />
+            </ProtectedRoute>
           </Switch>
+          <FriendsList classname='home__friends-list'/>
+          <MessageBar />
         </div>
       </BrowserRouter>
     </div>

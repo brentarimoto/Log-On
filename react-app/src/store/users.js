@@ -4,11 +4,19 @@
 /*************************** TYPES ***************************/
 const ADD_USER = "user/ADD_USER";
 
+const RESET_USERS = "user/RESET_USERS";
+
 /*************************** ACTIONS ***************************/
 const addUser = (user) => ({
     type: ADD_USER,
     user,
 });
+
+
+export const resetUsers = () => ({
+    type: RESET_USERS
+});
+
 
 /*************************** THUNKS ***************************/
 export const getUser = (userId) => async (dispatch) => {
@@ -95,6 +103,8 @@ export default function usersReducer(state=initialState, action) {
           newState={...state}
           newState[action.user.id]=action.user
           return newState
+        case RESET_USERS:
+          return initialState
         default:
             return state;
     }
