@@ -39,7 +39,6 @@ const FriendsList = () => {
 
     useEffect(()=>{
         if (user){
-            console.log('TEST')
             dispatch(getFriends(user.id))
             dispatch(getGames())
         }

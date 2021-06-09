@@ -13,7 +13,7 @@ from .models import db, Message
 if os.environ.get("FLASK_ENV") == "production":
     origins = [
         "http://log-on.herokuapp.com",
-        "https://log-on.herokuapp.com"
+        "http://log-on.herokuapp.com"
     ]
 else:
     origins = "*"
@@ -61,3 +61,28 @@ def confirmation(data):
 @socketio.on("chatroom")
 def game_chat(data):
     emit("chatroom",{'message':{'sender':data['sender'],'message':data['message']}}, room=data['room'])
+
+@socketio.on("leave_game")
+def leave_game(data):
+    print('LEAVE GAME')
+    emit("leave_game",{"leave_game":True, 'sender_id':data['sender_id']}, room=data['room'])
+
+#### Fours ####
+
+games={}
+
+@socketio.on("start_game")
+def start_game(data):
+    room=data['room']
+
+    games[room] = room
+    emit("start_game",{}, room=data['room'])
+
+
+@socketio.on("fours_move")
+def fours_move(data):
+    room=data['room']
+    move = data['move']
+
+    print(games[room])
+    emit("fours_move",{}, room=data['room'])

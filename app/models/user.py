@@ -74,7 +74,7 @@ class User(db.Model, UserMixin):
       'friends_requested' : {user.accepter.id:user.to_dict_basic() for user in self.friends_requested},
       'friends_accepted' : {user.requester.id:user.to_dict_basic() for user in self.friends_accepted},
       'messages_sent' : [message.to_dict_basic() for message in self.messages_sent],
-      'stats' : [game.to_dict() for game in self.stats],
+      'stats' : {game.game_id:game.to_dict() for game in self.stats},
     }
 
   def to_dict_basic(self):

@@ -5,6 +5,7 @@
     height: 100%;
     box-sizing: border-box;
     animation: 1s ease 0s 1 fadeIn;
+    min-width: 900px;
 }
 
 .games{

@@ -151,7 +151,13 @@ body{
 
 
     /** Game **/
-    --createMatch: var(--lightViolet)
+    --createMatch: var(--lightViolet);
+
+
+    /** Fours **/
+    --foursBoardColor: var(--deepBlue);
+    --foursOpponentColor: var(--lightRed);
+    --foursUserColor: var(--lightViolet);
 
 }
 

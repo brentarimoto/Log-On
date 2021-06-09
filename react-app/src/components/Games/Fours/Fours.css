@@ -1,3 +1,4 @@
+/*** Fours ***/
 .fours{
     width: 100%;
     height: 100%;
@@ -7,24 +8,22 @@
     grid-template-columns: 250px 1fr;
     grid-template-rows: 100px 1fr;
     grid-template-areas:
+    "info header"
+    "info game";
+}
+
+.fours--pre{
+    grid-template-areas:
     "header header"
     "info game";
 }
 
-.fours__board{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-}
-
+/*** Header ***/
 .fours__header{
     grid-area: header;
     background-color: var(--faintBorder);
     display: grid;
-    grid-template-columns: 200px 1fr 200px;
+    grid-template-columns: 250px 1fr 250px;
     grid-template-areas:
     "left vs right";
     align-items: center;
@@ -54,6 +53,7 @@
     align-items: center;
 }
 
+/* Invite */
 .fours__invite-button{
     grid-area: left;
 	border-radius: 3px;
@@ -75,12 +75,110 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
+.fours__invite-list{
+    position: absolute;
+    top: 70px;
+    left: 0;
+    min-width: 200px;
+    max-width: 450px;
+    max-height: 300px;
+    overflow: auto;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: var(--friendsListBackground);
+    border-radius: 10px;
+    color: black;
+    display: grid;
+    grid-template-rows: auto;
+    row-gap: 10px;
+}
+
+.fours__invite-item{
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: 40px;
+    padding: 2px;
+    box-sizing: border-box;
+    column-gap: 10px;
+    border-radius: 7px;
+}
+
+.fours__invite-item:hover{
+    background-color: var(--friendsListHover);
+}
+
+.fours__invite-pic{
+    border-radius: 550%;
+}
+
+.fours__invite-username{
+    justify-self: start;
+    align-self: center;
+}
+
+
+/* VS  */
+.fours__VS{
+    grid-area: vs;
+}
+
+/*** Players ***/
 .fours__players{
-    height: 250px;
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    grid-template-rows: 60px;
+    column-gap: 10px;
+    grid-template-areas:
+    "pic info";
+    border-radius: 5px;
+    background-color: var(--faintBorder);
+    border: 1px solid var(--faintBorder);
+    width: 90%;
 }
 
+.fours__players-pic{
+    grid-area: pic;
+    padding: 1px;
+    border-radius: 5px;
+    font-size: 150%;
+}
+
+.fours__players-info{
+    grid-area: info;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    height: 100%;
+}
+
+.fours__user{
+    grid-area: right;
+}
+
+.fours__opponent{
+    grid-area: left;
+}
+
+.fours__players-username{
+    font-size: 130%;
+    font-weight: bold;
+}
+
+.fours__players-rank{
+    display: flex;
+    font-size: 110%;
+}
+
+.fours__players-rank-icon{
+    margin-right: 10px;
+    -webkit-text-stroke: .5px grey;
+}
+
+
+/*** Chat ***/
 .fours__chat{
     grid-area: info;
     width: 100%;
@@ -119,4 +217,12 @@
     bottom: 20px;
     left: 10px;
     right: 10px;
+}
+
+/*** Main Game ***/
+.fours__game-container{
+    grid-area: game;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
 }

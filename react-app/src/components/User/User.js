@@ -271,8 +271,8 @@ function User({profileUserId, friend_id}) {
           spaceBetween={50}
           slidesPerView={1}
         >
-          {profileUser.stats.length>0 ?
-            profileUser.stats.map((stat)=>(
+          {Object.keys(profileUser.stats).length>0 ?
+            Object.values(profileUser.stats).map((stat)=>(
               <SwiperSlide key={stat.id}><Stat stat={stat}/></SwiperSlide>
             ))
             :
