@@ -31,16 +31,19 @@
     grid-area: message;
     display: flex;
     align-items: flex-end;
-    background-color: lightgray;
     padding: 5px;
 }
 
 .message__text--friend{
-    padding-left: 15px;
+    padding: 0 10px;
     margin-right: 30px;
     margin-left: 1px;
     margin-bottom: 7.5px;
     border-radius: 5px 5px 5px 0;
+    background-color: var(--otherMessage);
+    color: var(--otherText);
+    border: .5px solid var(--greyBlue);
+    word-break: break-all;
 }
 
 .message__text--user{
@@ -48,6 +51,9 @@
     margin-left: 30px;
     margin-right: 1px;
     margin-bottom: 7.5px;
-    flex-direction: row-reverse;
     border-radius: 5px 5px 0 5px;
+    background-color: var(--userMessage);
+    color: var(--userText);
+    border: .5px solid var(--greyBlue);
+    word-break: break-all;
 }

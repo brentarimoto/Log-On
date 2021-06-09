@@ -65,3 +65,36 @@
 .navbar__modal-button{
     color: var(--navLinkColor);
 }
+
+.navbar__friends,
+.navbar__messages,
+.navbar__notifications{
+    width: 40px;
+    height: 40px;
+    font-size: 110%;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 0 5px;
+    text-decoration: none;
+    position: relative;
+}
+
+.navbar__icon{
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    font-size: inherit;
+    background-color: var(--friendsListBackground);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar__account{
+    width: 40px;
+    height: 40px;
+    font-size: 120%;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 0 0 5px;
+}

@@ -1,19 +1,18 @@
 /*************************** REACT IMPORTS ***************************/
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 
 /*************************** COMPONENT IMPORTS ***************************/
 import MessageChat from "./MessageChat/MessageChat";
-import {addMessage, handleNewSocketMessage} from '../../store/messages'
+import {handleNewSocketMessage} from '../../store/messages'
 
 
 /*************************** CSS ***************************/
 import './MessageBar.css'
 import { useDispatch, useSelector } from "react-redux";
-import { newMessageNotification } from "../../store/notifications";
-import { updateActive } from "../../store/activeMessages";
+import { newNotification, setMessageNotifications } from "../../store/notifications";
 
 
 /*************************** SOCKET VARIABLE ***************************/
@@ -32,26 +31,63 @@ function MessageBar({closeMessage}) {
   const active = useSelector(state=>state.active)
   const friends = useSelector(state=>state.friends)
   const user = useSelector(state=>state.session.user)
-  const messages = useSelector(state=>state.messages)
+  const notifications = useSelector(state=>state.notifications.notifications)
+  const messageNotifications = useSelector(state=>state.notifications.messages)
+  const friendUpdate = useSelector(state=>state.friendUpdate)
+
+  const [loaded, setLoaded] = useState(false)
+  const [currentSocket, setCurrentSocket] = useState(null)
+
+  useEffect(()=>{
+    const value = JSON.parse(localStorage.getItem('messageNotifications'))
+    if(value){
+      if(Object.keys(value).length>0){
+        dispatch(setMessageNotifications(value))
+      }
+    }
+  },[])
+
+  useEffect(()=>{
+    localStorage.setItem('messageNotifications', JSON.stringify(messageNotifications))
+  },[messageNotifications])
 
   useEffect(()=>{
     socket = io()
-    socket.on('connect', () => {
-      if(Object.keys(friends).length>0){
-        for (let id in friends) {
-            socket.emit('join', {room:messageHash(friends[id].accept_id, friends[id].request_id)})
+
+    if(!loaded && Object.keys(friends).length){
+      socket.on('connect', () => {
+        if(Object.keys(friends).length>0){
+          for (let id in friends) {
+              socket.emit('join', {room:messageHash(friends[id].accept_id, friends[id].request_id)})
+            }
           }
-        }
-    })
+      })
+
+      setLoaded(true)
+    }
+
+    if(friendUpdate.new){
+      socket.emit('join', {room:messageHash(user.id, friendUpdate.new)})
+    }
+
+    if(friendUpdate.un){
+      socket.emit('leave', {room:messageHash(user.id, friendUpdate.un)})
+    }
 
     socket.on("message", (message) => {
       dispatch(handleNewSocketMessage(message, user))
     })
 
+    socket.on("invitations", ({invitation}) => {
+      if ((invitation.sender.id !== user.id)){
+        dispatch(newNotification(invitation))
+      }
+    })
+
     return ()=>{
       socket.disconnect()
     }
-  },[friends])
+  },[friends, friendUpdate])
 
 
   if (!user){

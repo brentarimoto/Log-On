@@ -85,10 +85,6 @@
     transition: .2s;
 }
 
-.messagechat__username--notification{
-    background-color: var(--lightBlue);
-    transition: .2s;
-}
 
 .messagechat__username p{
     width: 100%;

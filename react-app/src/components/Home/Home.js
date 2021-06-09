@@ -46,9 +46,9 @@ const Home = () => {
             <div className='home__game-links'>
                 {Object.entries(games).map(([id, game], count)=>(
                     <Link key={id} to={`/games/${id}`} className={`home__game-link ${count===0 ? 'home__game-link-first' : ''}`}>
-                        <img className='home__game-link-image' src={game.info.picture}></img>
+                        <img className='home__game-link-image' src={game.picture}></img>
                         <div className='home__game-link-header'>
-                            {game.info.name}
+                            {game.name}
                         </div>
                     </Link>
                 ))}

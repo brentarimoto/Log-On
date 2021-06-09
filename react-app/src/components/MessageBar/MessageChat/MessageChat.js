@@ -39,8 +39,8 @@ function MessageChat({closeMessage, messages, userId, socket}) {
     const friend = friendship?.accepter ? friendship?.accepter : friendship?.requester
 
 
-    const handleMessageClick=()=>{
-        if(!open[userId] && notificationsNum){
+    const handleMessageClick=(e)=>{
+        if(!open[userId] && notificationsNum && !e.target.className.includes('cancel')){
             dispatch(readMessageNotification(userId))
         }
         if(open[userId]){
@@ -79,7 +79,7 @@ function MessageChat({closeMessage, messages, userId, socket}) {
             <div className={`messagechat__username ${notificationsNum>0 && 'messagechat__username--notification'}`}onClick={handleMessageClick}>
                 <p>{friend.username}</p>
                 <div className='messagechat__cancel' onClick={handleMessageCancel}>
-                    <i className="fas fa-times"></i>
+                    <i className="fas fa-times cancel"></i>
                 </div>
                 {notificationsNum>0 &&
                     <div className='messagechat__notifications'>

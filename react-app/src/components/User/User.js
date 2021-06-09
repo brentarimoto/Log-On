@@ -10,13 +10,15 @@ import Stat from './Stat'
 import { acceptRequest, unFriend } from "../../store/friends";
 import { cancelRequest, declineRequest, sendFriendRequest, } from "../../store/users";
 import { popActive } from "../../store/activeMessages";
-import { removeNotification } from "../../store/notifications";
+import { removeMessageNotification } from "../../store/notifications";
 import { removeMessage } from "../../store/messages";
+import { newFriendUpdate, unFriendUpdate } from "../../store/friendUpdate";
 
 
 /*************************** CSS ***************************/
 import './User.css'
 import 'swiper/swiper-bundle.css';
+import LogoutButton from "../auth/LogoutButton";
 
 
 /*************************** HELPER COMPONENTS ***************************/
@@ -42,12 +44,13 @@ function FriendButtons({profileUser, unfriendOpen, setUnfriendOpen, friend_id}){
       dispatch(popActive(profileUser.id))
     }
     if(notifications[profileUser.id]){
-      dispatch(removeNotification(profileUser.id))
+      dispatch(removeMessageNotification(profileUser.id))
     }
     if(messages[profileUser.id]){
       dispatch(removeMessage(profileUser.id))
     }
     dispatch(unFriend(friends[profileUser.id].id))
+    dispatch(unFriendUpdate(profileUser.id))
     setUnfriendOpen(false)
   }
 
@@ -82,6 +85,7 @@ function NotFriendButtons({profileUser, user}){
 
   const handleAccept=()=>{
     dispatch(acceptRequest(profileUser.id))
+    dispatch(newFriendUpdate(profileUser.id))
   }
 
   const handleDecline=()=>{
@@ -142,7 +146,17 @@ function User({profileUserId, friend_id}) {
   const friends = useSelector(state=>state.friends)
   const users= useSelector(state=>state.users)
 
-  const profileUser = !friends[profileUserId] ? users[profileUserId]  : (friends[profileUserId].accepter ? friends[profileUserId].accepter : friends[profileUserId].requester)
+  const isUser = user.id==profileUserId
+
+  let profileUser;
+
+  if(isUser) {
+    profileUser=user
+  } else if(friends[profileUserId]) {
+    profileUser = friends[profileUserId].accepter ? friends[profileUserId].accepter : friends[profileUserId].requester
+  } else{
+    profileUser=users[profileUserId]
+  }
 
   const [firstname, setFirstname] = useState(profileUser.firstname)
   const [lastname, setLastname] = useState(profileUser.lastname)
@@ -152,13 +166,13 @@ function User({profileUserId, friend_id}) {
   const [errors, setErrors] = useState([])
   const [unfriendOpen, setUnfriendOpen] = useState(false);
 
-  const isUser = user.id==profileUser.id
 
   // Functions
 
   const handleSubmit = (e)=>{
     e.preventDefault()
   }
+
 
   return (
     <form className='user' onSubmit={handleSubmit}>
@@ -167,7 +181,7 @@ function User({profileUserId, friend_id}) {
       </div>
       <div className='user__info-container'>
         <div className='user__info'>
-          {friends[profileUser.id] && <div className='user__info-name'>
+          {(friends[profileUser.id] || isUser) && <div className='user__info-name'>
             <div className='user__info-divs'>
               <label className='user__info-labels' htmlFor="firstname">First Name</label>
               {isUser ?
@@ -230,12 +244,24 @@ function User({profileUserId, friend_id}) {
             }
           </div>
         <div className='user__info-buttons-div'>
-          {isUser && <button className='user__info-edit-button'>Save Changes</button>}
-          {!friends[profileUser.id] ?
-            <NotFriendButtons  profileUser={profileUser} user={user}/>
-            :
-            <FriendButtons profileUser={profileUser} unfriendOpen={unfriendOpen} setUnfriendOpen={setUnfriendOpen} friend_id={friend_id}/>
-          }
+          {isUser ?
+          <>
+            <button className='user__info-button' onClick={handleSubmit}>Save Changes</button>
+            <LogoutButton />
+          </>
+          :
+          <>
+            {!isUser &&
+            <>
+              {!friends[profileUser.id] ?
+                <NotFriendButtons  profileUser={profileUser} user={user}/>
+                :
+                <FriendButtons profileUser={profileUser} unfriendOpen={unfriendOpen} setUnfriendOpen={setUnfriendOpen} friend_id={friend_id}/>
+              }
+            </>
+            }
+          </>
+}
         </div>
         </div>
       </div>

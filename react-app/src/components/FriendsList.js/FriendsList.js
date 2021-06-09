@@ -39,6 +39,7 @@ const FriendsList = () => {
 
     useEffect(()=>{
         if (user){
+            console.log('TEST')
             dispatch(getFriends(user.id))
             dispatch(getGames())
         }
@@ -59,7 +60,9 @@ const FriendsList = () => {
     }
 
     return (
-        <div className={isHome ? 'home__friends-list' : `friends-list ${open.friends ? 'friends-list--active' : ''}`}>
+        <div
+        className={isHome ? 'home__friends-list' : `friends-list ${open.friends ? 'friends-list--active' : ''}`}
+        >
             <div className={`friends-list__header ${notificationCount>0 && 'friends-list__header--active'}`} onClick={handleFriendsList}>
                 Friends
                 {notificationCount>0 &&

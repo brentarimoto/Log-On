@@ -13,16 +13,44 @@ import switchActiveOpen, { setSpecificActiveOpen } from '../../store/activeOpen'
 import './Games.css'
 
 
+/*************************** HELPER FUNCTION ***************************/
+const gameChooser = (hash)=>{
+
+    if(/^\d+$/.test(hash)){
+        return hash
+    } else if (hash.split(':')[0].includes('Fours')){
+        return '1'
+    } else{
+        return undefined
+    }
+}
+
 /*************************** HELPER VARIABLES ***************************/
 const components = {
     1: <Fours />,
+}
+
+
+/*************************** HELPER VARIABLES ***************************/
+
+const GameDecider = ()=>{
+    const {game_id} = useParams()
+
+    if (gameChooser(game_id)==='1'){
+        return(
+            <Fours />
+        )
+    } else{
+        return (
+            <Redirect to='/' />
+        )
+    }
 }
 
 /*************************** COMPONENTS ***************************/
 const Games = () => {
     const dispatch = useDispatch()
     const location = useLocation()
-    const {game_id} = useParams()
 
     const user = useSelector(state=>state.session.user)
     const listOpen = useSelector(state=>state.open.friends)
@@ -36,7 +64,7 @@ const Games = () => {
     return (
     <div className='games-div'>
         <div className='games'>
-            {components[game_id]}
+            <GameDecider />
         </div>
     </div>
     );
