@@ -13,6 +13,7 @@ import {setActiveOpen, setSpecificActiveOpen} from '../../store/activeOpen'
 /*************************** CSS ***************************/
 import './Friend.css'
 import { newMessageNotification, readMessageNotification } from '../../store/notifications';
+import NotificationBubble from '../NotificationBubble/NotificationBubble';
 
 /*************************** COMPONENTS ***************************/
 const Friend = ({friendship}) => {
@@ -47,9 +48,7 @@ const Friend = ({friendship}) => {
     <div className='friend' onClick={handleMessageOpen}>
         <div className='friend__photo'>
             <UserModal friend={friend} friend_id={friendship.id}/>
-            {notificationsNum>0 && <div className='friend__notifications'>
-                {notificationsNum}
-            </div>}
+            <NotificationBubble notificationsNum={notificationsNum} message={true}/>
         </div>
         <div className='friend__username'>
             {friend?.username}

@@ -1,0 +1,48 @@
+
+.bubble-notification{
+    position: absolute;
+    width: 17px;
+    height: 17px;
+    font-size: 13px;
+    font-weight: bold;
+    top: -3px;
+    right: -3px;
+    border-radius: 50%;
+    color: white;
+    background-color: var(--notificationColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: .2s ease 0s 1 scaleUp;
+}
+
+.bubble-notification__message{
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    font-size: 11px;
+    font-weight: bolder;
+    top: .5px;
+    right: -1px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: .2s ease 0s 1 scaleUp;
+}
+
+.bubble-notification__message-icon{
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    font-size: 17px;
+    font-weight: bold;
+    top: 1px;
+    right: -1px;
+    border-radius: 50%;
+    color: var(--notificationColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: .2s ease 0s 1 scaleUp;
+}

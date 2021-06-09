@@ -20,25 +20,89 @@
     width: 100%;
 }
 
-.fours__info{
-    grid-area: info;
-    display: grid;
-    grid-template-rows: 250px 1fr;
+.fours__header{
+    grid-area: header;
     background-color: var(--faintBorder);
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-areas:
+    "left vs right";
+    align-items: center;
+    justify-items: center;
+}
+
+.fours__join-room-button{
+    grid-area: right;
+	border-radius: 3px;
+    background-color: var(--createMatch);
+	color: #fff;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	line-height: 21px;
+	width: 150px;
+	height: 55px;
+    font-size: 130%;
+	border-radius: 5px;
+	outline: 0;
+	border: none;
+	transition: all 1s;
+	text-align: center;
+    display: flex;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fours__invite-button{
+    grid-area: left;
+	border-radius: 3px;
+    background-color: var(--createMatch);
+	color: #fff;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	line-height: 21px;
+	width: 150px;
+	height: 55px;
+    font-size: 130%;
+	border-radius: 5px;
+	outline: 0;
+	border: none;
+	transition: all 1s;
+	text-align: center;
+    display: flex;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .fours__players{
     height: 250px;
 }
 
+.fours__chat{
+    grid-area: info;
+    width: 100%;
+    height: 100%;
+    background-color: var(--faintBorder);
+}
 
-.fours__info-messages{
+
+.gamechat__messages-div{
+    grid-area: info;
+    width: 100%;
+    height: 100%;
+}
+
+
+.gamechat__messages{
     width: 100%;
     height: 100%;
     position: relative;
 }
 
-.fours__info-chat-div{
+.gamechat__chat-div{
     position: absolute;
     top: 20px;
     bottom: 60px;
@@ -46,10 +110,11 @@
     right: 10px;
     display: flex;
     flex-direction: column-reverse;
+    justify-content: flex-start;
     overflow-y: auto;
 }
 
-.fours__info-input-div{
+.gamechat__input-div{
     position: absolute;
     bottom: 20px;
     left: 10px;

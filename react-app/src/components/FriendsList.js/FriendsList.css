@@ -7,7 +7,6 @@
     height: 30px;
     overflow-y: auto;
     border-radius: 10px;
-    border: .5px solid var(--faintBorder);
     background-color: var(--friendsListBackground);
     animation: 1s ease 0s 1 fadeIn;
     transition-property: height;
@@ -40,11 +39,6 @@
     position: relative;
 }
 
-.friends-list__header--active{
-    background-color: var(--friendsListHover);
-    border: 1.3px solid var(--friendsListHover);
-}
-
 .friends-list__notifications{
     position: absolute;
     width: 20px;
@@ -62,6 +56,7 @@
     animation: .2s ease 0s 1 scaleUp;
 }
 
+
 .friends-list__list{
     height: 100%;
     overflow-y: auto;
@@ -71,4 +66,5 @@
     border-top: 1px solid var(--faintBorder);
     padding-bottom: 5px;
     box-sizing: border-box;
+    background-color: var(--friendsListBackground);
 }

@@ -50,13 +50,14 @@
 	transform: translateY(-15px);
 	transition: .3s;
 }
+
 .navbar__search-list{
 	position: absolute;
 	top: 30px;
 	left: 10px;
 	min-width: 250px;
 	z-index: 99;
-	background-color: var(--friendsListBackground);
+	background-color: whitesmoke;
 	flex-direction: column;
 	display: none;
 
@@ -68,7 +69,6 @@
     animation: .2s ease 0s 1 fadeIn;
 	background-color: var(--friendsListBackground);
 	z-index: 98;
-
 }
 
 .navbar__search-input:focus~.navbar__search-list,

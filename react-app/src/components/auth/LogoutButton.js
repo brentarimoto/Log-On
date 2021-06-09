@@ -8,7 +8,7 @@ const LogoutButton = () => {
     dispatch(logout());
   };
 
-  return <h3 className='navbar__modal-button' onClick={onLogout}>Logout</h3>;
+  return <button className='user__info-button' onClick={onLogout}>Logout</button>;
 };
 
 export default LogoutButton;

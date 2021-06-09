@@ -1,0 +1,99 @@
+/*** Notifications ***/
+.notification{
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    font-size: inherit;
+    background-color: var(--friendsListBackground);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 125%;
+    position: relative;
+}
+
+.notification__icon{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/*** Notification List ***/
+.notification__list{
+    position: absolute;
+    top: 45px;
+    right: -20px;
+    min-width: 300px;
+    min-height: min-content;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    border: 1px solid var(--faintBorder);
+    animation: .2s ease 0s 1 fadeIn;
+    padding: 5px;
+}
+
+
+/*** Notification Item ***/
+.notification__list-item-none{
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notification__list-item{
+    display: grid;
+    column-gap: 10px;
+    grid-template-columns: 40px 1fr 30px;
+    grid-template-rows: 20px 20px;
+    grid-template-areas:
+    "pic name trash"
+    "pic text trash";
+    box-sizing: border-box;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    animation: 1s ease 0s 1 fadeIn;
+    text-decoration: none;
+}
+
+.notification__list-item:hover{
+	background-color: var(--friendsListHover);
+
+}
+
+.notification__list-item-profpic{
+    grid-area: pic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.notification__list-item-name{
+    grid-area: name;
+    display: flex;
+    align-items: center;
+    font-size: 85%;
+}
+
+.notification__list-item-text{
+    grid-area: text;
+    display: flex;
+    align-items: center;
+    font-size: 70%;
+}
+
+.notification__list-item-delete{
+    grid-area: trash;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 100%;
+    width: 100%;
+    height: 100%;
+}

@@ -76,6 +76,15 @@ body{
   bottom: 0;
 }
 
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
 :root {
     /* Rank Colors */
     --Cardboard: rgb(205, 159, 97);
@@ -106,11 +115,18 @@ body{
     --button: var(--deepBlue);
     --faintBorder: rgba(0,0,0,.10);
 
+    /* Scroll */
+    --scrollBar: var(--greyBlue);
+
     /* NavBar */
     --navLinkColor: var(--deepBlue);
 
     /* Search */
     --searchActiveColor: var(--lightViolet);
+
+    /* Notification */
+    --notificationColor: var(--lightRed);
+    --notificationBackground: var(--lightBlue);
 
     /* Modal */
     --modalBackground: rgba(0,0,0,.15);
@@ -127,11 +143,16 @@ body{
     /* User */
     --defaultProfPicColor: var(--lightBlue);
 
-    /* Scroll */
-    --scrollBar: var(--greyBlue);
+    /* Message */
+    --userMessage: var(--lightViolet);
+    --userText: var(--ghostWhite);
+    --otherMessage: lightgrey;
+    --otherText: black;
 
-    /* Notification */
-    --notificationColor: var(--lightRed)
+
+    /** Game **/
+    --createMatch: var(--lightViolet)
+
 }
 
 /* h1 {
