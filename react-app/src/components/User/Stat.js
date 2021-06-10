@@ -7,17 +7,7 @@ import './Stat.css'
 
 
 /*************************** HELPER OBJECTS ***************************/
-const image = {
-  'Cardboard': 'fas fa-box-open',
-  'Iron':'fas fa-weight-hanging',
-  'Bronze':'fas fa-bell',
-  'Silver': 'fas fa-coins',
-  'Gold':'fas fa-trophy',
-  'Platinum': 'fas fa-ring',
-  'Diamond':'fas fa-gem',
-  'Master': 'fas fa-meteor',
-  'Kami':'fas fa-sun',
-}
+import {rankImages} from '../../util/ranks'
 
 /*************************** COMPONENTS ***************************/
 
@@ -41,7 +31,7 @@ function Stat({stat}) {
             </div>
           </div>
           <div className='user__stat-img' style={{color: `var(--${stat.rank})`}}>
-            <i className={image[stat.rank]}></i>
+            <i className={rankImages[stat.rank]}></i>
             <div className='user__stat-border'></div>
           </div>
           <div className='user__stat-wlt'>

@@ -33,12 +33,12 @@ const components = {
 
 /*************************** HELPER VARIABLES ***************************/
 
-const GameDecider = ()=>{
+const GameDecider = ({socket})=>{
     const {game_id} = useParams()
 
     if (gameChooser(game_id)==='1'){
         return(
-            <Fours />
+            <Fours socket={socket}/>
         )
     } else{
         return (
@@ -48,7 +48,7 @@ const GameDecider = ()=>{
 }
 
 /*************************** COMPONENTS ***************************/
-const Games = () => {
+const Games = ({socket}) => {
     const dispatch = useDispatch()
     const location = useLocation()
 
@@ -64,7 +64,7 @@ const Games = () => {
     return (
     <div className='games-div'>
         <div className='games'>
-            <GameDecider />
+            <GameDecider socket={socket}/>
         </div>
     </div>
     );

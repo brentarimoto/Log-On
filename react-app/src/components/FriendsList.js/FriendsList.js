@@ -33,13 +33,13 @@ const FriendsList = () => {
     const friends = useSelector(state=>state.friends)
     const open = useSelector(state=>state.open)
     const notifications = useSelector(state=>state.notifications.messages)
+    const games = useSelector(state=>state.games)
 
     const [notificationCount, setNotificationCount] = useState(0)
     const [loaded, setLoaded] = useState(false)
 
     useEffect(()=>{
-        if (user){
-            console.log('TEST')
+        if (user && !games[1]){
             dispatch(getFriends(user.id))
             dispatch(getGames())
         }

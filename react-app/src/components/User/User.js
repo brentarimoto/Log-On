@@ -31,6 +31,7 @@ function FriendButtons({profileUser, unfriendOpen, setUnfriendOpen, friend_id}){
   const notifications = useSelector(state=>state.notifications)
   const messages = useSelector(state=>state.messages)
 
+
   const handleOpen=()=>{
     setUnfriendOpen(true)
   }
@@ -145,6 +146,7 @@ function User({profileUserId, friend_id}) {
   const user = useSelector(state=>state.session.user)
   const friends = useSelector(state=>state.friends)
   const users= useSelector(state=>state.users)
+  const gameStats = useSelector(state=>state.gameStats)
 
   const isUser = user.id==profileUserId
 
@@ -152,11 +154,13 @@ function User({profileUserId, friend_id}) {
 
   if(isUser) {
     profileUser=user
+    profileUser.stats = gameStats
   } else if(friends[profileUserId]) {
     profileUser = friends[profileUserId].accepter ? friends[profileUserId].accepter : friends[profileUserId].requester
   } else{
     profileUser=users[profileUserId]
   }
+
 
   const [firstname, setFirstname] = useState(profileUser.firstname)
   const [lastname, setLastname] = useState(profileUser.lastname)
@@ -271,8 +275,8 @@ function User({profileUserId, friend_id}) {
           spaceBetween={50}
           slidesPerView={1}
         >
-          {profileUser.stats.length>0 ?
-            profileUser.stats.map((stat)=>(
+          {Object.keys(profileUser.stats).length>0 ?
+            Object.values(profileUser.stats).map((stat)=>(
               <SwiperSlide key={stat.id}><Stat stat={stat}/></SwiperSlide>
             ))
             :

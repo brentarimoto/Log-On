@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { io } from 'socket.io-client';
 
 
 /*************************** COMPONENT IMPORTS ***************************/

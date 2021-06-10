@@ -108,6 +108,7 @@ body{
     --pastelWhite: rgba(245, 245, 244, 1);
     --ghostWhite: rgba(238, 238, 238,1);
     --greyBlue: rgba(190, 202, 211,1);
+    --faintGrey: rgba(64,64,64,.75);
 
 
     /* General */
@@ -151,7 +152,13 @@ body{
 
 
     /** Game **/
-    --createMatch: var(--lightViolet)
+    --createMatch: var(--lightViolet);
+
+
+    /** Fours **/
+    --foursBoardColor: var(--deepBlue);
+    --foursOpponentColor: var(--lightRed);
+    --foursUserColor: var(--lightViolet);
 
 }
 

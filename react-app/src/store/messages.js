@@ -55,8 +55,9 @@ export const getMessages = (friendship_id, user_id) => async (dispatch) => {
 
 
 /*************************** SPECIAL SOCKET THUNKS ***************************/
-export const handleNewSocketMessage = (message,user) => async (dispatch, getState) => {
+export const handleNewSocketMessage = (message) => async (dispatch, getState) => {
     const state = getState()
+    const user = state.session.user
     const userId = message.sender_id!==user.id ? message.sender_id : message.receiver_id
 
     if(!state.messages[userId] && user.id!==message.sender_id){

@@ -6,6 +6,10 @@ const JOIN_ROOM = "rooms/JOIN_ROOM";
 
 const ADD_OPPONENT = "rooms/ADD_OPPONENT";
 
+const UPDATE_OPPONENT = "rooms/UPDATE_OPPONENT";
+
+const REMOVE_OPPONENT = "rooms/REMOVE_OPPONENT";
+
 const ADD_ROOM_MESSAGE = "rooms/ADD_ROOM_MESSAGE";
 
 const LEAVE_ROOM = "rooms/LEAVE_ROOM";
@@ -24,6 +28,18 @@ export const addOpponent = (hash,opponent) => ({
     type: ADD_OPPONENT,
     hash,
     opponent
+});
+
+export const updateOpponent = (hash, game_id,stats) => ({
+    type: UPDATE_OPPONENT,
+    hash,
+    game_id,
+    stats
+});
+
+export const removeOpponent = (hash) => ({
+    type: REMOVE_OPPONENT,
+    hash,
 });
 
 export const addRoomMessage = (hash, message) => ({
@@ -72,6 +88,18 @@ export default function roomsReducer(state=initialState, action) {
             newState = {...state}
             newState[action.hash]={...newState[action.hash]}
             newState[action.hash].opponent = action.opponent
+            return newState
+        case UPDATE_OPPONENT:
+            newState = {...state}
+            newState[action.hash]={...newState[action.hash]}
+            newState[action.hash].opponent = {...newState[action.hash].opponent}
+            newState[action.hash].opponent.stats={...newState[action.hash].opponent.stats}
+            newState[action.hash].opponent.stats[action.game_id]=action.stats
+            return newState
+        case REMOVE_OPPONENT:
+            newState = {...state}
+            newState[action.hash]={...newState[action.hash]}
+            newState[action.hash].opponent = null
             return newState
         case ADD_ROOM_MESSAGE:
             newState = {...state}

@@ -18,20 +18,22 @@ def seed_stats():
     stats = [
         {'user_id': 1,
         'game_id': 1,
-        'times_played': 2,
-        'wins': 1,
+        'times_played': 11,
+        'wins': 9,
         'losses': 1,
-        'ties': 0,
+        'ties': 2,
         'rank': 'Cardboard',
-        'points': 0,},
+        'points': 90,},
     ]
+
+    users=[user for user in users if user.id!=1]
 
     for _ in range(40):
         user = random.choice(users)
         user_id = user.id
         users.remove(user)
         game_id = random.randint(1,game_count)
-        times_played=random.randint(1,20)
+        times_played=random.randint(1,75)
         wins=random.randint(1,times_played)
 
         value=times_played-wins if times_played-wins>=1 else 0
