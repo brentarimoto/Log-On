@@ -29,8 +29,15 @@ class Board:
 
     # FULL
     def column_full(self, column):
-        print(type(column))
         return len(self.grid[column])>=6
+
+    # FULLBOARD
+    def board_full(self):
+        for key in self.grid:
+            if len(self.grid[key])<6:
+                return False
+        return True
+
 
     # COLUMN WIN
     def column_win(self, column):
@@ -51,14 +58,13 @@ class Board:
 
         for i in range(column-1,-1, -1):
             if len(self.grid[i])>row and self.grid[i][row]==player:
-                print(row_win)
                 row_win.append(self.grid[i][row])
             else:
                 break
             if len(row_win)>=4:
                 break
 
-        for i in range(column+1,8):
+        for i in range(column+1,7):
             if len(self.grid[i])>row and self.grid[i][row]==player:
                 row_win.append(self.grid[i][row])
             else:
@@ -72,27 +78,35 @@ class Board:
             return True
 
     # DIAGONAL WIN SOUTHWEST TO NORTHEAST
-    def diagonal_win(self, player, column, isUp):
+    def diagonal_win(self, player, column, isUp, move):
         row = len(self.grid[column])-1
 
-        up = [player]
-        down = [player]
+        row_win = [player]
 
         start=row
+        n = -1 if isUp else 1
         for i in range(column-1,-1, -1):
-            start+=left
-            if len(self.grid[i])>temp and self.grid[i][row]==player:
-                row_win.append(self.grid[i][row])
+            start+=n
+            print(move,'IN FIRST', start)
+            if 0>start or start>5:
+                break
+            if len(self.grid[i])>start and self.grid[i][start]==player:
+                row_win.append(self.grid[i][start])
             else:
                 break
             if len(row_win)>=4:
                 break
+        print('IN BETWEEN')
 
         start=row
-        for i in range(column+1,8):
-            temp+=right
-            if len(self.grid[i])>temp and self.grid[i][row]==player:
-                row_win.append(self.grid[i][row])
+        n = 1 if isUp else -1
+        for i in range(column+1,7):
+            start+=n
+            print(move,'IN SECOND', start)
+            if 0>start or start>5:
+                break
+            if len(self.grid[i])>start and self.grid[i][start]==player:
+                row_win.append(self.grid[i][start])
             else:
                 break
             if len(row_win)>=4:
@@ -100,10 +114,9 @@ class Board:
 
         if len(row_win)<4:
             return False
-        elif len(set(row_win))>1:
-            return False
         else:
             return True
+
 
     # PRINT
     def __repr__(self):

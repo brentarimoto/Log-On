@@ -7,9 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 /*************************** COMPONENT IMPORTS ***************************/
 import FoursBoard from '../../../images/FoursBoard.png'
-import { foursMove } from '../../../store/fours';
+import { foursMove, resetFours } from '../../../store/fours';
 import { updateFriendStats } from '../../../store/friends';
-import { updateOpponent } from '../../../store/rooms';
+import { resetRooms, updateOpponent } from '../../../store/rooms';
 
 import './FoursGame.css'
 import { updateGameStats } from '../../../store/gameStats';
@@ -18,7 +18,7 @@ import { updateGameStats } from '../../../store/gameStats';
 /*************************** COMPONENTS ***************************/
 const FoursGame = ({socket, userTurn, setUserTurn, setWinner, setGameStart}) => {
     const dispatch = useDispatch()
-    const {game_id} = useParams()
+    const {room_id} = useParams()
 
     const user = useSelector(state=>state.session.user)
     const rooms = useSelector(state=>state.rooms)
@@ -28,7 +28,7 @@ const FoursGame = ({socket, userTurn, setUserTurn, setWinner, setGameStart}) => 
     const slots = Array(42).join(".").split(".")
 
     useEffect(()=>{
-        socket.on("fours_move", ({move, player, winner, loser, winnerStats, loserStats}) => {
+        socket.on("fours_move", ({move, player, winner, loser, tie, winnerStats, loserStats, p1, p2, p1Stats, p2Stats}) => {
             if(move){
                 dispatch(foursMove(move[0], move[1], player))
                 if(player!==user.id){
@@ -37,7 +37,7 @@ const FoursGame = ({socket, userTurn, setUserTurn, setWinner, setGameStart}) => 
             }
 
             if(winner){
-                setWinner(user.id===winner ? user.username : rooms[game_id].opponent.username)
+                setWinner(`${user.id===winner ? user.username : rooms[room_id].opponent.username}  Wins!`)
 
                 const userStats= user.id===winner ? winnerStats : loserStats
                 const otherStats = user.id===winner ? loserStats : winnerStats
@@ -45,16 +45,33 @@ const FoursGame = ({socket, userTurn, setUserTurn, setWinner, setGameStart}) => 
 
                 dispatch(updateGameStats(1, userStats))
                 dispatch(updateFriendStats(opponent_id, 1, otherStats))
-                dispatch(updateOpponent(game_id, 1, otherStats))
+                dispatch(updateOpponent(room_id, 1, otherStats))
+                setGameStart(false)
+            }
+
+            if(tie){
+                setWinner('Game is a Tie!')
+
+                const userStats= user.id===p1 ? p1Stats : p2Stats
+                const otherStats = user.id===p1 ? p2Stats : p1Stats
+                const opponent_id = user.id===p1 ? p2 : p1
+
+                dispatch(updateGameStats(1, userStats))
+                dispatch(updateFriendStats(opponent_id, 1, otherStats))
+                dispatch(updateOpponent(room_id, 1, otherStats))
                 setGameStart(false)
             }
         })
-    },[game_id])
+        return ()=>{
+            socket.emit('leave_game', {sender_id:user.id, room:room_id})
+            dispatch(resetFours())
+        }
+    },[room_id])
 
     const handleInput = (e)=>{
         if(e.target.id.includes('Fours_input')){
             const column = e.target.id.split(':')[1]
-            socket.emit('fours_move',{sender_id:user.id, column, room:game_id})
+            socket.emit('fours_move',{sender_id:user.id, column, room:room_id})
             setUserTurn(false)
         }
     }

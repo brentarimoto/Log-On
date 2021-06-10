@@ -1,7 +1,7 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, useLocation, useParams } from 'react-router';
+import { Redirect, Route, Switch, useLocation, useParams } from 'react-router';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
@@ -11,41 +11,6 @@ import switchActiveOpen, { setSpecificActiveOpen } from '../../store/activeOpen'
 
 /*************************** CSS ***************************/
 import './Games.css'
-
-
-/*************************** HELPER FUNCTION ***************************/
-const gameChooser = (hash)=>{
-
-    if(/^\d+$/.test(hash)){
-        return hash
-    } else if (hash.split(':')[0].includes('Fours')){
-        return '1'
-    } else{
-        return undefined
-    }
-}
-
-/*************************** HELPER VARIABLES ***************************/
-const components = {
-    1: <Fours />,
-}
-
-
-/*************************** HELPER VARIABLES ***************************/
-
-const GameDecider = ({socket})=>{
-    const {game_id} = useParams()
-
-    if (gameChooser(game_id)==='1'){
-        return(
-            <Fours socket={socket}/>
-        )
-    } else{
-        return (
-            <Redirect to='/' />
-        )
-    }
-}
 
 /*************************** COMPONENTS ***************************/
 const Games = ({socket}) => {
@@ -64,7 +29,17 @@ const Games = ({socket}) => {
     return (
     <div className='games-div'>
         <div className='games'>
-            <GameDecider socket={socket}/>
+            <Switch>
+                <Route path='/games/1/:room_id'>
+                    <Fours socket={socket}/>
+                </Route>
+                <Route path='/games/1'>
+                    <Redirect to='/games/1/home'/>
+                </Route>
+                <Route>
+                    <Redirect to='/'/>
+                </Route>
+            </Switch>
         </div>
     </div>
     );
