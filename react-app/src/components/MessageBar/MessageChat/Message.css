@@ -1,5 +1,7 @@
 /*** Message ***/
 .message{
+    width: 100%;
+    box-sizing: border-box;
     display: grid;
     grid-template-rows: auto;
     padding: 10px 10px;
@@ -24,6 +26,7 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    width: 100%;
 }
 
 .message__text{
@@ -32,6 +35,9 @@
     display: flex;
     align-items: flex-end;
     padding: 5px;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
 }
 
 .message__text--friend{
@@ -43,7 +49,6 @@
     background-color: var(--otherMessage);
     color: var(--otherText);
     border: .5px solid var(--greyBlue);
-    word-break: break-all;
 }
 
 .message__text--user{
@@ -55,5 +60,4 @@
     background-color: var(--userMessage);
     color: var(--userText);
     border: .5px solid var(--greyBlue);
-    word-break: break-all;
 }

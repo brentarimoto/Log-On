@@ -45,7 +45,7 @@ const NotificationItem = ({notification,setNotificationOpen})=>{
     }
 
     return(
-        <Link className='notification__list-item' to={`/games/${notification.hash}`} onClick={handleNotificationClick}>
+        <Link className='notification__list-item' to={`/games/${notification.game.id}/${notification.hash}`} onClick={handleNotificationClick}>
              <div className='notification__list-item-profpic'>
                 <ProfilePhoto profileUser={notification.sender}/>
             </div>

@@ -37,3 +37,16 @@ def add_loss(item):
             rank_down(item)
             return True
     return False
+
+def add_tie(item):
+    item.times_played+=1
+    item.ties+=1
+    item.points+=5
+    if item.points>=100:
+        if item.rank=='Kami':
+            item.points=100
+        else:
+            item.points-=100
+            rank_up(item)
+            return True
+    return False

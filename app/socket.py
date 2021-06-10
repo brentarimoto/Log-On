@@ -3,7 +3,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 import os
 from .models import db, Message, Stat, User
 from .games import Fours
-from .util import add_win, add_loss, rank_up, rank_down, ranks
+from .util import add_win, add_loss, add_tie, rank_up, rank_down, ranks
 
 # Add after deploy
 # from engineio.payload import Payload
@@ -25,6 +25,7 @@ socketio = SocketIO(cors_allowed_origins=origins)
 
 # create games container
 games={}
+
 
 @socketio.on("join")
 def on_join(data):
@@ -48,7 +49,6 @@ def message(data):
     message = Message(sender_id = data['sender_id'], friend_id = data['friend_id'], message=data['message'])
     db.session.add(message)
     db.session.commit()
-    print(data['room'])
 
     emit("message",{'sender_id':data['sender_id'],'receiver_id':data['receiver_id'],'message':message.to_dict()}, room=data['room'])
 
@@ -60,28 +60,37 @@ def invitations(data):
 
 @socketio.on("confirmation")
 def confirmation(data):
+    print('*****************Confirmation********************')
     emit("confirmation",{'sender_id':data['sender_id']}, room=data['room'])
 
 @socketio.on("chatroom")
 def game_chat(data):
-    emit("chatroom",{'message':{'sender':data['sender'],'message':data['message']}}, room=data['room'])
-
-@socketio.on("leave_game")
-def leave_game(data):
-    print('LEAVE GAME')
     room=data['room']
-    if games.get(room):
-        games.pop(room, None)
-        # if games[room].p1==data['sender_id'] or games[room].p2==data['sender_id']:
-        #     pass
-    emit("leave_game",{"leave_game":True, 'sender_id':data['sender_id']}, room=data['room'])
+    emit("chatroom",{'message':{'sender':data['sender'],'message':data['message']}, 'room':room}, room=room)
 
 
 #################### FOURS ####################
 
+def fours_result_win_loss(winner, loser):
+    statWinner = Stat.query.filter((Stat.user_id==winner) & (Stat.game_id==1)).first()
+    if not statWinner:
+        statWinner = Stat(user_id=winner, game_id=1, times_played=1, wins=1, losses=0, ties=0, rank='Cardboard', points=10)
+        db.session.add(statWinner)
+    else:
+        add_win(statWinner)
+
+    statLoser = Stat.query.filter((Stat.user_id==loser) & (Stat.game_id==1)).first()
+    if not statLoser:
+        statLoser = Stat(user_id=loser, game_id=1, times_played=1, wins=0, losses=1, ties=0, rank='Cardboard', points=0)
+        db.session.add(statLoser)
+    else:
+        add_loss(statLoser)
+    db.session.commit()
+
+    return [statWinner, statLoser]
+
 @socketio.on("start_game")
 def start_game(data):
-    print('************************START GAME************************')
     ## Variables ##
     room=data['room']
     p1=data['p1']
@@ -95,7 +104,6 @@ def start_game(data):
 
 @socketio.on("reset_game")
 def reset_game(data):
-    print('************************RESTART GAME************************')
     ## Variables ##
     room=data['room']
     sender_id=data['sender_id']
@@ -107,6 +115,22 @@ def reset_game(data):
     # Emit Result
     emit("reset_game",{'sender_id':sender_id, 'reset':True}, room=data['room'])
 
+@socketio.on("leave_game")
+def leave_game(data):
+    room=data['room']
+    print('*****************Leave Game********************')
+    res={'sender_id':data['sender_id']}
+    if games.get(room):
+        game=games.get(room)
+        if not game.win or not game.tie:
+            winner = game.p1 if game.p1!=data['sender_id'] else game.p2
+            loser = data['sender_id']
+            statWinner, statLoser = fours_result_win_loss(winner, loser)
+            res['winnerStats']=statWinner.to_dict()
+            res['loserStats']=statLoser.to_dict()
+            res['loser']=loser
+        games.pop(room, None)
+    emit("leave_game",res, room=data['room'])
 
 @socketio.on("fours_move")
 def fours_move(data):
@@ -126,26 +150,36 @@ def fours_move(data):
     # Win Result
     if result.get('win'):
         winner=result['winner']
-        res['winner']=winner
-        statWinner = Stat.query.filter((Stat.user_id==result['winner']) & (Stat.game_id==1)).first()
-        if not statWinner:
-            statWinner = Stat(user_id=result['winner'], game_id=1, times_played=1, wins=1, losses=0, ties=0, rank='Cardboard', points=10)
-            db.session.add(statWinner)
-        else:
-            add_win(statWinner)
-
         loser = game.p1 if game.p1!=result['winner'] else game.p2
+
+        res['winner']=winner
         res['loser'] = loser
-        statLoser = Stat.query.filter((Stat.user_id==loser) & (Stat.game_id==1)).first()
-        if not statLoser:
-            statLoser = Stat(user_id=loser, game_id=1, times_played=1, wins=0, losses=1, ties=0, rank='Cardboard', points=0)
-            db.session.add(statLoser)
-        else:
-            add_loss(statLoser)
-        db.session.commit()
+        statWinner, statLoser = fours_result_win_loss(winner, loser)
 
         res['winnerStats']=statWinner.to_dict()
         res['loserStats']=statLoser.to_dict()
+
+    if result.get('tie'):
+        res['tie']=True
+        p1Stat = Stat.query.filter((Stat.user_id==game.p1) & (Stat.game_id==1)).first()
+        if not p1Stat:
+            p1Stat = Stat(user_id=game.p1, game_id=1, times_played=1, wins=0, losses=0, ties=1, rank='Cardboard', points=5)
+            db.session.add(p1Stat)
+        else:
+            add_tie(p1Stat)
+
+        p2Stat = Stat.query.filter((Stat.user_id==game.p2) & (Stat.game_id==1)).first()
+        if not p2Stat:
+            p2Stat = Stat(user_id=game.p2, game_id=1, times_played=1, wins=0, losses=0, ties=1, rank='Cardboard', points=5)
+            db.session.add(p2Stat)
+        else:
+            add_tie(p2Stat)
+        db.session.commit()
+
+        res['p1Stats']=p1Stat.to_dict()
+        res['p2Stats']=p2Stat.to_dict()
+        res['p1']=game.p1
+        res['p2']=game.p2
 
     if result.get('move'):
         res['move']=result['move']

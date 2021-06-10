@@ -1,7 +1,7 @@
 /*************************** REACT IMPORTS ***************************/
 
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
@@ -28,10 +28,11 @@ function App() {
   const dispatch = useDispatch();
 
   const user = useSelector(state => state.session.user)
-  const friends = useSelector(state=>state.friends)
+  const rooms = useSelector(state=>state.rooms)
   const friendUpdate = useSelector(state=>state.friendUpdate)
   const games = useSelector(state=>state.games)
   const [loaded, setLoaded] = useState(false)
+  const [room, setRoom] = useState('')
 
   useEffect(() => {
     (() => {
@@ -43,11 +44,8 @@ function App() {
     if(user && !loaded){
       dispatch(setGameStats(user.stats))
 
-      socket=io()
-
-
-      socket.on('connect', () => {
-      })
+      socket=io('http://localhost:5000/')
+      console.log(socket)
 
       socket.on("message", (message) => {
         dispatch(handleNewSocketMessage(message))
@@ -68,6 +66,19 @@ function App() {
 
   },[user])
 
+  // useEffect(()=>{
+  //   if(Object.keys(rooms)[0]){
+  //     setRoom(Object.keys(rooms)[0])
+  //     console.log('ROOM SET')
+  //   }
+
+  //   if(room && !rooms[room]){
+  //     socket.emit('leave', {room:room})
+  //     setRoom('')
+  //   }
+
+  // },[rooms])
+
   return (
     <div className='main' style={{backgroundImage: `url(${background})`}}>
       <BrowserRouter>
@@ -86,9 +97,12 @@ function App() {
             <ProtectedRoute path="/messages" exact={true} >
               Messages
             </ProtectedRoute>
-            <ProtectedRoute path="/games/:game_id" exact={true} >
+            <ProtectedRoute path="/games/:game_id">
               <Games socket={socket}/>
             </ProtectedRoute>
+            <Route>
+                <Redirect to='/'/>
+            </Route>
           </Switch>
           <FriendsList />
           <MessageBar socket={socket}/>
