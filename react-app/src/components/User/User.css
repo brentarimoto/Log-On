@@ -22,6 +22,26 @@
     align-items: center;
     padding: 5px;
     box-sizing: border-box;
+    position: relative;
+}
+
+
+.user__profile-photo-button{
+	border-radius: 3px;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    padding: 2px;
+	border-radius: 3px;
+	transition: all 1s;
+	text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    bottom: 16px;
+    color: black;
+    font-weight: bold;
+    border: 1px solid black;
+    background-color: white;
 }
 
 /* Info */
@@ -72,6 +92,18 @@
     font-size: 75%;
 }
 
+.user__info-inputs{
+	height: 35px;
+	border-radius: 5px;
+	outline: 0;
+	border: 1px solid #cccccc;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    color: grey;
+    font-size: 100%;
+}
+
 .user__info-text{
 	height: 35px;
 	border-radius: 5px;
@@ -83,6 +115,7 @@
     color: grey;
     font-size: 100%;
 }
+
 
 .user__info-button{
 	border-radius: 3px;

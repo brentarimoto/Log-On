@@ -106,6 +106,31 @@ export const signUp = ({username, email, firstname, lastname, photo, password}) 
   return {};
 }
 
+
+export const editUser = ({id, username, email, firstname, lastname, photo}) => async (dispatch)  => {
+
+  const formData = new FormData();
+  formData.append('username', username)
+  formData.append('email', email)
+  formData.append('firstname', firstname)
+  formData.append('lastname', lastname)
+  formData.append("profile_photo", photo);
+
+
+  const response = await fetch(`/api/auth/${id}`, {
+    method: "PUT",
+    body: formData,
+  });
+
+  const data = await response.json();
+  if (data.errors) {
+      return data;
+  }
+
+  dispatch(setUser(data))
+  return {};
+}
+
 /*************************** REDUCER ***************************/
 const initialState = { user: null };
 export default function reducer(state=initialState, action) {

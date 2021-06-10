@@ -13,6 +13,7 @@ import { popActive } from "../../store/activeMessages";
 import { removeMessageNotification } from "../../store/notifications";
 import { removeMessage } from "../../store/messages";
 import { newFriendUpdate, unFriendUpdate } from "../../store/friendUpdate";
+import { editUser } from '../../store/session'
 
 
 /*************************** CSS ***************************/
@@ -143,6 +144,8 @@ function NotFriendButtons({profileUser, user}){
 /*************************** COMPONENT ***************************/
 function User({profileUserId, friend_id}) {
 
+  const dispatch = useDispatch()
+
   const user = useSelector(state=>state.session.user)
   const friends = useSelector(state=>state.friends)
   const users= useSelector(state=>state.users)
@@ -173,15 +176,36 @@ function User({profileUserId, friend_id}) {
 
   // Functions
 
-  const handleSubmit = (e)=>{
-    e.preventDefault()
-  }
+
+  const handleSubmit= async (e)=>{
+    e.preventDefault();
+    const userInfo = {
+        id:user.id,
+        firstname,
+        lastname,
+        username,
+        email,
+        photo,
+    }
+
+    let editedUser = await dispatch(editUser(userInfo))
+
+    if (editedUser.username) {
+        // setShowModal(false)
+    } else {
+        setErrors(editedUser.errors)
+    }
+}
 
 
   return (
     <form className='user' onSubmit={handleSubmit}>
       <div className='user__profile-photo'>
           <ProfilePhoto profileUser={profileUser}/>
+          {isUser && <div className='user__profile-photo-input'>
+              <input type="file" id="profpic-btn" onChange={(e)=>setPhoto(e.target.files[0])} hidden/>
+              <label htmlFor="profpic-btn" class="user__profile-photo-button">{photo?.name ? photo?.name : 'New Image'}</label>
+          </div>}
       </div>
       <div className='user__info-container'>
         <div className='user__info'>

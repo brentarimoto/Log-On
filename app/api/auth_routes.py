@@ -8,6 +8,7 @@ from app.models import User, db
 from app.aws import allowed_file, get_unique_filename, upload_file_to_s3
 from app.forms import LoginForm
 from app.forms import SignUpForm
+from app.forms import EditForm
 
 
 #################### SETUP ####################
@@ -111,6 +112,68 @@ def sign_up():
         return user.to_dict()
     return {'errors': validation_errors_to_error_messages(form.errors)}, 401
 
+## EDIT
+@auth_routes.route('/<int:id>', methods=['PUT'])
+def edit_user(id):
+    """
+    Creates a new user and logs them in
+    """
+    user = User.query.get(id)
+
+    if not user:
+        return {"errors": "User not found"}, 400
+
+    form = EditForm()
+
+    image = form.data['profile_photo']
+
+    if image=='null' or image=='undefined':
+        image=None
+
+    url = None
+
+    if image:
+        if not allowed_file(image.filename):
+            return {"errors": "file type not permitted"}, 400
+
+        image.filename = get_unique_filename(image.filename)
+
+        upload = upload_file_to_s3(image)
+
+        if "url" not in upload:
+            # if the dictionary doesn't have a url key
+            # it means that there was an error when we tried to upload
+            # so we send back that error message
+            return upload, 400
+
+        url = upload["url"]
+
+        # delete_file_from_s3(user.profile_photo)
+
+
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+    if form.validate_on_submit():
+        if form.data['username'] and form.data['username']!= user.username:
+            existing_user = User.query.filter(User.username==form.data['username']).first()
+            if existing_user:
+                return {"errors": ["Username is already taken"]}, 409
+            user.username=form.data['username']
+        if form.data['email'] and form.data['email']!= user.email:
+            existing_user = User.query.filter(User.email==form.data['email']).first()
+            if existing_user:
+                return {"errors": ["Email is already in use"]}, 409
+            user.email=form.data['email']
+        if form.data['firstname'] and form.data['firstname']!= user.firstname:
+            user.firstname=form.data['firstname']
+        if form.data['lastname'] and form.data['lastname']!= user.lastname:
+            user.lastname=form.data['lastname']
+        if url and url!= user.profile_photo:
+            user.profile_photo=url
+        db.session.commit()
+        login_user(user)
+        return user.to_dict()
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
 
 ## UNAUTHORIZED
 @auth_routes.route('/unauthorized')

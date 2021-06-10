@@ -29,9 +29,11 @@ function UserSearchModal({user, setSearch, setSearchResults}) {
   }
 
   const handleSearchClose = ()=>{
+    if (setSearch){
+      setSearch('')
+      setSearchResults([])
+    }
     setShowModal(false)
-    setSearch('')
-    setSearchResults([])
   }
 
   return (

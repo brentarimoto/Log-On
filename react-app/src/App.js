@@ -12,13 +12,14 @@ import Home from "./components/Home/Home";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import MessageBar from "./components/MessageBar/MessageBar";
 import Games from "./components/Games/Games";
+import FriendsPage from "./components/FriendsPage/FriendsPage";
+import FriendsList from "./components/FriendsList.js/FriendsList";
 
 import { authenticate } from "./store/session";
-import background from "./images/background_image.jpg";
-import FriendsList from "./components/FriendsList.js/FriendsList";
 import { handleNewSocketMessage } from "./store/messages";
 import { newNotification } from "./store/notifications";
 import { setGameStats } from "./store/gameStats";
+import background from "./images/background_image.jpg";
 /*************************** SOCKET VARIABLE ***************************/
 let socket;
 
@@ -44,7 +45,7 @@ function App() {
     if(user && !loaded){
       dispatch(setGameStats(user.stats))
 
-      socket=io('http://localhost:5000/')
+      socket=io()
       console.log(socket)
 
       socket.on("message", (message) => {
@@ -56,15 +57,16 @@ function App() {
           dispatch(newNotification(invitation))
         }
       })
-
       setLoaded(true)
-
-      return ()=>{
-        socket.disconnect()
-      }
     }
 
   },[user])
+
+  useEffect(()=>{
+    return ()=>{
+      socket.disconnect()
+    }
+  },[])
 
   // useEffect(()=>{
   //   if(Object.keys(rooms)[0]){
@@ -92,7 +94,7 @@ function App() {
               }
             </Route>
             <ProtectedRoute path="/friends" exact={true} >
-              Friends
+              <FriendsPage />
             </ProtectedRoute>
             <ProtectedRoute path="/messages" exact={true} >
               Messages
