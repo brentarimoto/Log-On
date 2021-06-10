@@ -1,7 +1,9 @@
 from flask import session
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import os
-from .models import db, Message
+from .models import db, Message, Stat, User
+from .games import Fours
+from .util import add_win, add_loss, rank_up, rank_down, ranks
 
 # Add after deploy
 # from engineio.payload import Payload
@@ -21,6 +23,8 @@ else:
 # create your SocketIO instance
 socketio = SocketIO(cors_allowed_origins=origins)
 
+# create games container
+games={}
 
 @socketio.on("join")
 def on_join(data):
@@ -65,24 +69,87 @@ def game_chat(data):
 @socketio.on("leave_game")
 def leave_game(data):
     print('LEAVE GAME')
+    room=data['room']
+    if games.get(room):
+        games.pop(room, None)
+        # if games[room].p1==data['sender_id'] or games[room].p2==data['sender_id']:
+        #     pass
     emit("leave_game",{"leave_game":True, 'sender_id':data['sender_id']}, room=data['room'])
 
-#### Fours ####
 
-games={}
+#################### FOURS ####################
 
 @socketio.on("start_game")
 def start_game(data):
+    print('************************START GAME************************')
+    ## Variables ##
     room=data['room']
+    p1=data['p1']
+    p2=data['p2']
 
-    games[room] = room
-    emit("start_game",{}, room=data['room'])
+    ## Game Create ##
+    games[room] = Fours(p1, p2)
+
+    # Emit Result
+    emit("start_game",{'sender_id':p1, 'gamestart':True}, room=data['room'])
+
+@socketio.on("reset_game")
+def reset_game(data):
+    print('************************RESTART GAME************************')
+    ## Variables ##
+    room=data['room']
+    sender_id=data['sender_id']
+    game=games[room]
+
+    ## Game Reset ##
+    game.reset_game()
+
+    # Emit Result
+    emit("reset_game",{'sender_id':sender_id, 'reset':True}, room=data['room'])
 
 
 @socketio.on("fours_move")
 def fours_move(data):
+    ## Variables ##
     room=data['room']
-    move = data['move']
+    game=games[room]
+    column = data['column']
+    player = data['sender_id']
 
-    print(games[room])
-    emit("fours_move",{}, room=data['room'])
+    ## Game Move ##
+    result = game.make_move(player, int(column))
+
+    ## Results ##
+    res={}
+
+
+    # Win Result
+    if result.get('win'):
+        winner=result['winner']
+        res['winner']=winner
+        statWinner = Stat.query.filter((Stat.user_id==result['winner']) & (Stat.game_id==1)).first()
+        if not statWinner:
+            statWinner = Stat(user_id=result['winner'], game_id=1, times_played=1, wins=1, losses=0, ties=0, rank='Cardboard', points=10)
+            db.session.add(statWinner)
+        else:
+            add_win(statWinner)
+
+        loser = game.p1 if game.p1!=result['winner'] else game.p2
+        res['loser'] = loser
+        statLoser = Stat.query.filter((Stat.user_id==loser) & (Stat.game_id==1)).first()
+        if not statLoser:
+            statLoser = Stat(user_id=loser, game_id=1, times_played=1, wins=0, losses=1, ties=0, rank='Cardboard', points=0)
+            db.session.add(statLoser)
+        else:
+            add_loss(statLoser)
+        db.session.commit()
+
+        res['winnerStats']=statWinner.to_dict()
+        res['loserStats']=statLoser.to_dict()
+
+    if result.get('move'):
+        res['move']=result['move']
+        res['player']=player
+
+    # Emit Result
+    emit("fours_move",res, room=data['room'])

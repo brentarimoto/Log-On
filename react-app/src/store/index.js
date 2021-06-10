@@ -11,6 +11,7 @@ import gamesReducer from './games'
 import roomsReducer from './rooms'
 import friendUpdateReducer from './friendUpdate'
 import foursReducer from './fours'
+import gamesStatsReducer from './gameStats'
 
 const rootReducer = combineReducers({
     session,
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
     rooms: roomsReducer,
     friendUpdate: friendUpdateReducer,
     fours:foursReducer,
+    gameStats:gamesStatsReducer,
 });
 
 

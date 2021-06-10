@@ -11,6 +11,7 @@ import { resetNotifications } from "./notifications";
 /*************************** TYPES ***************************/
 const SET_USER = "session/SET_USER";
 const REMOVE_USER = "session/REMOVE_USER";
+const UPDATE_USER_STATS = "session/UPDATE_USER_STATS";
 
 /*************************** ACTIONS ***************************/
 const setUser = (user) => ({
@@ -20,6 +21,12 @@ const setUser = (user) => ({
 
 const removeUser = () => ({
     type: REMOVE_USER,
+})
+
+export const updateUserStats = (game_id, stats) => ({
+    type: UPDATE_USER_STATS,
+    game_id,
+    stats
 })
 
 /*************************** REDUCER ***************************/
@@ -102,9 +109,16 @@ export const signUp = ({username, email, firstname, lastname, photo, password}) 
 /*************************** REDUCER ***************************/
 const initialState = { user: null };
 export default function reducer(state=initialState, action) {
+  let newState;
     switch (action.type) {
         case SET_USER:
             return {user: action.payload}
+        case UPDATE_USER_STATS:
+          newState={...state}
+          newState.user={...newState.user}
+          newState.user.stats={...newState.user.stats}
+          newState.user.stats[action.game_id]=action.stats
+          return newState
         case REMOVE_USER:
             return {user: null}
         default:

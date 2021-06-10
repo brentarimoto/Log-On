@@ -18,26 +18,20 @@ import background from "./images/background_image.jpg";
 import FriendsList from "./components/FriendsList.js/FriendsList";
 import { handleNewSocketMessage } from "./store/messages";
 import { newNotification } from "./store/notifications";
-
+import { setGameStats } from "./store/gameStats";
 /*************************** SOCKET VARIABLE ***************************/
 let socket;
-
-
-/*************************** HELPER FUNCTION ***************************/
-function messageHash(userId, friendId){
-  return `Message:${userId>friendId ? friendId : userId}-${userId>friendId ? userId : friendId}`
-}
 
 
 /*************************** COMPONENTS ***************************/
 function App() {
   const dispatch = useDispatch();
 
-  const [loaded, setLoaded] = useState(false);
-
   const user = useSelector(state => state.session.user)
   const friends = useSelector(state=>state.friends)
   const friendUpdate = useSelector(state=>state.friendUpdate)
+  const games = useSelector(state=>state.games)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     (() => {
@@ -46,43 +40,33 @@ function App() {
   }, [dispatch]);
 
   useEffect(()=>{
-    socket=io()
-    console.log(socket)
+    if(user && !loaded){
+      dispatch(setGameStats(user.stats))
 
-    if(!loaded && Object.keys(friends).length){
+      socket=io()
+
+
       socket.on('connect', () => {
-        if(Object.keys(friends).length>0){
-          for (let id in friends) {
-              socket.emit('join', {room:messageHash(friends[id].accept_id, friends[id].request_id)})
-            }
-          }
+      })
+
+      socket.on("message", (message) => {
+        dispatch(handleNewSocketMessage(message))
+      })
+
+      socket.on("invitations", ({invitation}) => {
+        if (invitation.sender.id !== user.id){
+          dispatch(newNotification(invitation))
+        }
       })
 
       setLoaded(true)
-    }
 
-    if(friendUpdate.new){
-      socket.emit('join', {room:messageHash(user.id, friendUpdate.new)})
-    }
-
-    if(friendUpdate.un){
-      socket.emit('leave', {room:messageHash(user.id, friendUpdate.un)})
-    }
-
-    socket.on("message", (message) => {
-      dispatch(handleNewSocketMessage(message, user))
-    })
-
-    socket.on("invitations", ({invitation}) => {
-      if ((invitation.sender.id !== user.id)){
-        dispatch(newNotification(invitation))
+      return ()=>{
+        socket.disconnect()
       }
-    })
-
-    return ()=>{
-      socket.disconnect()
     }
-  },[friends, friendUpdate])
+
+  },[user])
 
   return (
     <div className='main' style={{backgroundImage: `url(${background})`}}>

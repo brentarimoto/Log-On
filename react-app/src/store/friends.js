@@ -6,6 +6,8 @@ const SET_FRIENDS = "friends/SET_FRIENDS";
 
 const ADD_FRIEND = "friends/ADD_FRIEND";
 
+const UPDATE_FRIEND_STATS = "friends/UPDATE_FRIEND_STATS";
+
 const REMOVE_FRIEND = "friends/REMOVE_FRIEND";
 
 const RESET_FRIENDS = "friends/RESET_FRIENDS";
@@ -20,6 +22,13 @@ const addFriend = (user_id, friendship) => ({
     type: ADD_FRIEND,
     user_id,
     friendship
+});
+
+export const updateFriendStats = (user_id, game_id, stats) => ({
+    type: UPDATE_FRIEND_STATS,
+    user_id,
+    game_id,
+    stats
 });
 
 const removeFriend = (friend_id) => ({
@@ -107,6 +116,19 @@ export default function friendsReducer(state=initialState, action) {
         case ADD_FRIEND:
           newState={...state}
           newState[action.user_id] = action.friendship
+          return newState
+        case UPDATE_FRIEND_STATS:
+          newState={...state}
+          newState[action.user_id] = {...newState[action.user_id]}
+          if(newState[action.user_id].accepter){
+            newState[action.user_id].accepter={...newState[action.user_id].accepter}
+            newState[action.user_id].accepter.stats={...newState[action.user_id].accepter.stats}
+            newState[action.user_id].accepter.stats[action.game_id]=action.stats
+          } else{
+            newState[action.user_id].requester={...newState[action.user_id].requester}
+            newState[action.user_id].requester.stats={...newState[action.user_id].requester.stats}
+            newState[action.user_id].requester.stats[action.game_id]=action.stats
+          }
           return newState
         case REMOVE_FRIEND:
           newState = {...state}

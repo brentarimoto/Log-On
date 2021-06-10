@@ -12,6 +12,11 @@ import './MessageBar.css'
 import { useDispatch, useSelector } from "react-redux";
 import { newNotification, setMessageNotifications } from "../../store/notifications";
 
+/*************************** HELPER FUNCTION ***************************/
+function messageHash(userId, friendId){
+  return `Message:${userId>friendId ? friendId : userId}-${userId>friendId ? userId : friendId}`
+}
+
 
 /*************************** COMPONENTS ***************************/
 function MessageBar({closeMessage, socket}) {
@@ -32,6 +37,26 @@ function MessageBar({closeMessage, socket}) {
       }
     }
   },[])
+
+  useEffect(()=>{
+    if(!loaded && Object.keys(friends).length){
+      if(Object.keys(friends).length>0){
+        for (let id in friends) {
+            socket.emit('join', {room:messageHash(friends[id].accept_id, friends[id].request_id)})
+          }
+      }
+      setLoaded(true)
+    }
+
+    if(friendUpdate.new){
+      socket.emit('join', {room:messageHash(user.id, friendUpdate.new)})
+    }
+
+    if(friendUpdate.un){
+      socket.emit('leave', {room:messageHash(user.id, friendUpdate.un)})
+    }
+
+  },[friends, friendUpdate])
 
   useEffect(()=>{
     localStorage.setItem('messageNotifications', JSON.stringify(messageNotifications))

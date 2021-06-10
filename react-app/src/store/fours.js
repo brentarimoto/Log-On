@@ -14,10 +14,11 @@ export const gameStart = () => ({
     type: FOURS_START
 });
 
-export const foursMove = (column, row) => ({
+export const foursMove = (column, row, player) => ({
     type: FOURS_MOVE,
     column,
-    row
+    row,
+    player
 });
 
 export const resetFours = () => ({
@@ -32,7 +33,7 @@ let board={};
 for(let i =0;i<7;i++){
     let column={}
     for(let j=0; j<6;j++){
-        column[j]=false
+        column[j]=null
     }
     board[i]=column
 }
@@ -48,7 +49,9 @@ export default function foursReducer(state=initialState, action) {
             return newState
         case FOURS_MOVE:
             newState = {...state}
-            newState.board[action.column][action.rows]=true
+            newState.board = {...newState.board}
+            newState.board[action.column]={...newState.board[action.column]}
+            newState.board[action.column][action.row]=action.player
             return newState
         case RESET_FOURS:
             return initialState

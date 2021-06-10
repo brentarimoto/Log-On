@@ -54,6 +54,11 @@
     animation: .2s ease 0s 1 fadeIn;
 }
 
+.foursgame__input--disabled{
+    display: none;
+    cursor: not-allowed;
+}
+
 .foursgame__board-slot-div{
     /* border: 1px solid var(--greyBlue); */
     display: flex;

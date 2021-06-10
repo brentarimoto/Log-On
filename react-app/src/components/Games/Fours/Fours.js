@@ -15,6 +15,7 @@ import {rankImages} from '../../../util/ranks'
 
 /*************************** CSS ***************************/
 import './Fours.css'
+import { resetFours } from '../../../store/fours';
 
 
 /*************************** HELPER FUNCTION ***************************/
@@ -42,6 +43,13 @@ const gameChooser = (hash)=>{
 
 /*************************** HELPER COMPONENTS ***************************/
 const FoursPlayer =({user, classname})=>{
+    const currentUser = useSelector(state=>state.session.user)
+    const gameStats = useSelector(state=>state.gameStats)
+
+    if(currentUser.id===user.id){
+        user.stats=gameStats
+    }
+
     return(
         <div className={`fours__players ${classname}`}>
             <div className='fours__players-pic'>
@@ -99,8 +107,11 @@ const Fours = ({socket}) => {
     const rooms = useSelector(state=>state.rooms)
 
     const [gameStart, setGameStart] = useState(false)
+    const [roomOwner, setRoomOwner] = useState(false)
+    const [userTurn, setUserTurn] = useState(false)
     const [inviteOpen, setInviteOpen] = useState(false)
     const [message, setMessage] = useState('')
+    const [winner, setWinner] = useState(null)
 
     useEffect(()=>{
         if (!isHome(game_id)){
@@ -113,22 +124,37 @@ const Fours = ({socket}) => {
             socket.on("confirmation", ({sender_id}) => {
                 if (sender_id !== user.id){
                     dispatch(setOpponent(game_id, sender_id))
+                    setRoomOwner(true)
                 }
             })
 
-            socket.on("move", ({move}) => {
+            socket.on("start_game", ({sender_id, gamestart}) => {
+                if(sender_id!==user.id && gamestart){
+                    setGameStart(true)
+                }
+            })
+
+            socket.on("reset_game", ({sender_id, reset}) => {
+                if(sender_id!==user.id && reset){
+                    dispatch(resetFours())
+                    setWinner(null)
+                    setGameStart(true)
+                }
             })
 
             socket.on("leave_game",({leave_game, sender_id})=>{
                 if (sender_id !== user.id && leave_game){
                     dispatch(removeOpponent(game_id))
+                    dispatch(resetFours())
                     setGameStart(false)
+                    setRoomOwner(true)
                 }
             })
 
             return ()=>{
                 socket.emit('leave_game', {sender_id:user.id, room:game_id})
                 dispatch(resetRooms())
+                dispatch(resetFours())
             }
         }
     },[game_id])
@@ -142,12 +168,6 @@ const Fours = ({socket}) => {
         }
     },[game_id])
 
-    // useEffect(()=>{
-    //     if(Object.keys(friends).length){
-    //         dispatch(setOpponent(game_id, 2))
-    //     }
-    // },[friends])
-
     const handleJoinRoom =()=>{
         const hash = foursHash()
         history.push(`/games/${hash}`)
@@ -156,6 +176,19 @@ const Fours = ({socket}) => {
 
     const handleOpenInvite = ()=>{
         setInviteOpen(prev=>!prev)
+    }
+
+    const handleStart = ()=>{
+        if(!winner){
+            socket.emit('start_game',{p1:user.id, p2:rooms[game_id].opponent.id, room:game_id})
+            setUserTurn(true)
+        } else{
+            console.log('TEST')
+            socket.emit('reset_game',{sender_id:user.id, room:game_id})
+            dispatch(resetFours())
+        }
+        setWinner(null)
+        setGameStart(true)
     }
 
     const onEnterPress =(e)=>{
@@ -180,6 +213,9 @@ const Fours = ({socket}) => {
 
     return (
         <div className={`fours ${(!rooms[game_id]?.opponent && isHome(game_id))&& 'fours--pre'}`}>
+            <div>
+
+            </div>
             <div className='fours__header'>
                 {(!rooms[game_id]?.opponent && isHome(game_id) ) &&
                     <button onClick={handleJoinRoom} className='fours__join-room-button'>Create Match</button>
@@ -202,7 +238,14 @@ const Fours = ({socket}) => {
                     <>
                         <FoursPlayer user={rooms[game_id].opponent} classname={'fours__opponent'}/>
                         <div className='fours__VS'>
-                            <h1>VS</h1>
+                            {gameStart && <h1>VS</h1>}
+                            {(!gameStart && !roomOwner) &&
+                            <h2>Waiting On Start...</h2>
+                            }
+                            {(!gameStart && roomOwner) &&
+                            <button className='fours__start-button' onClick={handleStart}>{winner? 'Restart' : 'Start'}</button>
+                            }
+
                         </div>
                         <FoursPlayer user={user} classname={'fours__user'}/>
                     </>
@@ -210,7 +253,11 @@ const Fours = ({socket}) => {
             </div>
             {rooms[game_id]?.opponent &&
                 <div className='fours__game-container'>
-                    <FoursGame />
+                    {winner &&
+                    <div className='foursgame__winner'>
+                        {winner} Wins!
+                    </div>}
+                    <FoursGame socket={socket} userTurn={userTurn} setUserTurn={setUserTurn} winner={winner} setWinner={setWinner} setGameStart={setGameStart}/>
                 </div>
             }
             {!isHome(game_id) &&

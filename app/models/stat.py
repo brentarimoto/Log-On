@@ -2,6 +2,7 @@
 ## FILES
 from .db import db
 
+ranks=['Cardboard','Iron','Bronze','Silver','Gold', 'Platinum', 'Diamond', 'Master', 'Kami']
 
 #################### CLASS ####################
 class Stat(db.Model):
@@ -26,6 +27,7 @@ class Stat(db.Model):
     "Game",
     back_populates="stats"
   )
+
 
   def to_dict(self):
     return {
