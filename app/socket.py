@@ -1,7 +1,7 @@
 from flask import session
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import os
-from .models import db, Message, Stat, User
+from .models import db, Message, Stat, User, Friend
 from .games import Fours
 from .util import add_win, add_loss, add_tie, rank_up, rank_down, ranks
 
@@ -23,16 +23,41 @@ else:
 # create your SocketIO instance
 socketio = SocketIO(cors_allowed_origins=origins)
 
-# create games container
+# Reference Containers
+online={}
+
 games={}
 rooms={}
+
+# Helper Function
+
+@socketio.on("logon")
+def logon(data):
+    sender_id = data['sender_id']
+    if sender_id not in online:
+        online[sender_id] = True
+    friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id)).all()
+    friend_ids = [friend.accept_id if friend.accept_id!=sender_id else friend.request_id for friend in friendships]
+    for friend_id in friend_ids:
+        emit('logon', {'sender_id':sender_id}, include_self=False, room=f'User:{friend_id}')
+    online_friends = {friend_id:True for friend_id in friend_ids if friend_id in online}
+    emit('online', {'friends':online_friends}, room=f'User:{sender_id}')
+
+@socketio.on("logoff")
+def logoff(data):
+    sender_id = data['sender_id']
+    if sender_id in online:
+        online.pop(sender_id, None)
+        friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id)).all()
+        friend_ids = [friend.accept_id if friend.accept_id!=sender_id else friend.request_id for friend in friendships]
+        for friend_id in friend_ids:
+            emit('logoff', {'sender_id':sender_id}, include_self=False, room=f'User:{friend_id}')
 
 
 @socketio.on("join")
 def on_join(data):
     room=data['room']
     join_room(room)
-
 
 
 @socketio.on('leave')
@@ -90,7 +115,6 @@ def fours_result_win_loss(winner, loser):
 @socketio.on("join_fours")
 def join_fours(data):
     room=data['room']
-    print(rooms)
 
     if not rooms.get(room):
         join_room(room)
@@ -108,17 +132,12 @@ def join_fours(data):
 
 @socketio.on("leave_fours")
 def leave_fours(data):
-    print('*****************Leave Fours********************')
     room=data['room']
-    print(rooms, room)
     if room!='home':
         if (data['sender_id'] in rooms[room]):
-            print(rooms)
             rooms[room].remove(data['sender_id'])
         if len(rooms[room])<=0:
-            print(rooms)
             rooms.pop(room, None)
-    print(rooms, room)
     leave_room(room)
 
 @socketio.on("start_game")
@@ -150,7 +169,6 @@ def reset_game(data):
 @socketio.on("leave_game")
 def leave_game(data):
     room=data['room']
-    print('*****************Leave Game********************')
     if data['sender_id'] in rooms[room]:
         res={'sender_id':data['sender_id']}
         if games.get(room):

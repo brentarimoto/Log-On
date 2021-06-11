@@ -60,7 +60,7 @@ const NavBar = ({socket}) => {
             <NotificationBubble notificationsNum={normalNotifications.length}/>
           </div>
           <div className='navbar__account'>
-            <UserModal friend={user}/>
+            <UserModal friend={user} socket={socket}/>
           </div>
         </> :
         <>

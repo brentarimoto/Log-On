@@ -34,9 +34,11 @@ const FriendsList = () => {
     const open = useSelector(state=>state.open)
     const notifications = useSelector(state=>state.notifications.messages)
     const games = useSelector(state=>state.games)
+    const online = useSelector(state=>state.online)
+
 
     const [notificationCount, setNotificationCount] = useState(0)
-    const [loaded, setLoaded] = useState(false)
+    const [onlineFriends, setOnlineFriends] = useState([])
 
     useEffect(()=>{
         if (user && !games[1]){
@@ -48,6 +50,13 @@ const FriendsList = () => {
     useEffect(()=>{
         setNotificationCount(Object.values(notifications).reduce((el,sum)=>sum+el, 0))
     },[notifications])
+
+    useEffect(()=>{
+        const onlineArray = Object.entries(friends).filter(([id, friendship])=>{
+            return online[id]
+        })
+        setOnlineFriends(onlineArray)
+    },[online])
 
     const handleFriendsList = ()=>{
         if(!isHome){
@@ -72,7 +81,7 @@ const FriendsList = () => {
                 }
             </div>
             <div className='friends-list__list'>
-                {Object.entries(friends)?.map(([id, friendship])=>(
+                {onlineFriends.map(([id, friendship])=>(
                     <Friend key={id} friendship={friendship}/>
                 ))}
             </div>

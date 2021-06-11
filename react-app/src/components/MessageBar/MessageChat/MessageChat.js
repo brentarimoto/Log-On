@@ -16,9 +16,7 @@ import './MessageChat.css'
 
 
 /*************************** HELPER FUNCTION ***************************/
-function messageHash(userId, friendId){
-    return `Message:${userId>friendId ? friendId : userId}-${userId>friendId ? userId : friendId}`
-}
+import messageHash from '../../../util/messageHash'
 
 /*************************** COMPONENTS ***************************/
 function MessageChat({closeMessage, messages, userId, socket}) {

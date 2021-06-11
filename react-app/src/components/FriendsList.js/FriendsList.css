@@ -15,6 +15,7 @@
     overflow-y: hidden;
     display: grid;
     grid-template-rows: 30px 1fr;
+    z-index: 98;
 }
 
 .friends-list--active{
