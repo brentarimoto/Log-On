@@ -143,7 +143,7 @@ function NotFriendButtons({profileUser, user}){
 
 
 /*************************** COMPONENT ***************************/
-function User({profileUserId, friend_id}) {
+function User({profileUserId, friend_id,socket}) {
 
   const dispatch = useDispatch()
   const history = useHistory()
@@ -277,7 +277,7 @@ function User({profileUserId, friend_id}) {
           {isUser ?
           <>
             <button className='user__info-button' onClick={handleSubmit}>Save Changes</button>
-            <LogoutButton />
+            <LogoutButton  socket={socket}/>
           </>
           :
           <>

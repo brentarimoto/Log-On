@@ -94,6 +94,7 @@ const Fours = ({socket}) => {
     const user = useSelector(state=>state.session.user)
     const friends = useSelector(state=>state.friends)
     const rooms = useSelector(state=>state.rooms)
+    const online = useSelector(state=>state.online)
 
     const [gameStart, setGameStart] = useState(false)
     const [roomOwner, setRoomOwner] = useState(false)
@@ -102,6 +103,7 @@ const Fours = ({socket}) => {
     const [message, setMessage] = useState('')
     const [winner, setWinner] = useState(null)
     const [error, setError] = useState(false)
+    const [onlineFriends, setOnlineFriends] = useState([])
 
     useEffect(()=>{
         if(rooms[room_id]?.opponent){
@@ -177,6 +179,13 @@ const Fours = ({socket}) => {
     },[error])
 
     useEffect(()=>{
+        const onlineArray = Object.entries(friends).filter(([id, friendship])=>{
+            return online[id]
+        })
+        setOnlineFriends(onlineArray)
+    },[online])
+
+    useEffect(()=>{
         return()=>{
             dispatch(resetRooms())
         }
@@ -238,7 +247,7 @@ const Fours = ({socket}) => {
                                     Invite
                                     {inviteOpen &&
                                     <div className='fours__invite-list'>
-                                        {Object.entries(friends).map(([id, friendship])=>(
+                                        {onlineFriends.map(([id, friendship])=>(
                                             <InviteItem key={id} friendship={friendship} inviteOpen={inviteOpen} setWinner={setWinner} socket={socket}/>
                                         ))}
                                     </div>}

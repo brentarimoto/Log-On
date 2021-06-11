@@ -11,7 +11,7 @@ import { resetRooms } from "./rooms";
 import { resetFriendUpdate } from "./friendUpdate";
 import { resetFours } from "./fours";
 import { resetGameStats } from "./gameStats";
-import { resetError } from "./error";
+import { resetOnline } from "./online";
 
 
 /*************************** TYPES ***************************/
@@ -78,11 +78,9 @@ export const logout = () => async (dispatch) => {
     }
   });
 
-  console.log('TEST')
-
   const data = await response.json();
 
-  dispatch(resetError())
+  dispatch(resetOnline())
   dispatch(resetGameStats())
   dispatch(resetFours())
   dispatch(resetFriendUpdate())

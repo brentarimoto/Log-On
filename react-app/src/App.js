@@ -21,7 +21,7 @@ import { newNotification } from "./store/notifications";
 import { setGameStats } from "./store/gameStats";
 import background from "./images/background_image.jpg";
 import MessagesPage from "./components/MessagesPage/MessagesPage";
-import { setError } from "./store/error";
+import { addOnline, removeOnline, setOnline } from "./store/online";
 /*************************** SOCKET VARIABLE ***************************/
 let socket;
 
@@ -32,11 +32,21 @@ function App() {
   const history = useHistory()
 
   const user = useSelector(state => state.session.user)
+  const friends = useSelector(state=>state.friends)
   const rooms = useSelector(state=>state.rooms)
   const friendUpdate = useSelector(state=>state.friendUpdate)
   const games = useSelector(state=>state.games)
   const [loaded, setLoaded] = useState(false)
   const [room, setRoom] = useState('')
+
+  window.addEventListener('beforeunload', function(event) {
+    const friend_ids = Object.keys(friends)
+    return socket.emit('logoff',{sender_id:user.id, friend_ids})
+  });
+  window.addEventListener('unload', function(event) {
+    const friend_ids = Object.keys(friends)
+    return socket.emit('logoff',{sender_id:user.id, friend_ids})
+  });
 
   useEffect(() => {
     (() => {
@@ -49,11 +59,28 @@ function App() {
       dispatch(setGameStats(user.stats))
 
       socket=io()
-      console.log(socket)
 
       socket.on('connect', ()=>{
         socket.emit('join', {room:`User:${user.id}`})
+        socket.emit('logon',{sender_id:user.id})
       })
+
+      socket.on("online", ({friends}) => {
+        dispatch(setOnline(friends))
+      })
+
+      socket.on("logon", ({sender_id}) => {
+        if(sender_id!=user.id){
+          dispatch(addOnline(sender_id))
+        }
+      })
+
+      socket.on("logoff", ({sender_id}) => {
+        if(sender_id!=user.id){
+          dispatch(removeOnline(sender_id))
+        }
+      })
+
 
       socket.on("message", (message) => {
         dispatch(handleNewSocketMessage(message))
@@ -66,11 +93,11 @@ function App() {
       })
       setLoaded(true)
     }
-
   },[user])
 
   useEffect(()=>{
     return ()=>{
+      console.log('TEST')
       socket.disconnect()
     }
   },[])
@@ -91,7 +118,7 @@ function App() {
   return (
     <div className='main' style={{backgroundImage: `url(${background})`}}>
       <BrowserRouter>
-        <NavBar />
+        <NavBar socket={socket}/>
         <div className='content'>
           <Switch>
             <Route path="/" exact={true}>

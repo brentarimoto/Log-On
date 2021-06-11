@@ -12,7 +12,7 @@ import './UserModal.css'
 
 /*************************** COMPONENTS ***************************/
 
-function UserModal({friend,friend_id}) {
+function UserModal({friend,friend_id, socket}) {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ function UserModal({friend,friend_id}) {
         <ProfilePhoto profileUser={friend} onClick={()=>setShowModal(true)}/>
         {showModal && (
         <Modal onClose={()=>setShowModal(false)}>
-            <User setShowModal={setShowModal} profileUserId={friend.id} friend_id={friend_id}/>
+            <User setShowModal={setShowModal} profileUserId={friend.id} friend_id={friend_id}  socket={socket}/>
         </Modal>
         )}
     </>

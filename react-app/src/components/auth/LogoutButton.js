@@ -1,14 +1,19 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { logout } from "../../store/session";
 
-const LogoutButton = () => {
+const LogoutButton = ({socket}) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
+  const user = useSelector(state=>state.session.user)
+  const friends = useSelector(state=>state.friends)
+
   const onLogout = async e => {
     e.preventDefault();
+    const friend_ids = Object.keys(friends)
+    socket.emit('logoff',{sender_id:user.id, friend_ids})
     await dispatch(logout())
     history.push('/')
   }

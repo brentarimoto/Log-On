@@ -12,7 +12,7 @@ import roomsReducer from './rooms'
 import friendUpdateReducer from './friendUpdate'
 import foursReducer from './fours'
 import gamesStatsReducer from './gameStats'
-import errorReducer from './error'
+import onlineReducer from './online'
 
 const rootReducer = combineReducers({
     session,
@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
     friendUpdate: friendUpdateReducer,
     fours:foursReducer,
     gameStats:gamesStatsReducer,
-    error:errorReducer,
+    online:onlineReducer,
 });
 
 

@@ -1,12 +1,13 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Switch, Route, useLocation, useParams, NavLink } from 'react-router-dom';
+import { Switch, Route, useParams, NavLink } from 'react-router-dom';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
 import { setSpecificActiveOpen } from '../../store/activeOpen'
-import { getAllMessages } from '../../store/messages';
+import { getAllMessages, getMessages } from '../../store/messages';
+import Message from '../MessageBar/MessageChat/Message';
 import NotificationBubble from '../NotificationBubble/NotificationBubble';
 import UserModal from '../User/UserModal';
 
@@ -14,13 +15,16 @@ import UserModal from '../User/UserModal';
 /*************************** CSS ***************************/
 import './MessagesPage.css'
 
+/*************************** HELPER FUNCTION ***************************/
+import messageHash from '../../util/messageHash'
+
 
 /*************************** HELPER COMPONENT ***************************/
 
-const FriendMessage = ({user_id}) => {
-    const friendship = useSelector(state=>state.friends[user_id])
-    const messages = useSelector(state=>state.messages[user_id])
-    const notificationsNum = useSelector(state=>state.notifications.messages[user_id])
+const FriendMessage = ({friend_id}) => {
+    const friendship = useSelector(state=>state.friends[friend_id])
+    const messages = useSelector(state=>state.messages[friend_id])
+    const notificationsNum = useSelector(state=>state.notifications.messages[friend_id])
 
     if (!friendship){
         return null
@@ -56,44 +60,53 @@ const FriendMessage = ({user_id}) => {
     )
 }
 
-const FriendChat = ({friendship, socket}) => {
-    const {user_id} = useParams()
+const FriendChat = ({socket}) => {
+    const {friend_id} = useParams()
     const inputRef = useRef(null)
+    const dispatch = useDispatch()
 
-    const notificationsNum = useSelector(state=>state.notifications.messages[user_id])
-    const messages = useSelector(state=>state.messages[user_id])
+    const user = useSelector(state=>state.session.user)
+    const notificationsNum = useSelector(state=>state.notifications.messages[friend_id])
+    const messages = useSelector(state=>state.messages[friend_id])
+    const friendship = useSelector(state=>state.friends[friend_id])
 
     const [message, setMessage] = useState('')
 
     useEffect(()=>{
         inputRef.current.focus()
-        // if(Object.values(messages).length<1){
-        //     dispatch(getMessage(user_id))
-        // }
-    },[])
+        if(!messages && friendship){
+            dispatch(getMessages(friendship.id, friend_id))
+        }
+    },[friendship])
 
-    // const onEnterPress =(e)=>{
-    //     if(e.key=='Enter'){
-    //         e.preventDefault()
-    //         if(message.length>0){
-    //             socket.emit("message", {sender_id:user.id,receiver_id:userId,friend_id:friendship.id, message, room:messageHash(userId, user.id)})
-    //             setMessage('')
-    //         }
-    //     }
-    // }
+    const onEnterPress =(e)=>{
+        if(e.key=='Enter'){
+            e.preventDefault()
+            if(message.length>0){
+                socket.emit("message", {sender_id:user.id,receiver_id:friend_id,friend_id:friendship.id, message, room:messageHash(user.id, friend_id)})
+                setMessage('')
+            }
+        }
+    }
 
     return(
         <>
-            <div className='messagespage__chat'>
-
+            <div className='messagespage__chat-div'>
+                <div className='messagespage__chat'>
+                    {messages &&
+                        Object.entries(messages).reverse().map(([id, message])=>(
+                            <Message key={id} message={message}/>
+                        ))
+                    }
+                </div>
             </div>
-            <div className='messagespage__input'>
+            <div className='messagespage__input-div'>
                 <textarea
                     ref={inputRef}
                     className='messagespage__input'
                     value={message}
                     onChange={(e)=>setMessage(e.target.value)}
-                    // onKeyDown={onEnterPress}
+                    onKeyDown={onEnterPress}
                 ></textarea>
             </div>
         </>
@@ -103,31 +116,15 @@ const FriendChat = ({friendship, socket}) => {
 /*************************** COMPONENTS ***************************/
 const MessagesPage = ({socket}) => {
     const dispatch = useDispatch()
-    const location = useLocation()
 
-    const user = useSelector(state=>state.session.user)
     const friends = useSelector(state=>state.friends)
-    const messages = useSelector(state=>state.messages)
     const listOpen = useSelector(state=>state.open.friends)
-
-    const [chats, setChats] = useState([])
 
     useEffect(()=>{
         if(listOpen){
             dispatch(setSpecificActiveOpen('friends', false))
         }
     },[dispatch])
-
-    useEffect(()=>{
-        const array = Object.entries(friends)
-        const filtered = array.filter(([id, friendship])=>{
-            return friendship.last_message[0] || (messages[id] && Object.values(messages[id]).length>0)
-        })
-        setChats(filtered)
-    },[friends,messages])
-
-
-    console.log(chats)
 
     return (
     <div className='messagespage-container'>
@@ -136,16 +133,16 @@ const MessagesPage = ({socket}) => {
                 <div className='messagespage__friends-div'>
                     <div className='messagespage__friends-header'>
                         <h2>Chats</h2>
-                        <input type='text'></input>
+                        {/* <input type='text'></input> */}
                     </div>
                     <div className='messagespage__friends'>
-                        {chats.map(([user_id, friendship])=>(
-                            <FriendMessage key={user_id} user_id={user_id} />
+                        {Object.entries(friends).map(([friend_id, friendship])=>(
+                            <FriendMessage key={friend_id} friend_id={friend_id} friendship={friendship}/>
                         ))}
                     </div>
                 </div>
                 <Switch>
-                    <Route path='/messages/:user_id'>
+                    <Route path='/messages/:friend_id'>
                         <FriendChat socket={socket}/>
                     </Route>
                 </Switch>
