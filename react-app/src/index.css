@@ -105,6 +105,7 @@ body{
     --lightRed: rgb(255, 105, 98);
 
     --lightBlueFaded: rgba(133,195,253,.5);
+    --fadedBlueFaded: rgba(133,195,253,.25);
     --pastelWhite: rgba(245, 245, 244, 1);
     --ghostWhite: rgba(238, 238, 238,1);
     --greyBlue: rgba(190, 202, 211,1);
@@ -150,6 +151,8 @@ body{
     --otherMessage: lightgrey;
     --otherText: black;
 
+    /* Messages Page */
+    --messagesActive: var(--fadedBlueFaded);
 
     /** Game **/
     --createMatch: var(--lightViolet);

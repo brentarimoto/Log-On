@@ -30,8 +30,9 @@ class Friend(db.Model):
   messages = db.relationship(
     "Message",
     back_populates="friendship",
-    cascade='all, delete-orphan'
+    cascade='all, delete-orphan',
   )
+
 
   def to_dict(self):
     return {
@@ -42,7 +43,7 @@ class Friend(db.Model):
       'declined' : self.declined,
       'requester' : self.requester.to_dict() if self.requester.id!=int(session['_user_id']) else None,
       'accepter' : self.accepter.to_dict() if self.accepter.id!=int(session['_user_id']) else None,
-      'messages' : [message.to_dict_basic() for message in self.messages],
+      'last_message' : [message.to_dict() for message in self.messages if self.messages.index(message)==len(self.messages)-1],
     }
 
   def to_dict_basic(self):

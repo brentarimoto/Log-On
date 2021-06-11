@@ -14,7 +14,7 @@ import './UserSearchModal.css'
 
 /*************************** COMPONENTS ***************************/
 
-function UserSearchModal({user, setSearch, setSearchResults}) {
+function UserSearchModal({user, setSearch, setSearchResults, classname}) {
   const dispatch = useDispatch()
   const users=useSelector(state=>state.users)
 
@@ -38,13 +38,16 @@ function UserSearchModal({user, setSearch, setSearchResults}) {
 
   return (
     <>
-        <div className='navbar__search-item' onClick={handleSearchClick}>
-            <div className='navbar__search-photo'>
+        <div className={`${classname}__search-item`} onClick={handleSearchClick}>
+            <div className={`${classname}__search-photo`}>
                     <ProfilePhoto profileUser={user}/>
             </div>
-            <p className='navbar__search-username'>{user.username}</p>
-            <div className='navbar__search-extra'>
-                <p className='navbar__search-email'>{user.email}</p>
+            <p className={`${classname}__search-username`}>{user.username}</p>
+            <div className={`${classname}__search-extra`}>
+              {classname==='friendspage' &&
+              <p className={`${classname}__search-name`}>{user.firstname} {user.lastname}</p>
+              }
+                <p className={`${classname}__search-email`}> {user.email}</p>
             </div>
         </div>
         {showModal && (

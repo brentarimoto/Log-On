@@ -11,6 +11,7 @@ import MessageChat from "./MessageChat/MessageChat";
 import './MessageBar.css'
 import { useDispatch, useSelector } from "react-redux";
 import { newNotification, setMessageNotifications } from "../../store/notifications";
+import { getAllMessages } from "../../store/messages";
 
 /*************************** HELPER FUNCTION ***************************/
 function messageHash(userId, friendId){

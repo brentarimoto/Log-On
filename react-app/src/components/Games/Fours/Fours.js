@@ -14,6 +14,7 @@ import {rankImages} from '../../../util/ranks'
 import { resetFours } from '../../../store/fours';
 import { updateGameStats } from '../../../store/gameStats';
 import { updateFriendStats } from '../../../store/friends';
+import { newNotification } from '../../../store/notifications';
 
 
 /*************************** CSS ***************************/
@@ -100,19 +101,27 @@ const Fours = ({socket}) => {
     const [inviteOpen, setInviteOpen] = useState(false)
     const [message, setMessage] = useState('')
     const [winner, setWinner] = useState(null)
+    const [error, setError] = useState(false)
 
     useEffect(()=>{
+        if(rooms[room_id]?.opponent){
+            setRoomOwner(false)
+        }
         if (room_id!=='home' ){
-            socket.emit('join', {room:room_id})
+            socket.emit('join_fours', {sender_id:user.id, room:room_id})
 
             socket.on("chatroom", ({message, room}) => {
                 dispatch(addRoomMessage(room, message))
             })
 
-            socket.on("confirmation", ({sender_id}) => {
-                if (sender_id !== user.id){
+            socket.on("join_fours", ({sender_id, error}) => {
+                if (sender_id !== user.id && !error){
                     dispatch(setOpponent(room_id, sender_id))
                     setRoomOwner(true)
+                } else if(error){
+                    const notification = {sender:user, error:true, text:error.text, hash:error.hash}
+                    dispatch(newNotification(notification))
+                    setError(true)
                 }
             })
 
@@ -149,24 +158,26 @@ const Fours = ({socket}) => {
 
             return ()=>{
                 socket.removeAllListeners("chatroom")
-                socket.removeAllListeners("confirmation")
+                socket.removeAllListeners("join_fours")
                 socket.removeAllListeners("start_game")
                 socket.removeAllListeners("reset_game")
                 socket.removeAllListeners("leave_game")
-                socket.emit('leave', {room:room_id})
+                socket.emit('leave_game', {sender_id:user.id, room:room_id})
+                dispatch(resetFours())
+                socket.emit('leave_fours', {sender_id:user.id, room:room_id})
             }
+
         }
     },[room_id])
 
     useEffect(()=>{
-        if(rooms[room_id]?.opponent){
-            socket.emit("confirmation", {sender_id:user.id, room:room_id})
+        if(error){
+            history.push('/')
         }
-    },[room_id])
+    },[error])
 
     useEffect(()=>{
         return()=>{
-            socket.emit('leave', {room:room_id})
             dispatch(resetRooms())
         }
     },[])
@@ -255,7 +266,15 @@ const Fours = ({socket}) => {
                             <div className='foursgame__winner'>
                                 {winner}
                             </div>}
-                            <FoursGame socket={socket} userTurn={userTurn} setUserTurn={setUserTurn} winner={winner} setWinner={setWinner} setGameStart={setGameStart}/>
+                            <FoursGame
+                                socket={socket}
+                                userTurn={userTurn}
+                                setUserTurn={setUserTurn}
+                                winner={winner}
+                                setWinner={setWinner}
+                                setGameStart={setGameStart}
+                                error={error}
+                            />
                         </div>
                     }
                     {room_id!=='home' &&

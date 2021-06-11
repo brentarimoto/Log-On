@@ -1,6 +1,6 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -26,6 +26,7 @@ let socket;
 
 const NotificationItem = ({notification,setNotificationOpen})=>{
     const dispatch = useDispatch()
+    const location = useLocation()
 
     const user = useSelector(state=>state.session.user)
     const rooms = useSelector(state=>state.rooms)
@@ -44,8 +45,16 @@ const NotificationItem = ({notification,setNotificationOpen})=>{
         dispatch(deleteGameInvitation(notification.hash))
     }
 
+    let link;
+
+    if (notification.game){
+        link = `/games/${notification.game.id}/${notification.hash}`
+    } else if (notification.error){
+        link = location.pathname
+    }
+
     return(
-        <Link className='notification__list-item' to={`/games/${notification.game.id}/${notification.hash}`} onClick={handleNotificationClick}>
+        <Link className='notification__list-item' to={link} onClick={handleNotificationClick}>
              <div className='notification__list-item-profpic'>
                 <ProfilePhoto profileUser={notification.sender}/>
             </div>

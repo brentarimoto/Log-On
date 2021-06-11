@@ -7,7 +7,7 @@ const ProtectedRoute = props => {
 
   const user = useSelector(state => state.session.user)
 
-  if(location.pathname.includes('games') && !user){
+  if((location.pathname.includes('games')||location.pathname.includes('friends')||location.pathname.includes('messages')) && !user){
     localStorage.setItem('authorizing', location.pathname)
   }
 

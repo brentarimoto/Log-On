@@ -14,8 +14,8 @@ from .util import add_win, add_loss, add_tie, rank_up, rank_down, ranks
 
 if os.environ.get("FLASK_ENV") == "production":
     origins = [
-        "http://log-on.herokuapp.com",
-        "http://log-on.herokuapp.com"
+        "https://log-on.herokuapp.com",
+        "https://log-on.herokuapp.com"
     ]
 else:
     origins = "*"
@@ -25,12 +25,14 @@ socketio = SocketIO(cors_allowed_origins=origins)
 
 # create games container
 games={}
+rooms={}
 
 
 @socketio.on("join")
 def on_join(data):
     room=data['room']
     join_room(room)
+
 
 
 @socketio.on('leave')
@@ -58,11 +60,6 @@ def invitations(data):
     text=f'Invited you to a {data["game"]["name"]} game'
     emit("invitations",{'invitation':{'sender':data['sender'],'game':data['game'], 'text':text, 'hash': data['hash']}}, room=data['room'])
 
-@socketio.on("confirmation")
-def confirmation(data):
-    print('*****************Confirmation********************')
-    emit("confirmation",{'sender_id':data['sender_id']}, room=data['room'])
-
 @socketio.on("chatroom")
 def game_chat(data):
     room=data['room']
@@ -88,6 +85,41 @@ def fours_result_win_loss(winner, loser):
     db.session.commit()
 
     return [statWinner, statLoser]
+
+
+@socketio.on("join_fours")
+def join_fours(data):
+    room=data['room']
+    print(rooms)
+
+    if not rooms.get(room):
+        join_room(room)
+        rooms[room]=[data['sender_id']]
+    elif rooms.get(room) and len(rooms.get(room))<2:
+        join_room(room)
+        rooms[room].append(data['sender_id'])
+        emit("join_fours",{'sender_id':data['sender_id']}, room=data['room'])
+    elif not len(rooms.get(room))<2:
+        text = 'The game you were trying to join was full!'
+        emit("join_fours",{'error':{'text':text, 'hash':f'User:{data["sender_id"]}'}}, room=f'User:{data["sender_id"]}')
+    else:
+        text = 'The game you were trying to join does not exist!'
+        emit("join_fours",{'error':{'text':text, 'hash':f'User:{data["sender_id"]}'}}, room=f'User:{data["sender_id"]}')
+
+@socketio.on("leave_fours")
+def leave_fours(data):
+    print('*****************Leave Fours********************')
+    room=data['room']
+    print(rooms, room)
+    if room!='home':
+        if (data['sender_id'] in rooms[room]):
+            print(rooms)
+            rooms[room].remove(data['sender_id'])
+        if len(rooms[room])<=0:
+            print(rooms)
+            rooms.pop(room, None)
+    print(rooms, room)
+    leave_room(room)
 
 @socketio.on("start_game")
 def start_game(data):
@@ -119,18 +151,19 @@ def reset_game(data):
 def leave_game(data):
     room=data['room']
     print('*****************Leave Game********************')
-    res={'sender_id':data['sender_id']}
-    if games.get(room):
-        game=games.get(room)
-        if not game.win or not game.tie:
-            winner = game.p1 if game.p1!=data['sender_id'] else game.p2
-            loser = data['sender_id']
-            statWinner, statLoser = fours_result_win_loss(winner, loser)
-            res['winnerStats']=statWinner.to_dict()
-            res['loserStats']=statLoser.to_dict()
-            res['loser']=loser
-        games.pop(room, None)
-    emit("leave_game",res, room=data['room'])
+    if data['sender_id'] in rooms[room]:
+        res={'sender_id':data['sender_id']}
+        if games.get(room):
+            game=games.get(room)
+            if not game.win or not game.tie:
+                winner = game.p1 if game.p1!=data['sender_id'] else game.p2
+                loser = data['sender_id']
+                statWinner, statLoser = fours_result_win_loss(winner, loser)
+                res['winnerStats']=statWinner.to_dict()
+                res['loserStats']=statLoser.to_dict()
+                res['loser']=loser
+            games.pop(room, None)
+        emit("leave_game",res, room=data['room'])
 
 @socketio.on("fours_move")
 def fours_move(data):

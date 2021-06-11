@@ -6,6 +6,12 @@ import { resetMessages } from "./messages";
 import { resetActive } from "./activeMessages";
 import { resetActiveOpen } from "./activeOpen";
 import { resetNotifications } from "./notifications";
+import { resetGames } from "./games";
+import { resetRooms } from "./rooms";
+import { resetFriendUpdate } from "./friendUpdate";
+import { resetFours } from "./fours";
+import { resetGameStats } from "./gameStats";
+import { resetError } from "./error";
 
 
 /*************************** TYPES ***************************/
@@ -37,6 +43,7 @@ export const authenticate = () => async (dispatch) => {
       }
     });
     const data = await response.json();
+
     if (data.errors) {
         return;
     }
@@ -71,14 +78,23 @@ export const logout = () => async (dispatch) => {
     }
   });
 
+  console.log('TEST')
+
   const data = await response.json();
-  dispatch(removeUser());
+
+  dispatch(resetError())
+  dispatch(resetGameStats())
+  dispatch(resetFours())
+  dispatch(resetFriendUpdate())
+  dispatch(resetRooms())
+  dispatch(resetGames())
   dispatch(resetNotifications())
   dispatch(resetActiveOpen())
   dispatch(resetActive())
   dispatch(resetMessages())
   dispatch(resetUsers())
   dispatch(resetFriends())
+  dispatch(removeUser());
 };
 
 

@@ -37,6 +37,8 @@ const Home = () => {
             const pathname=localStorage.getItem('authorizing')
             localStorage.removeItem('authorizing')
             history.push(pathname)
+        } else if (localStorage.getItem('authorizing') && !user){
+            localStorage.removeItem('authorizing')
         }
     },[user])
 

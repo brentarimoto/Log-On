@@ -19,7 +19,7 @@ import './NavBar.css'
 import UserModal from '../User/UserModal';
 
 /*************************** COMPONENTS ***************************/
-const NavBar = () => {
+const NavBar = ({socket}) => {
   const user = useSelector(state=>state.session.user)
   const messageNotifications = useSelector(state=>state.notifications.messages)
   const normalNotifications = useSelector(state=>state.notifications.notifications)
@@ -43,6 +43,7 @@ const NavBar = () => {
       <div className='navbar__links-div'>
         {user ?
         <>
+          {/* <LogoutButton /> */}
           <Link className='navbar__friends' to='/friends'>
             <div className='navbar__icon'>
               <i className="fas fa-users"></i>
@@ -55,7 +56,7 @@ const NavBar = () => {
             <NotificationBubble notificationsNum={messageCount}/>
           </Link>
           <div className='navbar__notifications'>
-            <Notifications />
+            <Notifications socket={socket}/>
             <NotificationBubble notificationsNum={normalNotifications.length}/>
           </div>
           <div className='navbar__account'>

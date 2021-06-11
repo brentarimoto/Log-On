@@ -16,7 +16,7 @@ import { updateGameStats } from '../../../store/gameStats';
 
 
 /*************************** COMPONENTS ***************************/
-const FoursGame = ({socket, userTurn, setUserTurn, setWinner, setGameStart}) => {
+const FoursGame = ({socket, userTurn, setUserTurn, setWinner, setGameStart, error}) => {
     const dispatch = useDispatch()
     const {room_id} = useParams()
 
@@ -62,10 +62,10 @@ const FoursGame = ({socket, userTurn, setUserTurn, setWinner, setGameStart}) => 
                 setGameStart(false)
             }
         })
-        return ()=>{
-            socket.emit('leave_game', {sender_id:user.id, room:room_id})
-            dispatch(resetFours())
-        }
+        // return ()=>{
+        //     socket.emit('leave_game', {sender_id:user.id, room:room_id})
+        //     dispatch(resetFours())
+        // }
     },[room_id])
 
     const handleInput = (e)=>{
