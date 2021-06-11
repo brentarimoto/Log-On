@@ -1,12 +1,14 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { StaticRouter, useParams } from "react-router-dom";
+import { StaticRouter, useHistory, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 /*************************** COMPONENT IMPORTS ***************************/
 import ProfilePhoto from "../ProfilePhoto/ProfilePhoto";
 import Stat from './Stat'
+import LogoutButton from "../auth/LogoutButton";
+
 import { acceptRequest, unFriend } from "../../store/friends";
 import { cancelRequest, declineRequest, sendFriendRequest, } from "../../store/users";
 import { popActive } from "../../store/activeMessages";
@@ -19,7 +21,6 @@ import { editUser } from '../../store/session'
 /*************************** CSS ***************************/
 import './User.css'
 import 'swiper/swiper-bundle.css';
-import LogoutButton from "../auth/LogoutButton";
 
 
 /*************************** HELPER COMPONENTS ***************************/
@@ -145,6 +146,7 @@ function NotFriendButtons({profileUser, user}){
 function User({profileUserId, friend_id}) {
 
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const user = useSelector(state=>state.session.user)
   const friends = useSelector(state=>state.friends)
@@ -195,7 +197,7 @@ function User({profileUserId, friend_id}) {
     } else {
         setErrors(editedUser.errors)
     }
-}
+  }
 
 
   return (
@@ -204,7 +206,7 @@ function User({profileUserId, friend_id}) {
           <ProfilePhoto profileUser={profileUser}/>
           {isUser && <div className='user__profile-photo-input'>
               <input type="file" id="profpic-btn" onChange={(e)=>setPhoto(e.target.files[0])} hidden/>
-              <label htmlFor="profpic-btn" class="user__profile-photo-button">{photo?.name ? photo?.name : 'New Image'}</label>
+              <label htmlFor="profpic-btn" className="user__profile-photo-button">{photo?.name ? photo?.name : 'New Image'}</label>
           </div>}
       </div>
       <div className='user__info-container'>

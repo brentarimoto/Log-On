@@ -39,7 +39,7 @@ const SearchBar = () => {
             <label htmlFor='navSearch' className="navbar__search-label">Search</label>
             {searchResults.length>0 && <div className='navbar__search-list'>
                 {searchResults.map(user=>(
-                    <UserSearchModal key={user.id} user={user} setSearch={setSearch} setSearchResults={setSearchResults}/>
+                    <UserSearchModal key={user.id} user={user} setSearch={setSearch} setSearchResults={setSearchResults} classname='navbar'/>
                 ))}
 
             </div>}

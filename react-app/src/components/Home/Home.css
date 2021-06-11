@@ -32,6 +32,7 @@
   "one one three"
   "one one four"
   "five six seven";
+  min-width: 650px;
 }
 
 .home__game-link{
@@ -62,7 +63,7 @@
   top: 5px;
   left: 5px;
   right: 5px;
-  height: 45px;
+  height: 65px;
   background-color: rgba(0, 0, 0, .75);
   color: white;
   display: flex;

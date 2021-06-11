@@ -35,7 +35,7 @@ const Friend = ({friendship}) => {
             } else if(open[friend.id]===false){
                 dispatch(setSpecificActiveOpen(friend.id, true))
             }
-            if (!messages[friend.id]){
+            if (!messages[friend.id] || Object.values(messages[friend.id])<1){
                 const messages = await dispatch(getMessages(friendship.id, friend.id))
                 dispatch(appendActive(messages))
             } else if(!active.find(el=>el?.user_id===friend.id)){

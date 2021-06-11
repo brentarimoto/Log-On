@@ -14,8 +14,8 @@ from .util import add_win, add_loss, add_tie, rank_up, rank_down, ranks
 
 if os.environ.get("FLASK_ENV") == "production":
     origins = [
-        "http://log-on.herokuapp.com",
-        "http://log-on.herokuapp.com"
+        "https://log-on.herokuapp.com",
+        "https://log-on.herokuapp.com"
     ]
 else:
     origins = "*"

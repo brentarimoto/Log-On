@@ -1,0 +1,132 @@
+/*** Messages Page ***/
+.messagespage-container{
+    padding: 20px;
+    /* padding-bottom: 50px; */
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    animation: 1s ease 0s 1 fadeIn;
+    min-width: 700px;
+}
+
+.messagespage-div{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: var(--greyBlue);
+}
+
+.messagespage{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border: .5px solid var(--faintBorder);
+    background-color: var(--ghostWhite);
+    display: grid;
+    grid-template-columns: 300px minmax(350px, 1fr);
+    grid-template-rows: 1fr 100px;
+    grid-template-areas:
+    "friends chat"
+    "friends input";
+}
+
+
+/*** Friend ***/
+.messagespage__friends-div{
+    grid-area: friends;
+    width: 100%;
+    height: 100%;
+    border: .5px solid var(--faintBorder);
+    position: relative;
+    grid-template-rows: auto;
+    row-gap: 10px;
+}
+
+.messagespage__friends-header{
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 75px;
+    padding: 10px;
+    border-bottom: 1px solid var(--faintBorder);
+    box-sizing: border-box;
+
+}
+.messagespage__friends{
+    position: absolute;
+    width: 100%;
+    top: 75px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.messagespage__friend{
+    display: grid;
+    padding: 5px;
+    box-sizing: border-box;
+    grid-template-columns: 70px 1fr;
+    grid-template-rows: 35px 35px;
+    grid-template-areas:
+    "pic username"
+    "pic lastmessage";
+    width: 300px;
+    column-gap: 10px;
+    text-decoration: none;
+}
+
+.messagespage__friend:hover{
+    background-color: var(--friendsListHover);
+}
+
+.messagespage--active{
+    background-color: var(--messagesActive);
+}
+
+/*** Photo ***/
+.messagespage__friend-photo{
+    grid-area: pic;
+    font-size: 160%;
+    padding: 7px;
+    border-radius: 7px;
+    position: relative;
+}
+
+/*** Username ***/
+.messagespage__friend-username{
+    grid-area: username;
+    font-size: 130%;
+    align-self: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 200px;
+
+}
+
+/*** Last Message ***/
+.messagespage__friend-lastmessage-div{
+    grid-area: lastmessage;
+    width: 200px;
+    padding: 5px 0;
+    box-sizing: border-box;
+}
+
+.messagespage__friend-lastmessage{
+    font-size: 90%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    border: 1px solid  var(--faintBorder);
+    border-radius: 3px;
+    background-color: lightgrey;
+    color: grey;
+}

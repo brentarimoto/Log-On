@@ -43,6 +43,7 @@ const NavBar = () => {
       <div className='navbar__links-div'>
         {user ?
         <>
+          {/* <LogoutButton /> */}
           <Link className='navbar__friends' to='/friends'>
             <div className='navbar__icon'>
               <i className="fas fa-users"></i>

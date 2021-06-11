@@ -14,10 +14,14 @@ const setGames = (games) => ({
     games
 });
 
+export const resetGames = (games) => ({
+    type: RESET_GAMES,
+});
+
 
 /*************************** THUNKS ***************************/
 export const getGames = () => async (dispatch) => {
-    const response = await fetch(`/api/games`);
+    const response = await fetch(`/api/games/`);
 
     const data = await response.json();
 

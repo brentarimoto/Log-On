@@ -32,6 +32,7 @@
     border-radius: 50%;
     font-size: 100%;
 }
+
 .navbar__search-photo{
     grid-area: pic;
     display: flex;

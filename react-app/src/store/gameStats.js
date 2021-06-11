@@ -21,6 +21,11 @@ export const updateGameStats = (game_id, stats) => ({
     stats
 });
 
+export const resetGameStats = (game_id, stats) => ({
+    type: RESET_GAME_STATS,
+});
+
+
 /*************************** REDUCER ***************************/
 const initialState = {};
 

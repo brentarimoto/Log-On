@@ -20,6 +20,7 @@ import { handleNewSocketMessage } from "./store/messages";
 import { newNotification } from "./store/notifications";
 import { setGameStats } from "./store/gameStats";
 import background from "./images/background_image.jpg";
+import MessagesPage from "./components/MessagesPage/MessagesPage";
 /*************************** SOCKET VARIABLE ***************************/
 let socket;
 
@@ -96,8 +97,8 @@ function App() {
             <ProtectedRoute path="/friends" exact={true} >
               <FriendsPage />
             </ProtectedRoute>
-            <ProtectedRoute path="/messages" exact={true} >
-              Messages
+            <ProtectedRoute path="/messages">
+              <MessagesPage socket={socket}/>
             </ProtectedRoute>
             <ProtectedRoute path="/games/:game_id">
               <Games socket={socket}/>

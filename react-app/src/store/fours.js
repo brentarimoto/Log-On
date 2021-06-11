@@ -38,7 +38,7 @@ for(let i =0;i<7;i++){
     board[i]=column
 }
 
-const initialState = {board:board,gameStart:false, turn:false};
+const initialState = {board:board};
 
 export default function foursReducer(state=initialState, action) {
     let newState;
