@@ -1,5 +1,5 @@
 /*************************** REACT IMPORTS ***************************/
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 
@@ -14,13 +14,20 @@ import logo from '../../images/Log-On.png'
 
 /*************************** COMPONENTS ***************************/
 const LoginForm = ({setShowModal}) => {
+  const dispatch = useDispatch();
+  const inputRef = useRef(null)
+  const {setModalOpen} = useSearch()
+
+
+  const user = useSelector(state => state.session.user);
+
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
 
-  const user = useSelector(state => state.session.user);
-  const {setModalOpen} = useSearch()
-  const dispatch = useDispatch();
+  useEffect(()=>{
+    inputRef.current.focus()
+  },[])
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -67,6 +74,7 @@ const LoginForm = ({setShowModal}) => {
       <div className='auth__form-divs'>
         <label className='auth__form-labels' htmlFor="credential">Username/Email</label>
         <input
+          ref={inputRef}
           name="credential"
           type="text"
           value={credential}

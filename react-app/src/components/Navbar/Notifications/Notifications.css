@@ -49,7 +49,7 @@
     display: grid;
     column-gap: 10px;
     grid-template-columns: 40px 1fr 30px;
-    grid-template-rows: 20px 20px;
+    grid-template-rows: 20px minmax(20px, 1fr);
     grid-template-areas:
     "pic name trash"
     "pic text trash";
@@ -72,6 +72,8 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    width: 40px;
+    height: 40px;
 }
 
 .notification__list-item-name{

@@ -1,7 +1,7 @@
 /*************************** REACT IMPORTS ***************************/
 
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
@@ -21,6 +21,7 @@ import { newNotification } from "./store/notifications";
 import { setGameStats } from "./store/gameStats";
 import background from "./images/background_image.jpg";
 import MessagesPage from "./components/MessagesPage/MessagesPage";
+import { setError } from "./store/error";
 /*************************** SOCKET VARIABLE ***************************/
 let socket;
 
@@ -28,6 +29,7 @@ let socket;
 /*************************** COMPONENTS ***************************/
 function App() {
   const dispatch = useDispatch();
+  const history = useHistory()
 
   const user = useSelector(state => state.session.user)
   const rooms = useSelector(state=>state.rooms)
@@ -48,6 +50,10 @@ function App() {
 
       socket=io()
       console.log(socket)
+
+      socket.on('connect', ()=>{
+        socket.emit('join', {room:`User:${user.id}`})
+      })
 
       socket.on("message", (message) => {
         dispatch(handleNewSocketMessage(message))
