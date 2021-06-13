@@ -1,6 +1,6 @@
 /*************************** OTHER FILE IMPORTS ***************************/
 
-import { updateActive } from "./activeMessages";
+import { deleteAnActiveMessage, updateActive } from "./activeMessages";
 import { newMessageNotification } from "./notifications";
 
 /*************************** TYPES ***************************/
@@ -11,6 +11,8 @@ const SET_MESSAGES = "messages/SET_MESSAGES";
 const ADD_MESSAGE = "messages/ADD_MESSAGE";
 
 const REMOVE_MESSAGE = "messages/REMOVE_MESSAGE";
+
+const REMOVE_SPECIFIC_MESSAGE = "messages/REMOVE_SPECIFIC_MESSAGE";
 
 const RESET_MESSAGES = "messages/RESET_MESSAGES";
 
@@ -39,6 +41,12 @@ export const removeMessage = (user_id) => ({
     user_id
 });
 
+export const removeSpecificMessage = (user_id, message_id) => ({
+    type: REMOVE_SPECIFIC_MESSAGE,
+    user_id,
+    message_id
+});
+
 
 export const resetMessages = () => ({
     type: RESET_MESSAGES
@@ -57,7 +65,6 @@ export const getAllMessages = () => async (dispatch) => {
     }
 
     dispatch(setAllMessages(data.messages))
-    // return {user_id:user_id, messages:data.messages}
 }
 
 export const getMessages = (friendship_id, user_id) => async (dispatch) => {
@@ -71,6 +78,26 @@ export const getMessages = (friendship_id, user_id) => async (dispatch) => {
 
     dispatch(setMessages(user_id, data.messages))
     return {user_id:user_id, messages:data.messages}
+}
+
+export const deleteMessage = (message_id, friend_id) => async (dispatch, getState) => {
+    const response = await fetch(`/api/messages/${message_id}`,{
+        method:'DELETE'
+      });
+
+    const data = await response.json();
+
+    if (data.errors) {
+        return;
+    }
+
+    dispatch(removeSpecificMessage(friend_id, message_id))
+
+    const state = getState()
+    const active = state.active
+    if(active.find(el=>el.user_id===friend_id)){
+        dispatch(deleteAnActiveMessage(friend_id, message_id))
+    }
 }
 
 
@@ -120,6 +147,12 @@ export default function messagesReducer(state=initialState, action) {
         case REMOVE_MESSAGE:
           newState={...state}
           delete newState[action.user_id]
+          return newState
+        case REMOVE_SPECIFIC_MESSAGE:
+            console.log(action.user_id, action.message_id)
+          newState={...state}
+          newState[action.user_id] = {...newState[action.user_id]}
+          delete newState[action.user_id][action.message_id]
           return newState
         case RESET_MESSAGES:
           return initialState

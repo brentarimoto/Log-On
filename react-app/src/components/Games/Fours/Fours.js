@@ -77,7 +77,13 @@ const InviteList = ({onlineFriends, setInviteOpen, socket})=>{
         }
     }
 
-
+    if (onlineFriends.length<1){
+        return(
+            <div className='fours__invite-list'>
+                No Friend Online
+            </div>
+        )
+    }
 
     return(
         <div className='fours__invite-list'>
@@ -125,6 +131,7 @@ const Fours = ({socket}) => {
     const friends = useSelector(state=>state.friends)
     const rooms = useSelector(state=>state.rooms)
     const online = useSelector(state=>state.online)
+    const fours = useSelector(state=>state.games['1'])
 
     const [gameStart, setGameStart] = useState(false)
     const [roomOwner, setRoomOwner] = useState(false)
@@ -151,6 +158,7 @@ const Fours = ({socket}) => {
             socket.on("join_fours", ({sender_id, error}) => {
                 if (sender_id !== user.id && !error){
                     dispatch(setOpponent(room_id, sender_id))
+                    setInviteOpen(false)
                     setRoomOwner(true)
                 } else if(error){
                     const notification = {sender:user, error:true, text:error.text, hash:error.hash}
@@ -262,11 +270,14 @@ const Fours = ({socket}) => {
         )
     }
 
-
+    // style={{backgroundImage: `${room_id==='home' ? `url(${fours?.picture})` : ''}`}}
     return (
         <div className={`fours ${room_id==='home' && 'fours--pre'}`}>
             <Switch>
                 <Route path='/games/1/home'>
+                    <div className='fours__background-div' >
+                        <img className='fours__background' src={fours?.picture}></img>
+                    </div>
                     <div className='fours__header'>
                         <button onClick={handleJoinRoom} className='fours__join-room-button'>Create Match</button>
                     </div>

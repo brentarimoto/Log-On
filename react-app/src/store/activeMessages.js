@@ -8,6 +8,9 @@ const POP_ACTIVE = "active/POP_ACTIVE";
 
 const UPDATE_ACTIVE = "active/UPDATE_ACTIVE";
 
+const DELETE_AN_ACTIVE_MESSAGE = "active/DELETE_AN_ACTIVE_MESSAGE";
+
+
 const RESET_ACTIVE = "active/RESET_ACTIVE";
 
 /*************************** ACTIONS ***************************/
@@ -25,6 +28,12 @@ export const updateActive = (user_id, message) => ({
     type: UPDATE_ACTIVE,
     user_id,
     message
+});
+
+export const deleteAnActiveMessage = (user_id, message_id) => ({
+    type: DELETE_AN_ACTIVE_MESSAGE,
+    user_id,
+    message_id
 });
 
 export const resetActive = () => ({
@@ -56,6 +65,17 @@ export default function activeReducer(state=initialState, action) {
                 value.messages={...value.messages}
                 if(value.user_id===action.user_id){
                     value.messages[action.message.id]=action.message
+                }
+                return value
+            })
+            return newState
+        case DELETE_AN_ACTIVE_MESSAGE:
+            newState=[...state]
+            newState=newState.map(value=>{
+                value={...value}
+                value.messages={...value.messages}
+                if(value.user_id===action.user_id){
+                    delete value.messages[action.message_id]
                 }
                 return value
             })
