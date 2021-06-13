@@ -1,6 +1,7 @@
 /*************************** REACT IMPORTS ***************************/
 
 import React from "react";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 /*************************** COMPONENT IMPORTS ***************************/
@@ -27,6 +28,9 @@ function Splash() {
         <div className='splash__signup'>
             <SignupModal classname={modalOpen ? 'splash__modal-button--hidden' : 'splash__modal-button'}/>
         </div>
+        <Link className='splash__aboutme' to='/aboutme'>
+          <h3 className={modalOpen ? 'splash__modal-button--hidden' : 'splash__modal-button'}>About Me</h3>
+        </Link>
     </div>
   );
 }

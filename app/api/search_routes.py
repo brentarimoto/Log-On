@@ -16,7 +16,7 @@ search_routes = Blueprint('search', __name__)
 @search_routes.route('/<value>')
 @login_required
 def search(value):
-    users = User.query.filter(User.username.ilike(f'{value}%') | User.email.ilike(f'{value}%')).limit(10).all()
+    users = User.query.filter((User.username.ilike(f'{value}%') | User.email.ilike(f'{value}%')) & (User.id != int(session['_user_id']))).limit(10).all()
     return {"users": [user.to_dict_basic() for user in users]}
 
 @search_routes.route('/user/<int:user_id>')

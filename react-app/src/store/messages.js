@@ -79,19 +79,22 @@ export const getMessages = (friendship_id, user_id) => async (dispatch) => {
 export const handleNewSocketMessage = (message) => async (dispatch, getState) => {
     const state = getState()
     const user = state.session.user
-    const userId = message.sender_id!==user.id ? message.sender_id : message.receiver_id
+    const messagepage = parseInt(state.messagepage)
+    const friendId = message.sender_id!==user.id ? parseInt(message.sender_id) : parseInt(message.receiver_id)
 
-    if(!state.messages[userId] && user.id!==message.sender_id){
-        dispatch(newMessageNotification(userId))
-    }else if(state.messages[userId] && (!state.active.find(el=>el.user_id===userId) || !state.open[userId]) && user.id!==message.sender_id){
-        dispatch(addMessage(userId, message.message))
-        dispatch(newMessageNotification(userId))
-    // } else if(state.messages[userId] && state.active.find(el=>el.user_id===userId) && !state.open[userId]  && user.id!==message.sender_id){
-    //     dispatch(addMessage(userId, message.message))
-    //     dispatch(newMessageNotification(userId))
+
+
+    if(!state.messages[friendId] && user.id!==message.sender_id && messagepage!==friendId){
+        dispatch(newMessageNotification(friendId))
+    }else if(state.messages[friendId] && (!state.active.find(el=>el.user_id===friendId) || !state.open[friendId]) && user.id!==message.sender_id && messagepage!==friendId){
+        dispatch(addMessage(friendId, message.message))
+        dispatch(newMessageNotification(friendId))
+    // } else if(state.messages[friendId] && state.active.find(el=>el.user_id===friendId) && !state.open[friendId]  && user.id!==message.sender_id){
+    //     dispatch(addMessage(friendId, message.message))
+    //     dispatch(newMessageNotification(friendId))
     } else{
-        dispatch(addMessage(userId, message.message))
-        dispatch(updateActive(userId, message.message))
+        dispatch(addMessage(friendId, message.message))
+        dispatch(updateActive(friendId, message.message))
     }
 }
 

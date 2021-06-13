@@ -6,17 +6,18 @@ import { useDispatch, useSelector } from 'react-redux';
 
 /*************************** COMPONENT IMPORTS ***************************/
 import ProfilePhoto from '../../ProfilePhoto/ProfilePhoto';
-import { deleteGameInvitation, setNotifications } from '../../../store/notifications';
+import { deleteNotification, resetNormalNotifications, setNotifications } from '../../../store/notifications';
 import { joinRoom } from '../../../store/rooms';
 
 /*************************** CSS ***************************/
 import './Notifications.css'
+import UserNotificationModal from '../../User/UserNotificationModal';
 
 /*************************** INNER COMPONENTS ***************************/
 const NoNotificationItem = ()=>{
     return(
-        <div className='notification__list-item-none noselect'>
-            <h3 className='notification__list-item-none'>No Notifications!</h3>
+        <div className='notification__list-none noselect'>
+            <h3 className='notification__list-none'>No Notifications!</h3>
         </div>
     )
 }
@@ -24,7 +25,7 @@ const NoNotificationItem = ()=>{
 
 let socket;
 
-const NotificationItem = ({notification,setNotificationOpen})=>{
+const NotificationItem = ({notification,setNotificationOpen, socket})=>{
     const dispatch = useDispatch()
     const location = useLocation()
 
@@ -37,12 +38,13 @@ const NotificationItem = ({notification,setNotificationOpen})=>{
             return
         }
         dispatch(joinRoom(notification.hash, notification.sender))
-        dispatch(deleteGameInvitation(notification.hash))
+        dispatch(deleteNotification(notification.hash))
         setNotificationOpen(false)
     }
 
     const handleDeleteNotification = (e)=>{
-        dispatch(deleteGameInvitation(notification.hash))
+        dispatch(deleteNotification(notification.hash))
+        setNotificationOpen(false)
     }
 
     let link;
@@ -51,6 +53,12 @@ const NotificationItem = ({notification,setNotificationOpen})=>{
         link = `/games/${notification.game.id}/${notification.hash}`
     } else if (notification.error){
         link = location.pathname
+    }
+
+    if (notification.request){
+        return(
+            <UserNotificationModal notification={notification} setNotificationOpen={setNotificationOpen} handleDeleteNotification={handleDeleteNotification} socket={socket}/>
+        )
     }
 
     return(
@@ -71,14 +79,10 @@ const NotificationItem = ({notification,setNotificationOpen})=>{
     )
 }
 
-const NotificationList = ({setNotificationOpen}) =>{
+const NotificationList = ({setNotificationOpen, socket}) =>{
+    const dispatch = useDispatch()
     const notifications = useSelector(state=>state.notifications.notifications)
 
-    const handleClick = (e)=>{
-        if(!/^notification/.test(e.target.className)){
-            setNotificationOpen(false)
-        }
-    }
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClick);
@@ -88,11 +92,28 @@ const NotificationList = ({setNotificationOpen}) =>{
         };
     }, []);
 
+    const handleClick = (e)=>{
+        if(!/^notification/.test(e.target.className)){
+            setNotificationOpen(false)
+        } else if(e.target.className.includes('notification__list-item')){
+            document.removeEventListener("mousedown", handleClick);
+        }
+    }
+
+    const handleClear = ()=>{
+        dispatch(resetNormalNotifications())
+        setNotificationOpen(false)
+    }
+
     return(
         <div className='notification__list'>
+            <div className='notification__clear-div'>
+                <div className='notification__header'>Notifications</div>
+                <div className='notification__clear' onClick={handleClear}>Clear</div>
+            </div>
             {notifications.length>0 ?
-            notifications.map((notification)=>(
-                <NotificationItem key={notification.hash} notification={notification} none={true} setNotificationOpen={setNotificationOpen}/>
+            notifications.map((notification, id)=>(
+                <NotificationItem key={`${id}-${notification.hash}`} notification={notification} none={true} setNotificationOpen={setNotificationOpen} socket={socket}/>
             )) :
             <NoNotificationItem />
             }
@@ -103,7 +124,7 @@ const NotificationList = ({setNotificationOpen}) =>{
 
 
 /*************************** COMPONENTS ***************************/
-const Notifications = ({notification}) => {
+const Notifications = ({notification, socket}) => {
     const dispatch = useDispatch()
 
     const user = useSelector(state=>state.session.user)
@@ -129,7 +150,7 @@ const Notifications = ({notification}) => {
     return (
         <div className='notification'>
             <i className="notification__icon fas fa-bell" onClick={handleClick}></i>
-            {notificationOpen && <NotificationList setNotificationOpen={setNotificationOpen}/>}
+            {notificationOpen && <NotificationList setNotificationOpen={setNotificationOpen} socket={socket}/>}
         </div>
     );
 }

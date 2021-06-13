@@ -6,7 +6,9 @@ const SET_NOTIFICATIONS = "notifications/SET_NOTIFICATIONS";
 
 const NEW_NOTIFICATION = "notifications/NEW_NOTIFICATION";
 
-const DELETE_GAME_INVITATION = "notifications/DELETE_GAME_INVITATION";
+const DELETE_NOTIFICATION = "notifications/DELETE_NOTIFICATION";
+
+const RESET_NORMAL_NOTIFICATIONS = "notifications/RESET_NORMAL_NOTIFICATIONS";
 
 const SET_MESSAGE_NOTIFICATION = "notifications/SET_MESSAGE_NOTIFICATION";
 
@@ -15,6 +17,8 @@ const NEW_MESSAGE_NOTIFICATION = "notifications/NEW_MESSAGE_NOTIFICATION";
 const READ_MESSAGE_NOTIFICATION = "notifications/READ_MESSAGE_NOTIFICATION";
 
 const REMOVE_MESSAGE_NOTIFICATION = "notifications/REMOVE_MESSAGE_NOTIFICATION";
+
+const RESET_MESSAGE_NOTIFICATION = "notifications/RESET_MESSAGE_NOTIFICATION";
 
 const RESET_NOTIFICATIONS = "notifications/RESET_NOTIFICATIONS";
 
@@ -30,9 +34,13 @@ export const newNotification = (notification) => ({
     notification,
 });
 
-export const deleteGameInvitation = (hash) => ({
-    type: DELETE_GAME_INVITATION,
+export const deleteNotification = (hash) => ({
+    type: DELETE_NOTIFICATION,
     hash,
+});
+
+export const resetNormalNotifications = () => ({
+    type: RESET_NORMAL_NOTIFICATIONS,
 });
 
 export const setMessageNotifications = (messages) => ({
@@ -55,6 +63,9 @@ export const removeMessageNotification = (user_id) => ({
     user_id,
 });
 
+export const resetMessageNotifications = () => ({
+    type: RESET_MESSAGE_NOTIFICATION,
+});
 
 export const resetNotifications = () => ({
     type: RESET_NOTIFICATIONS
@@ -76,12 +87,16 @@ export default function notificationsReducer(state=initialState, action) {
             newState.notifications=[...newState.notifications]
             newState.notifications.unshift(action.notification)
             return newState;
-        case DELETE_GAME_INVITATION:
+        case DELETE_NOTIFICATION:
             newState={...state}
             newState.notifications=[...newState.notifications]
             newState.notifications=newState.notifications.filter(notification=>{
                 return notification.hash!==action.hash
             })
+            return newState;
+        case RESET_NORMAL_NOTIFICATIONS:
+            newState={...state}
+            newState.notifications=[]
             return newState;
         case SET_MESSAGE_NOTIFICATION:
             newState={...state}
@@ -105,6 +120,10 @@ export default function notificationsReducer(state=initialState, action) {
             newState={...state}
             newState.messages={...newState.messages}
             delete newState.messages[action.user_id]
+            return newState;
+        case RESET_MESSAGE_NOTIFICATION:
+            newState={...state}
+            newState.messages={}
             return newState;
         case RESET_NOTIFICATIONS:
           return initialState

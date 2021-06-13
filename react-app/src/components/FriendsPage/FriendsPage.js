@@ -35,13 +35,15 @@ const FriendsPage = ({socket}) => {
                     <h1>Friends</h1>
                     {/* <input type='text'></input> */}
                 </div>
-                <div className='friendspage__friends'>
-                    {Object.entries(friends).map(([id, friendship])=>{
-                        const friend = friendship.accepter || friendship.requester
-                        return(
-                            <UserSearchModal key={friend.id} user={friend} classname='friendspage'/>
-                        )
-                    })}
+                <div className='friendspage__friends-div'>
+                    <div className='friendspage__friends'>
+                        {Object.entries(friends).map(([id, friendship])=>{
+                            const friend = friendship.accepter || friendship.requester
+                            return(
+                                <UserSearchModal key={friend.id} user={friend} classname='friendspage'/>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
         </div>

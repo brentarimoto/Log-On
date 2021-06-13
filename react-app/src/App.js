@@ -14,14 +14,20 @@ import MessageBar from "./components/MessageBar/MessageBar";
 import Games from "./components/Games/Games";
 import FriendsPage from "./components/FriendsPage/FriendsPage";
 import FriendsList from "./components/FriendsList.js/FriendsList";
+import MessagesPage from "./components/MessagesPage/MessagesPage";
+import AboutMe from "./components/AboutMe/AboutMe";
 
 import { authenticate } from "./store/session";
 import { handleNewSocketMessage } from "./store/messages";
 import { newNotification } from "./store/notifications";
 import { setGameStats } from "./store/gameStats";
-import background from "./images/background_image.jpg";
-import MessagesPage from "./components/MessagesPage/MessagesPage";
 import { addOnline, removeOnline, setOnline } from "./store/online";
+import { newFriendUpdate } from "./store/friendUpdate";
+import { addFriend, handleUnFriended } from './store/friends'
+
+import background from "./images/background_image.jpg";
+
+
 /*************************** SOCKET VARIABLE ***************************/
 let socket;
 
@@ -39,14 +45,13 @@ function App() {
   const [loaded, setLoaded] = useState(false)
   const [room, setRoom] = useState('')
 
-  window.addEventListener('beforeunload', function(event) {
-    const friend_ids = Object.keys(friends)
-    return socket.emit('logoff',{sender_id:user.id, friend_ids})
-  });
-  window.addEventListener('unload', function(event) {
-    const friend_ids = Object.keys(friends)
-    return socket.emit('logoff',{sender_id:user.id, friend_ids})
-  });
+  // window.addEventListener('beforeunload', (e)=> {
+  //   return socket.disconnect()
+  // });
+
+  // window.addEventListener('unload', (e)=> {
+  //   return socket.disconnect()
+  // });
 
   useEffect(() => {
     (() => {
@@ -61,11 +66,11 @@ function App() {
       socket=io()
 
       socket.on('connect', ()=>{
-        socket.emit('join', {room:`User:${user.id}`})
-        socket.emit('logon',{sender_id:user.id})
+        socket.emit('logon', {room:`User:${user.id}`})
       })
 
       socket.on("online", ({friends}) => {
+        console.log(friends)
         dispatch(setOnline(friends))
       })
 
@@ -81,9 +86,21 @@ function App() {
         }
       })
 
-
       socket.on("message", (message) => {
         dispatch(handleNewSocketMessage(message))
+      })
+
+      socket.on("friend_request", ({friend_request}) => {
+        dispatch(newNotification(friend_request))
+      })
+
+      socket.on("accept_request", ({sender_id, friendship}) => {
+        dispatch(addFriend(sender_id, friendship))
+        dispatch(newFriendUpdate(sender_id))
+      })
+
+      socket.on("unfriend", ({sender_id}) => {
+        dispatch(handleUnFriended(sender_id))
       })
 
       socket.on("invitations", ({invitation}) => {
@@ -97,23 +114,9 @@ function App() {
 
   useEffect(()=>{
     return ()=>{
-      console.log('TEST')
       socket.disconnect()
     }
   },[])
-
-  // useEffect(()=>{
-  //   if(Object.keys(rooms)[0]){
-  //     setRoom(Object.keys(rooms)[0])
-  //     console.log('ROOM SET')
-  //   }
-
-  //   if(room && !rooms[room]){
-  //     socket.emit('leave', {room:room})
-  //     setRoom('')
-  //   }
-
-  // },[rooms])
 
   return (
     <div className='main' style={{backgroundImage: `url(${background})`}}>
@@ -136,11 +139,14 @@ function App() {
             <ProtectedRoute path="/games/:game_id">
               <Games socket={socket}/>
             </ProtectedRoute>
+            <Route path='/aboutme'>
+              <AboutMe />
+            </Route>
             <Route>
                 <Redirect to='/'/>
             </Route>
           </Switch>
-          <FriendsList />
+          <FriendsList socket={socket}/>
           <MessageBar socket={socket}/>
         </div>
       </BrowserRouter>

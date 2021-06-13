@@ -64,7 +64,6 @@ export const resetRooms = () => ({
 export const setOpponent = (hash, userId) => async (dispatch, getState) => {
     const state=getState()
     const friend = state.friends[userId].accepter || state.friends[userId].requester
-    console.log(friend)
     dispatch(addOpponent(hash, friend))
 }
 

@@ -101,7 +101,6 @@ const Fours = ({socket}) => {
     const [winner, setWinner] = useState(null)
 
     useEffect(()=>{
-        console.log(room_id)
         if (room_id){
             socket.emit('join', {room:game_id})
 
@@ -140,7 +139,6 @@ const Fours = ({socket}) => {
             })
 
             return ()=>{
-                console.log('UNMOUNT')
                 socket.removeAllListeners("chatroom")
                 socket.removeAllListeners("confirmation")
                 socket.removeAllListeners("start_game")

@@ -22,7 +22,7 @@ function activeList(bool){
     }
 }
 /*************************** COMPONENTS ***************************/
-const FriendsList = () => {
+const FriendsList = ({socket}) => {
     const dispatch = useDispatch();
     const location = useLocation()
 
@@ -56,7 +56,7 @@ const FriendsList = () => {
             return online[id]
         })
         setOnlineFriends(onlineArray)
-    },[online])
+    },[online, friends])
 
     const handleFriendsList = ()=>{
         if(!isHome){
@@ -82,7 +82,7 @@ const FriendsList = () => {
             </div>
             <div className='friends-list__list'>
                 {onlineFriends.map(([id, friendship])=>(
-                    <Friend key={id} friendship={friendship}/>
+                    <Friend key={id} friendship={friendship} socket={socket}/>
                 ))}
             </div>
         </div>

@@ -1,6 +1,6 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 
@@ -20,6 +20,8 @@ import UserModal from '../User/UserModal';
 
 /*************************** COMPONENTS ***************************/
 const NavBar = ({socket}) => {
+  const location = useLocation()
+
   const user = useSelector(state=>state.session.user)
   const messageNotifications = useSelector(state=>state.notifications.messages)
   const normalNotifications = useSelector(state=>state.notifications.notifications)
@@ -33,17 +35,21 @@ const NavBar = ({socket}) => {
   return (
     <nav className='navbar'>
       <div className='navbar__search-div'>
-        {user && <SearchBar />}
+        {user && <SearchBar socket={socket}/>}
       </div>
       <div className='navbar__logo-div noselect'>
-        {user && <NavLink to="/" exact={true} activeClassName="active" className='navbar__logo-link'>
+        {(user || location.pathname.includes('aboutme')) && <NavLink to="/" exact={true} activeClassName="active" className='navbar__logo-link'>
             <img className='navbar__logo'alt='logo' src={logo}></img>
         </NavLink>}
       </div>
       <div className='navbar__links-div'>
         {user ?
         <>
-          {/* <LogoutButton /> */}
+          <Link className='navbar__aboutme' to='/aboutme'>
+            <div className='navbar__icon'>
+              <i className="fas fa-at"></i>
+            </div>
+          </Link>
           <Link className='navbar__friends' to='/friends'>
             <div className='navbar__icon'>
               <i className="fas fa-users"></i>

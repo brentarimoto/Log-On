@@ -1,5 +1,11 @@
 /*************************** OTHER FILE IMPORTS ***************************/
 
+import { popActive } from "./activeMessages";
+import { unFriendUpdate } from "./friendUpdate";
+import { removeMessage } from "./messages";
+import { removeMessageNotification } from "./notifications";
+import { removeOnline } from "./online";
+
 
 /*************************** TYPES ***************************/
 const SET_FRIENDS = "friends/SET_FRIENDS";
@@ -18,7 +24,7 @@ const setFriends = (friendships) => ({
     friendships,
 });
 
-const addFriend = (user_id, friendship) => ({
+export const addFriend = (user_id, friendship) => ({
     type: ADD_FRIEND,
     user_id,
     friendship
@@ -45,6 +51,30 @@ export const resetFriends = () => ({
 /*************************** THUNKS ***************************/
 export const getFriends = (userId) => async (dispatch) => {
     const response = await fetch(`/api/friends/${userId}`,{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+
+    if (data.errors) {
+        return;
+    }
+
+    const friendsObj ={};
+
+    data.friends.forEach((friendship)=>{
+      const friend = friendship.requester ? friendship.requester : friendship.accepter
+      friendsObj[friend.id] = friendship
+    })
+
+    dispatch(setFriends(friendsObj))
+    return friendsObj
+}
+
+export const friendAdded = (friend_id) => async (dispatch) => {
+    const response = await fetch(`/api/friends/add/${friend_id}`,{
       headers: {
         'Content-Type': 'application/json'
       }
@@ -102,6 +132,30 @@ export const unFriend = (id) => async (dispatch) => {
 
     dispatch(removeFriend(data.user.id))
 }
+
+
+/*************************** THUNKS ***************************/
+export const handleUnFriended = (sender_id) => async (dispatch, getState) => {
+  const state = getState()
+  const active = state.active
+  const user = state.session.user
+  const notifications = state.notifications
+  const messages = state.messages
+
+  if(active.find(el=>el.user_id===sender_id)){
+    dispatch(popActive(sender_id))
+  }
+  if(notifications[sender_id]){
+    dispatch(removeMessageNotification(sender_id))
+  }
+  if(messages[sender_id]){
+    dispatch(removeMessage(sender_id))
+  }
+  dispatch(unFriendUpdate(sender_id))
+  dispatch(removeOnline(sender_id))
+  dispatch(removeFriend(sender_id))
+}
+
 
 
 

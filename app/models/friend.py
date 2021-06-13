@@ -46,6 +46,19 @@ class Friend(db.Model):
       'last_message' : [message.to_dict() for message in self.messages if self.messages.index(message)==len(self.messages)-1],
     }
 
+
+  def to_dict_accepted(self):
+    return {
+      "id": self.id,
+      "request_id": self.request_id,
+      "accept_id": self.accept_id,
+      'accepted' : self.accepted,
+      'declined' : self.declined,
+      'requester' : self.requester.to_dict() if self.requester.id==int(session['_user_id']) else None,
+      'accepter' : self.accepter.to_dict() if self.accepter.id==int(session['_user_id']) else None,
+      'last_message' : [message.to_dict() for message in self.messages if self.messages.index(message)==len(self.messages)-1],
+    }
+
   def to_dict_basic(self):
     return {
       "id": self.id,

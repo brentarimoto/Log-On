@@ -13,7 +13,6 @@ const RESET_UPDATE = "update/RESET_UPDATE";
 export const newFriendUpdate = (userId) => ({
     type: NEW_FRIEND_UPDATE,
     userId,
-
 });
 
 export const unFriendUpdate = (userId) => ({
