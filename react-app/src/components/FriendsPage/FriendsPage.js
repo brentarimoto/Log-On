@@ -1,7 +1,6 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
@@ -13,11 +12,9 @@ import UserSearchModal from '../User/UserSearchModal';
 import './FriendsPage.css'
 
 /*************************** COMPONENTS ***************************/
-const FriendsPage = ({socket}) => {
+const FriendsPage = () => {
     const dispatch = useDispatch()
-    const location = useLocation()
 
-    const user = useSelector(state=>state.session.user)
     const friends = useSelector(state=>state.friends)
     const listOpen = useSelector(state=>state.open.friends)
 

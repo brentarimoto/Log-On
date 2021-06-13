@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 
 /*************************** COMPONENT IMPORTS ***************************/
 import SearchBar from '../SearchBar/SearchBar';
-import LogoutButton from '../auth/LogoutButton';
 import LoginModal from '../auth/LoginModal'
 import SignupModal from '../auth/SignupModal'
 import Notifications from './Notifications/Notifications';

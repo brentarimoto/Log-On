@@ -149,7 +149,6 @@ export default function messagesReducer(state=initialState, action) {
           delete newState[action.user_id]
           return newState
         case REMOVE_SPECIFIC_MESSAGE:
-            console.log(action.user_id, action.message_id)
           newState={...state}
           newState[action.user_id] = {...newState[action.user_id]}
           delete newState[action.user_id][action.message_id]

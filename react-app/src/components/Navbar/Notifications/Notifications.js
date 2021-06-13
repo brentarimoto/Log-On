@@ -1,6 +1,6 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -22,15 +22,9 @@ const NoNotificationItem = ()=>{
     )
 }
 
-
-let socket;
-
 const NotificationItem = ({notification,setNotificationOpen, socket})=>{
     const dispatch = useDispatch()
     const location = useLocation()
-
-    const user = useSelector(state=>state.session.user)
-    const rooms = useSelector(state=>state.rooms)
 
     const handleNotificationClick=(e)=>{
         if(e.target.className.includes('delete')){
@@ -127,7 +121,6 @@ const NotificationList = ({setNotificationOpen, socket}) =>{
 const Notifications = ({notification, socket}) => {
     const dispatch = useDispatch()
 
-    const user = useSelector(state=>state.session.user)
     const notifications = useSelector(state=>state.notifications.notifications)
 
     const [notificationOpen, setNotificationOpen] = useState(false)
@@ -141,7 +134,7 @@ const Notifications = ({notification, socket}) => {
         if(value?.length){
             dispatch(setNotifications(value))
         }
-    },[])
+    },[dispatch])
 
     useEffect(()=>{
         localStorage.setItem('notifications', JSON.stringify(notifications))

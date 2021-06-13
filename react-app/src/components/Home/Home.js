@@ -1,11 +1,10 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
-import FriendsList from '../FriendsList.js/FriendsList';
 import { setSpecificActiveOpen } from '../../store/activeOpen';
 
 
@@ -48,7 +47,7 @@ const Home = () => {
             <div className='home__game-links'>
                 {Object.entries(games).map(([id, game], count)=>(
                     <Link key={id} to={`/games/${id}/home`} className={`home__game-link ${count===0 ? 'home__game-link-first' : ''}`}>
-                        <img className='home__game-link-image' src={game.picture}></img>
+                        <img className='home__game-link-image' src={game.picture} alt='game'></img>
                         <div className='home__game-link-header'>
                             {game.name}
                         </div>
@@ -56,7 +55,7 @@ const Home = () => {
                 ))}
                 {['','','','','',''].map((el, id)=>(
                     <Link key={id} to='/' className='home__game-link'>
-                        <img className='home__game-link-image' src={commingSoon}></img>
+                        <img className='home__game-link-image' src={commingSoon} alt='game'></img>
                         <div className='home__game-link-header'>
                             New Game Coming Soon
                         </div>

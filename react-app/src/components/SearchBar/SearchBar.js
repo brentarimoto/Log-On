@@ -15,16 +15,18 @@ const SearchBar = ({socket}) => {
 
     const {search, setSearch, searchResults, setSearchResults} = useSearch()
 
-    useEffect(async()=>{
-        if(search.length){
-            const res = await fetch(`/api/search/${search}`);
-            const data = await res.json();
+    useEffect(()=>{
+        (async ()=>{
+            if(search.length){
+                const res = await fetch(`/api/search/${search}`);
+                const data = await res.json();
 
-            setSearchResults(data.users)
-        } else{
-            setSearchResults([])
-        }
-    },[search])
+                setSearchResults(data.users)
+            } else{
+                setSearchResults([])
+            }
+        })();
+    },[search, setSearchResults])
 
     return (
         <form className='navbar__search' onSubmit={(e)=>e.preventDefault()}>

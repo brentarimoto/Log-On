@@ -10,8 +10,7 @@ import MessageChat from "./MessageChat/MessageChat";
 /*************************** CSS ***************************/
 import './MessageBar.css'
 import { useDispatch, useSelector } from "react-redux";
-import { newNotification, setMessageNotifications } from "../../store/notifications";
-import { getAllMessages } from "../../store/messages";
+import { setMessageNotifications } from "../../store/notifications";
 
 /*************************** HELPER FUNCTION ***************************/
 function messageHash(userId, friendId){
@@ -37,7 +36,7 @@ function MessageBar({closeMessage, socket}) {
         dispatch(setMessageNotifications(value))
       }
     }
-  },[])
+  },[dispatch])
 
   useEffect(()=>{
     if(!loaded && Object.keys(friends).length){

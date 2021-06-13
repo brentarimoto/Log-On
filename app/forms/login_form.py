@@ -22,9 +22,9 @@ def password_matches(form, field):
     credential = form.data['credential']
     user = User.query.filter((User.email==credential) | (User.username==credential)).first()
     if not user:
-        raise ValidationError("No such user exists.")
+        raise ValidationError("Credentials and password given do not match.")
     if not user.check_password(password):
-        raise ValidationError("Password was incorrect.")
+        raise ValidationError("Credentials and password given do not match.")
 
 
 #################### CLASSES ####################

@@ -1,7 +1,7 @@
 /*************************** REACT IMPORTS ***************************/
 
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
@@ -35,23 +35,9 @@ let socket;
 /*************************** COMPONENTS ***************************/
 function App() {
   const dispatch = useDispatch();
-  const history = useHistory()
 
   const user = useSelector(state => state.session.user)
-  const friends = useSelector(state=>state.friends)
-  const rooms = useSelector(state=>state.rooms)
-  const friendUpdate = useSelector(state=>state.friendUpdate)
-  const games = useSelector(state=>state.games)
   const [loaded, setLoaded] = useState(false)
-  const [room, setRoom] = useState('')
-
-  // window.addEventListener('beforeunload', (e)=> {
-  //   return socket.disconnect()
-  // });
-
-  // window.addEventListener('unload', (e)=> {
-  //   return socket.disconnect()
-  // });
 
   useEffect(() => {
     (() => {
@@ -70,18 +56,17 @@ function App() {
       })
 
       socket.on("online", ({friends}) => {
-        console.log(friends)
         dispatch(setOnline(friends))
       })
 
       socket.on("logon", ({sender_id}) => {
-        if(sender_id!=user.id){
+        if(sender_id!==user.id){
           dispatch(addOnline(sender_id))
         }
       })
 
       socket.on("logoff", ({sender_id}) => {
-        if(sender_id!=user.id){
+        if(sender_id!==user.id){
           dispatch(removeOnline(sender_id))
         }
       })

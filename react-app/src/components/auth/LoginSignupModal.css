@@ -16,15 +16,51 @@
     /* background-color: rgba(0,0,0,.05); */
 }
 
-/*** Errors ***/
+/*** Signup Errors ***/
 .auth__form-errors{
-    width: 100%;
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    right: 0;
     border: 3px solid var(--lightRed);
-    background-color: coral;
+    background-color: lightsalmon;
     border-radius: 5px;
-    color: darkpu;
+    color: darkred;
+    animation: 1s ease 0s 1 fadeIn;
 }
 
+
+/*** Login Errors ***/
+.auth__form-errors-login{
+    position: absolute;
+    right: -205px;
+    width: 200px;
+    border: 3px solid var(--lightRed);
+    background-color: lightsalmon;
+    border-radius: 5px;
+    color: darkred;
+    animation: 1s ease 0s 1 fadeIn;
+}
+
+.auth__form-errors-login--credential{
+    top: 123px;
+}
+
+
+.auth__form-errors-login--password{
+    top: 177px;
+}
+
+.auth__form-errors-arrow{
+    position: absolute;
+    top: -0px;
+    left: -12px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right:10px solid var(--lightRed);
+}
 
 /* FORM */
 .auth__form-container{

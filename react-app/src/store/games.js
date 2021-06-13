@@ -39,7 +39,6 @@ export const getGames = () => async (dispatch) => {
 const initialState = {};
 
 export default function gamesReducer(state=initialState, action) {
-    let newState;
     switch (action.type) {
         case SET_GAMES:
           return action.games

@@ -1,15 +1,14 @@
 /*************************** REACT IMPORTS ***************************/
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 
 
 /*************************** COMPONENT IMPORTS ***************************/
-import FoursBoard from '../../../images/FoursBoard.png'
-import { foursMove, resetFours } from '../../../store/fours';
+import { foursMove } from '../../../store/fours';
 import { updateFriendStats } from '../../../store/friends';
-import { resetRooms, updateOpponent } from '../../../store/rooms';
+import { updateOpponent } from '../../../store/rooms';
 
 import './FoursGame.css'
 import { updateGameStats } from '../../../store/gameStats';
@@ -61,11 +60,11 @@ const FoursGame = ({socket, userTurn, setUserTurn, setWinner, setGameStart, erro
                 dispatch(updateOpponent(room_id, 1, otherStats))
                 setGameStart(false)
             }
+
+            return ()=>{
+                socket.removeAllListeners("fours_move")
+            }
         })
-        // return ()=>{
-        //     socket.emit('leave_game', {sender_id:user.id, room:room_id})
-        //     dispatch(resetFours())
-        // }
     },[room_id])
 
     const handleInput = (e)=>{

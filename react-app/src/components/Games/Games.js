@@ -1,12 +1,12 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, Route, Switch, useLocation, useParams } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
 import Fours from './Fours/Fours'
-import switchActiveOpen, { setSpecificActiveOpen } from '../../store/activeOpen'
+import { setSpecificActiveOpen } from '../../store/activeOpen'
 
 
 /*************************** CSS ***************************/
@@ -15,9 +15,7 @@ import './Games.css'
 /*************************** COMPONENTS ***************************/
 const Games = ({socket}) => {
     const dispatch = useDispatch()
-    const location = useLocation()
 
-    const user = useSelector(state=>state.session.user)
     const listOpen = useSelector(state=>state.open.friends)
 
     useEffect(()=>{

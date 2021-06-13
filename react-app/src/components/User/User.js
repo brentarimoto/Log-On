@@ -1,5 +1,5 @@
 /*************************** REACT IMPORTS ***************************/
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -10,7 +10,7 @@ import Stat from './Stat'
 import LogoutButton from "../auth/LogoutButton";
 
 import { acceptRequest, unFriend } from "../../store/friends";
-import { cancelRequest, declineRequest, getUser, sendFriendRequest, } from "../../store/users";
+import { sendFriendRequest, } from "../../store/users";
 import { popActive } from "../../store/activeMessages";
 import { removeMessageNotification } from "../../store/notifications";
 import { removeMessage } from "../../store/messages";
@@ -34,7 +34,6 @@ function FriendButtons({setShowModal, profileUser, unfriendOpen, setUnfriendOpen
   const friends = useSelector(state=>state.friends)
   const active = useSelector(state=>state.active)
   const notifications = useSelector(state=>state.notifications)
-  const users = useSelector(state=>state.users)
   const messages = useSelector(state=>state.messages)
 
 
@@ -103,13 +102,13 @@ function NotFriendButtons({profileUser, user, socket}){
     socket.emit('accept_request', {sender_id:user.id, friend_id:profileUser.id, room:`User:${profileUser.id}`})
   }
 
-  const handleDecline=()=>{
-    dispatch(declineRequest(profileUser.id))
-  }
+  // const handleDecline=()=>{
+  //   dispatch(declineRequest(profileUser.id))
+  // }
 
-  const handleCancelRequest=()=>{
-    dispatch(cancelRequest(profileUser.friends_accepted[user.id].id))
-  }
+  // const handleCancelRequest=()=>{
+  //   dispatch(cancelRequest(profileUser.friends_accepted[user.id].id))
+  // }
 
   const handleSendRequest=()=>{
     dispatch(sendFriendRequest(profileUser.id))
@@ -159,14 +158,13 @@ function NotFriendButtons({profileUser, user, socket}){
 function User({setShowModal,profileUserId, friend_id, socket}) {
 
   const dispatch = useDispatch()
-  const history = useHistory()
 
   const user = useSelector(state=>state.session.user)
   const friends = useSelector(state=>state.friends)
   const users= useSelector(state=>state.users)
   const gameStats = useSelector(state=>state.gameStats)
 
-  const isUser = user.id==profileUserId
+  const isUser = user.id===profileUserId
 
   let profileUser;
 
@@ -191,6 +189,12 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
 
   // Functions
 
+  useEffect(()=>{
+    if(errors.length>0){
+      setErrors([])
+    }
+  },[username, email, firstname, lastname, photo])
+
 
   const handleSubmit= async (e)=>{
     e.preventDefault();
@@ -214,7 +218,7 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
 
 
   return (
-    <form className='user' onSubmit={handleSubmit}>
+    <div className='user'>
       <div className='user__profile-photo'>
           <ProfilePhoto profileUser={profileUser}/>
           {isUser && <div className='user__profile-photo-input'>
@@ -223,6 +227,13 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
           </div>}
       </div>
       <div className='user__info-container'>
+        {errors.length>0 &&
+          <div className='user__profile-errors'>
+          <div class="user__profile-errors-arrow"></div>
+          {errors.map((error) => (
+            <div key={error}>{error}</div>
+          ))}
+        </div>}
         <div className='user__info'>
           {(friends[profileUser.id] || isUser) && <div className='user__info-name'>
             <div className='user__info-divs'>
@@ -230,9 +241,10 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
               {isUser ?
                 <input
                     className='user__info-inputs'
+                    autoComplete = 'off'
                     name='firstname'
                     type='text'
-                    placeholder='First Name'
+                    placeholder='(First Name)'
                     value={firstname}
                     onChange={(e)=>setFirstname(e.target.value)}
                 ></input>
@@ -245,9 +257,10 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
               {isUser ?
                 <input
                     className='user__info-inputs'
+                    autoComplete = 'off'
                     name='lastname'
                     type='text'
-                    placeholder='Last Name'
+                    placeholder='(Last Name)'
                     value={lastname}
                     onChange={(e)=>setLastname(e.target.value)}
                 ></input>
@@ -261,6 +274,7 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
             {isUser ?
               <input
                   className='user__info-inputs'
+                  autoComplete = 'off'
                   name='username'
                   type='text'
                   placeholder='Username'
@@ -276,8 +290,9 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
             {isUser ?
               <input
                   className='user__info-inputs'
+                  autoComplete = 'off'
                   name='email'
-                  type='text'
+                  type='email'
                   placeholder='Email'
                   value={email}
                   onChange={(e)=>setEmail(e.target.value)}
@@ -289,7 +304,9 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
         <div className='user__info-buttons-div'>
           {isUser ?
           <>
-            <button className='user__info-button' onClick={handleSubmit}>Save Changes</button>
+            <button className='user__info-button user__info-save-changes' onClick={handleSubmit}>
+              Save Changes
+            </button>
             <LogoutButton  socket={socket}/>
           </>
           :
@@ -339,7 +356,7 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
           }
         </Swiper>
       </div>
-    </form>
+    </div>
   );
 }
 

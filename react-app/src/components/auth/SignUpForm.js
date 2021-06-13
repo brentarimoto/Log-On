@@ -1,7 +1,7 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux"
-import { Redirect, useHistory } from 'react-router-dom';
+import { useDispatch } from "react-redux"
+import { useHistory } from 'react-router-dom';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
@@ -18,8 +18,6 @@ const SignUpForm = ({setShowModal}) => {
   const inputRef = useRef(null)
   const {setModalOpen} = useSearch()
 
-  const user = useSelector(state => state.session.user);
-
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -32,6 +30,12 @@ const SignUpForm = ({setShowModal}) => {
   useEffect(()=>{
     inputRef.current.focus()
   },[])
+
+  useEffect(()=>{
+    if(errors.length>0){
+      setErrors([])
+    }
+  },[username, email, firstname, lastname, photo, password, confirmPassword])
 
   const onSignUp = async (e) => {
     e.preventDefault();
@@ -62,7 +66,17 @@ const SignUpForm = ({setShowModal}) => {
     }
 
     if (errors.length<1) {
-			await dispatch(signUp({username, email, firstname, lastname, photo, password}))
+			const data = await dispatch(signUp({username, email, firstname, lastname, photo, password}))
+
+      if(data.errors){
+        const errorsArray = data.errors.map(error=>{
+          return error.split(':')[1]
+        })
+        setErrors(errorsArray)
+        return
+      }
+
+
       setModalOpen(false)
     }
 
@@ -117,7 +131,7 @@ const SignUpForm = ({setShowModal}) => {
       {errors.length>0 &&
       <div className='auth__form-errors'>
         {errors.map((error) => (
-          <div>{error}</div>
+          <div key={error}>{error}</div>
         ))}
       </div>}
       <div className='auth__form-divs'>

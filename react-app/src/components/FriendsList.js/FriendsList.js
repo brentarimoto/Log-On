@@ -1,5 +1,5 @@
 /*************************** REACT IMPORTS ***************************/
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 
@@ -13,14 +13,7 @@ import { switchActiveOpen } from '../../store/activeOpen';
 import './FriendsList.css'
 import { getGames } from '../../store/games';
 
-/*************************** HELPER FUNCTION ***************************/
-function activeList(bool){
-    if(bool){
-        return 'friends-list--active'
-    } else {
-        return 'friends-list'
-    }
-}
+
 /*************************** COMPONENTS ***************************/
 const FriendsList = ({socket}) => {
     const dispatch = useDispatch();
@@ -45,7 +38,7 @@ const FriendsList = ({socket}) => {
             dispatch(getFriends(user.id))
             dispatch(getGames())
         }
-    },[user])
+    },[user, dispatch])
 
     useEffect(()=>{
         setNotificationCount(Object.values(notifications).reduce((el,sum)=>sum+el, 0))
@@ -74,7 +67,7 @@ const FriendsList = ({socket}) => {
         >
             <div className={`friends-list__header ${notificationCount>0 && 'friends-list__header--active'}`} onClick={handleFriendsList}>
                 Friends
-                {notificationCount>0 &&
+                {(notificationCount>0 && !open.friends) &&
                 <div className='friends-list__notifications'>
                     {notificationCount}
                 </div>

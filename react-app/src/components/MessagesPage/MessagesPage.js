@@ -72,11 +72,11 @@ const FriendMessage = ({friend_id}) => {
 
 const FriendChat = ({socket}) => {
     const {friend_id} = useParams()
-    const inputRef = useRef(null)
     const dispatch = useDispatch()
+    const inputRef = useRef(null)
+	const bottomRef = useRef(null)
 
     const user = useSelector(state=>state.session.user)
-    const notificationsNum = useSelector(state=>state.notifications.messages[friend_id])
     const messages = useSelector(state=>state.messages[friend_id])
     const friendship = useSelector(state=>state.friends[friend_id])
 
@@ -96,8 +96,18 @@ const FriendChat = ({socket}) => {
         }
     },[friendship])
 
+	useEffect(() => {
+		if(bottomRef.current){
+			scrollToBottom()
+		}
+	}, [messages])
+
+	const scrollToBottom = () => {
+		bottomRef.current.scrollIntoView({ behavior: "auto" })
+	}
+
     const onEnterPress =(e)=>{
-        if(e.key=='Enter'){
+        if(e.key==='Enter'){
             e.preventDefault()
             if(message.length>0){
                 socket.emit("message", {sender_id:user.id,receiver_id:parseInt(friend_id),friend_id:friendship.id, message, room:messageHash(user.id, friend_id)})
@@ -110,6 +120,7 @@ const FriendChat = ({socket}) => {
         <>
             <div className='messagespage__chat-div'>
                 <div className='messagespage__chat'>
+					<div ref={bottomRef}/>
                     {messages &&
                         Object.entries(messages).reverse().map(([id, message])=>(
                             <Message key={id} message={message}/>

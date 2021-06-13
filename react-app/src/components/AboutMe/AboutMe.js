@@ -21,7 +21,7 @@ const AboutMe = () => {
         if(listOpen){
             dispatch(setSpecificActiveOpen('friends', false))
         }
-    },[dispatch])
+    },[dispatch, listOpen])
 
     return (
     <div className='aboutme-container'>
@@ -32,21 +32,21 @@ const AboutMe = () => {
                     <img className='aboutme__pic' src={Headshot} alt='headshot'></img>
                 </div>
                 <h2 className='aboutme__repo'>
-                    <a href='https://github.com/brentarimoto' target="_blank" rel="noreferrer">Log On Github Repo</a>
+                    <a href='https://github.com/brentarimoto' target="_blank" rel="noopener noreferrer">Log On Github Repo</a>
                 </h2>
                 <h2 className='aboutme__email'>
                     <a href="mailto: brentarimoto@gmail.com">brentarimoto@gmail.com</a>
                 </h2>
                 <div className='aboutme__links'>
-                    <a className='aboutme__link' href='https://www.linkedin.com/in/brent-arimoto/' target="_blank" rel="noreferrer">
+                    <a className='aboutme__link' href='https://www.linkedin.com/in/brent-arimoto/' target="_blank" rel="noopener noreferrer">
                         <i className="fab fa-linkedin"></i>
                         <h4 className="aboutme__link-text">LinkedIn</h4>
                     </a>
-                    <a className='aboutme__link' href='https://angel.co/u/brentarimoto' target="_blank" rel="noreferrer">
+                    <a className='aboutme__link' href='https://angel.co/u/brentarimoto' target="_blank" rel="noopener noreferrer">
                         <i className="fab fa-angellist"></i>
                         <h4 className="aboutme__link-text">AngelList</h4>
                     </a>
-                    <a className='aboutme__link' href='https://github.com/brentarimoto/Log-On' target="_blank" rel="noreferrer">
+                    <a className='aboutme__link' href='https://github.com/brentarimoto/Log-On' target="_blank" rel="noopener noreferrer">
                         <i className="fab fa-github"></i>
                         <h4 className="aboutme__link-text">GitHub</h4>
                     </a>
