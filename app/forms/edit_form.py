@@ -12,6 +12,6 @@ from app.models import User
 class EditForm(FlaskForm):
     username = StringField('username', validators=[DataRequired()])
     email = StringField('email', validators=[DataRequired()])
-    firstname = StringField('firstname', validators=[DataRequired()])
-    lastname = StringField('lastname', validators=[DataRequired()])
+    firstname = StringField('firstname')
+    lastname = StringField('lastname')
     profile_photo = StringField('profile_photo')

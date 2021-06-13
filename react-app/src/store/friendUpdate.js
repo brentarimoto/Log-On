@@ -27,7 +27,6 @@ export const resetFriendUpdate = () => ({
 const initialState = {};
 
 export default function friendUpdateReducer(state=initialState, action) {
-    let newState;
     switch (action.type) {
         case NEW_FRIEND_UPDATE:
             return {new:action.userId}

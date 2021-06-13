@@ -7,9 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 /*************************** COMPONENT IMPORTS ***************************/
 import Message from "./Message";
-import { popActive, updateActive } from "../../../store/activeMessages";
+import { popActive } from "../../../store/activeMessages";
 import { switchActiveOpen, removeActiveOpen } from "../../../store/activeOpen";
-import { newMessageNotification, readMessageNotification } from "../../../store/notifications";
+import { readMessageNotification } from "../../../store/notifications";
 
 import './MessageChat.css'
 
@@ -19,22 +19,37 @@ import './MessageChat.css'
 import messageHash from '../../../util/messageHash'
 
 /*************************** COMPONENTS ***************************/
-function MessageChat({closeMessage, messages, userId, socket}) {
-    const [messageOpen, setMessageOpen]=useState(true)
+function MessageChat({messages, userId, socket}) {
     const [message, setMessage] = useState('')
-    const [initialLoad, setInitialLoad] = useState(true)
-    const [temp, setTemp] = useState([])
 
     const dispatch= useDispatch()
     const inputRef = useRef(null)
+	const bottomRef = useRef(null)
 
     const user = useSelector(state=>state.session.user)
     const friends = useSelector(state=>state.friends)
-    const active = useSelector(state=>state.active)
     const open = useSelector(state=>state.open)
     const notificationsNum = useSelector(state=>state.notifications.messages[userId])
     const friendship=friends[userId]
     const friend = friendship?.accepter ? friendship?.accepter : friendship?.requester
+
+    useEffect(()=>{
+        inputRef.current.focus()
+        dispatch(switchActiveOpen(userId))
+        return ()=>{
+            dispatch(removeActiveOpen(userId))
+        }
+    },[dispatch])
+
+	useEffect(() => {
+		if(bottomRef.current){
+			scrollToBottom()
+		}
+	}, [messages])
+
+	const scrollToBottom = () => {
+		bottomRef.current.scrollIntoView({ behavior: "auto" })
+	}
 
 
     const handleMessageClick=(e)=>{
@@ -54,7 +69,7 @@ function MessageChat({closeMessage, messages, userId, socket}) {
     }
 
     const onEnterPress =(e)=>{
-        if(e.key=='Enter'){
+        if(e.key==='Enter'){
             e.preventDefault()
             if(message.length>0){
                 socket.emit("message", {sender_id:user.id,receiver_id:userId,friend_id:friendship.id, message, room:messageHash(userId, user.id)})
@@ -63,13 +78,6 @@ function MessageChat({closeMessage, messages, userId, socket}) {
         }
     }
 
-    useEffect(()=>{
-        inputRef.current.focus()
-        dispatch(switchActiveOpen(userId))
-        return ()=>{
-            dispatch(removeActiveOpen(userId))
-        }
-    },[])
 
     return (
     <div className='messagechat__div'>
@@ -87,6 +95,7 @@ function MessageChat({closeMessage, messages, userId, socket}) {
             </div>
             <div className='messagechat__chat-div'>
                 <div className='messagechat__chat'>
+					<div ref={bottomRef}/>
                     {Object.keys(messages).length>0 &&
                         Object.entries(messages).reverse().map(([id, message])=>(
                             <Message key={id} message={message}/>

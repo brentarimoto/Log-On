@@ -9,7 +9,7 @@ import uuid from 'react-uuid'
 import FoursGame from './FoursGame';
 import ProfilePhoto from '../../ProfilePhoto/ProfilePhoto';
 import Message from '../../MessageBar/MessageChat/Message';
-import {addOpponent, addRoomMessage, joinRoom, leaveRoom, removeOpponent, resetRooms, setOpponent} from '../../../store/rooms'
+import {addRoomMessage, joinRoom, removeOpponent, resetRooms, setOpponent} from '../../../store/rooms'
 import {rankImages} from '../../../util/ranks'
 import { resetFours } from '../../../store/fours';
 import { updateGameStats } from '../../../store/gameStats';
@@ -210,13 +210,13 @@ const Fours = ({socket}) => {
             }
 
         }
-    },[room_id])
+    },[room_id, dispatch])
 
     useEffect(()=>{
         if(error){
             history.push('/')
         }
-    },[error])
+    },[error, history])
 
     useEffect(()=>{
         const onlineArray = Object.entries(friends).filter(([id, friendship])=>{
@@ -229,7 +229,7 @@ const Fours = ({socket}) => {
         return()=>{
             dispatch(resetRooms())
         }
-    },[])
+    },[dispatch])
 
     const handleJoinRoom = ()=>{
         const hash = foursHash()
@@ -254,7 +254,7 @@ const Fours = ({socket}) => {
     }
 
     const onEnterPress =(e)=>{
-        if(e.key=='Enter'){
+        if(e.key==='Enter'){
             e.preventDefault()
             if(message.length>0){
                 const sender = {id:user.id, username: user.username, profile_photo:user.profile_photo}
@@ -270,13 +270,12 @@ const Fours = ({socket}) => {
         )
     }
 
-    // style={{backgroundImage: `${room_id==='home' ? `url(${fours?.picture})` : ''}`}}
     return (
         <div className={`fours ${room_id==='home' && 'fours--pre'}`}>
             <Switch>
                 <Route path='/games/1/home'>
                     <div className='fours__background-div' >
-                        <img className='fours__background' src={fours?.picture}></img>
+                        <img className='fours__background' src={fours?.picture} alt='fours'></img>
                     </div>
                     <div className='fours__header'>
                         <button onClick={handleJoinRoom} className='fours__join-room-button'>Create Match</button>

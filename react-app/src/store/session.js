@@ -81,6 +81,10 @@ export const logout = () => async (dispatch) => {
 
   const data = await response.json();
 
+  if (data.errors) {
+      return data;
+  }
+
   dispatch(resetMessagePage())
   dispatch(resetOnline())
   dispatch(resetGameStats())
@@ -114,6 +118,7 @@ export const signUp = ({username, email, firstname, lastname, photo, password}) 
   });
 
   const data = await response.json();
+
   if (data.errors) {
       return data;
   }

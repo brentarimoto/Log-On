@@ -63,7 +63,6 @@ function Message({message}) {
     const isUser = message.sender.id===user.id
 
     const [deleteOpen, setDeleteOpen] = useState(false)
-    const [deleteConfirmation, setDeleteConfirmation] = useState(false)
 
     const handleDeleteOpen = (e)=>{
         if(!e.target.className.includes('message__delete')){

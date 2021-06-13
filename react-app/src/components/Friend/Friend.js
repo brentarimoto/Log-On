@@ -1,18 +1,17 @@
 /*************************** REACT IMPORTS ***************************/
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
 import UserModal from '../User/UserModal'
-import ProfilePhoto from '../ProfilePhoto/ProfilePhoto';
 import { getMessages } from '../../store/messages';
 import { appendActive } from '../../store/activeMessages';
 import {setActiveOpen, setSpecificActiveOpen} from '../../store/activeOpen'
 
 /*************************** CSS ***************************/
 import './Friend.css'
-import { newMessageNotification, readMessageNotification } from '../../store/notifications';
+import {readMessageNotification } from '../../store/notifications';
 import NotificationBubble from '../NotificationBubble/NotificationBubble';
 
 /*************************** COMPONENTS ***************************/

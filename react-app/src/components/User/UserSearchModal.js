@@ -1,6 +1,6 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 
 /*************************** OTHER FILE IMPORTS ***************************/
@@ -16,7 +16,6 @@ import './UserSearchModal.css'
 
 function UserSearchModal({user, setSearch, setSearchResults, classname,socket}) {
   const dispatch = useDispatch()
-  const users=useSelector(state=>state.users)
 
   const [showModal, setShowModal] = useState(false);
 

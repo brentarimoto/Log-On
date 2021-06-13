@@ -1,7 +1,7 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Redirect, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 
 
@@ -19,39 +19,87 @@ const LoginForm = ({setShowModal}) => {
   const history = useHistory()
   const {setModalOpen} = useSearch()
 
-
-  const user = useSelector(state => state.session.user);
-
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState([]);
+  const [cError, setCError] = useState(null);
+  const [pError, setPError] = useState(null);
 
   useEffect(()=>{
     inputRef.current.focus()
   },[])
+
+  useEffect(()=>{
+    if(cError){
+      setCError(null)
+    }
+    if(pError){
+      setPError(null)
+    }
+  },[credential, password])
 
   const onLogin = async (e) => {
     e.preventDefault();
 
     const data = await dispatch(login(credential, password));
 
-    setModalOpen(false)
     if (data.errors) {
-      setErrors(data.errors);
+      data.errors.forEach((error)=>{
+        const array = error.split(':')
+        if (array[0].includes('credential')){
+          setCError(error.split(':')[1])
+        } else if (array[0].includes('password')){
+          setPError(error.split(':')[1])
+        }
+      });
+      return
     }
+
+    setModalOpen(false)
     history.push('/')
   };
+
 
   const demoLogin = async (e) => {
     e.preventDefault();
 
     const data = await dispatch(login('Demo', 'password'));
 
+    if (data.errors) {
+      data.errors.forEach((error)=>{
+        const array = error.split(':')
+        if (array[0].includes('credential')){
+          setCError(error.split(':')[1])
+        } else if (array[0].includes('password')){
+          setPError(error.split(':')[1])
+        }
+      });
+      return
+    }
+
     setModalOpen(false)
+    history.push('/')
+  };
+
+
+  const demoLogin2 = async (e) => {
+    e.preventDefault();
+
+    const data = await dispatch(login('pokewong_go', 'password'));
 
     if (data.errors) {
-      setErrors(data.errors);
+      data.errors.forEach((error)=>{
+        const array = error.split(':')
+        if (array[0].includes('credential')){
+          setCError(error.split(':')[1])
+        } else if (array[0].includes('password')){
+          setPError(error.split(':')[1])
+        }
+      });
+      return
     }
+
+    setModalOpen(false)
+    history.push('/')
   };
 
   const updateCredential = (e) => {
@@ -74,11 +122,15 @@ const LoginForm = ({setShowModal}) => {
           <img alt='logo' src={logo}></img>
         </div>
       </div>
-      {errors.length>0 &&
-      <div className='auth__form-errors'>
-        {errors.map((error) => (
-          <div key={error}>{error}</div>
-        ))}
+      {cError &&
+      <div className='auth__form-errors-login auth__form-errors-login--credential'>
+        <div class="auth__form-errors-arrow"></div>
+        <div>{cError}</div>
+      </div>}
+      {pError &&
+      <div className='auth__form-errors-login auth__form-errors-login--password'>
+        <div class="auth__form-errors-arrow"></div>
+        <div>{pError}</div>
       </div>}
       <div className='auth__form-divs'>
         <label className='auth__form-labels' htmlFor="credential">Username/Email</label>
@@ -107,6 +159,7 @@ const LoginForm = ({setShowModal}) => {
       </div>
       <button type="submit" className='auth__form-button'>Login</button>
       <button type="submit" className='auth__form-button' onClick={demoLogin}>Demo</button>
+      <button type="submit" className='auth__form-button' onClick={demoLogin2}>Demo 2</button>
       <div className='auth__form-cancel' onClick={handleCancel}>
         <i className="fas fa-times"></i>
       </div>

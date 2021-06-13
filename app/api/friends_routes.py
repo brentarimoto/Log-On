@@ -36,25 +36,6 @@ def send_request(user_id):
     db.session.commit()
     return {'user': friend.accepter.to_dict()}
 
-
-@friends_routes.route('/<int:user_id>', methods=['PATCH'])
-@login_required
-def decline_request(user_id):
-    friend = Friend.query.filter((Friend.accept_id==session['_user_id']) & (Friend.request_id==user_id)).first()
-
-    if not friend:
-        return {'errors':['Not a friend.']}, 400
-
-
-    if friend.accepted:
-        return {'errors':['Already a friend.']}, 400
-
-    friend.declined=True
-    db.session.commit()
-    return {'user': friend.requester.to_dict()}
-
-
-
 @friends_routes.route('/<int:user_id>', methods=['PUT'])
 @login_required
 def request_decision(user_id):

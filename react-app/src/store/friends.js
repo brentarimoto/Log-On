@@ -138,7 +138,6 @@ export const unFriend = (id) => async (dispatch) => {
 export const handleUnFriended = (sender_id) => async (dispatch, getState) => {
   const state = getState()
   const active = state.active
-  const user = state.session.user
   const notifications = state.notifications
   const messages = state.messages
 

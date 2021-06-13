@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 /*************************** COMPONENT IMPORTS ***************************/
 import LoginModal from "../auth/LoginModal";
@@ -15,7 +14,6 @@ import './Splash.css'
 
 /*************************** COMPONENTS ***************************/
 function Splash() {
-  const user = useSelector(state => state.session.user)
 
   const {modalOpen} = useSearch()
 
