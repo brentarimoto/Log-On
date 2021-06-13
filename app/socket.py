@@ -1,6 +1,8 @@
+#################### IMPORTS ####################
 from flask import session
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import os
+
 from .models import db, Message, Stat, User, Friend
 from .games import Fours
 from .util import add_win, add_loss, add_tie, rank_up, rank_down, ranks
@@ -12,6 +14,7 @@ from .util import add_win, add_loss, add_tie, rank_up, rank_down, ranks
 
 # Setting origins variable to all when in dev, actual heroku app-url in production
 
+#################### SETUP ####################
 if os.environ.get("FLASK_ENV") == "production":
     origins = [
         "https://log-on.herokuapp.com",
@@ -20,38 +23,61 @@ if os.environ.get("FLASK_ENV") == "production":
 else:
     origins = "*"
 
-# create your SocketIO instance
+#################### SOCKET INSTANCE ####################
 socketio = SocketIO(cors_allowed_origins=origins)
 
-# Reference Containers
+#################### REFERENCE DICTIONARIES ####################
 online={}
 
 games={}
 rooms={}
 
-# Helper Function
+#################### HELPER FUNCTIONS ####################
 
-@socketio.on("logon")
-def logon(data):
-    sender_id = data['sender_id']
+
+
+#################### SOCKETS ####################
+@socketio.on("connect")
+def connect():
+    sender_id = int(session['_user_id'])
     if sender_id not in online:
         online[sender_id] = True
-    friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id)).all()
-    friend_ids = [friend.accept_id if friend.accept_id!=sender_id else friend.request_id for friend in friendships]
-    for friend_id in friend_ids:
-        emit('logon', {'sender_id':sender_id}, include_self=False, room=f'User:{friend_id}')
-    online_friends = {friend_id:True for friend_id in friend_ids if friend_id in online}
-    emit('online', {'friends':online_friends}, room=f'User:{sender_id}')
 
-@socketio.on("logoff")
-def logoff(data):
-    sender_id = data['sender_id']
+
+@socketio.on("disconnect")
+def disconnect():
+    sender_id = int(session['_user_id'])
+    print('*******************DISCONNECT*******************', sender_id)
     if sender_id in online:
         online.pop(sender_id, None)
         friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id)).all()
         friend_ids = [friend.accept_id if friend.accept_id!=sender_id else friend.request_id for friend in friendships]
-        for friend_id in friend_ids:
+        online_friends = [friend_id for friend_id in friend_ids if friend_id in online]
+        for friend_id in online_friends:
             emit('logoff', {'sender_id':sender_id}, include_self=False, room=f'User:{friend_id}')
+
+
+@socketio.on("logon")
+def on_join(data):
+    print('*******************LOGON*******************')
+    sender_id = int(session['_user_id'])
+    room=data['room']
+    join_room(room)
+
+    friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id)).all()
+    friend_ids = [friend.accept_id if friend.accept_id!=sender_id else friend.request_id for friend in friendships]
+    online_friends = {friend_id:True for friend_id in friend_ids if friend_id in online}
+    for friend_id in online_friends:
+        emit('logon', {'sender_id':sender_id}, include_self=False, room=f'User:{friend_id}')
+    emit('online', {'friends':online_friends}, room=f'User:{sender_id}')
+
+@socketio.on("check_online")
+def on_join(data):
+    sender_id = int(session['_user_id'])
+    friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id)).all()
+    friend_ids = [friend.accept_id if friend.accept_id!=sender_id else friend.request_id for friend in friendships]
+    online_friends = {friend_id:True for friend_id in friend_ids if friend_id in online}
+    emit('online', {'friends':online_friends}, room=f'User:{sender_id}')
 
 
 @socketio.on("join")
@@ -78,6 +104,23 @@ def message(data):
     db.session.commit()
 
     emit("message",{'sender_id':data['sender_id'],'receiver_id':data['receiver_id'],'message':message.to_dict()}, room=data['room'])
+
+@socketio.on("friend_request")
+def friend_request(data):
+    text=f'Invited sent you a Friend Request'
+    emit("friend_request",{'friend_request':{'sender':data['sender'],'request':True, 'text':text, 'hash': f'FriendRequest:{data["sender"]["id"]}'}}, room=data['room'])
+
+@socketio.on("accept_request")
+def accept_request(data):
+    accept_id=data['sender_id']
+    request_id=data['friend_id']
+    friendship = Friend.query.filter((Friend.accept_id==accept_id) & (Friend.request_id==request_id)).first()
+    emit("accept_request",{'sender_id':accept_id, 'friendship':friendship.to_dict_accepted()}, room=data['room'])
+
+@socketio.on("unfriend")
+def unfriend(data):
+    print('***********UNFRIEND*************')
+    emit("unfriend",{'sender_id':data['sender_id']}, room=data['room'])
 
 
 @socketio.on("invitations")
@@ -115,19 +158,20 @@ def fours_result_win_loss(winner, loser):
 @socketio.on("join_fours")
 def join_fours(data):
     room=data['room']
+    opponent=data.get('opponent',None)
 
-    if not rooms.get(room):
+    if not rooms.get(room) and not opponent:
         join_room(room)
         rooms[room]=[data['sender_id']]
+    elif not rooms.get(room) and opponent:
+        text = 'The game you were trying to join does not exist!'
+        emit("join_fours",{'error':{'text':text, 'hash':f'User:{data["sender_id"]}'}}, room=f'User:{data["sender_id"]}')
     elif rooms.get(room) and len(rooms.get(room))<2:
         join_room(room)
         rooms[room].append(data['sender_id'])
         emit("join_fours",{'sender_id':data['sender_id']}, room=data['room'])
     elif not len(rooms.get(room))<2:
         text = 'The game you were trying to join was full!'
-        emit("join_fours",{'error':{'text':text, 'hash':f'User:{data["sender_id"]}'}}, room=f'User:{data["sender_id"]}')
-    else:
-        text = 'The game you were trying to join does not exist!'
         emit("join_fours",{'error':{'text':text, 'hash':f'User:{data["sender_id"]}'}}, room=f'User:{data["sender_id"]}')
 
 @socketio.on("leave_fours")

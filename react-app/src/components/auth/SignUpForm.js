@@ -1,7 +1,7 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux"
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
@@ -13,6 +13,8 @@ import logo from '../../images/Log-On.png'
 /*************************** COMPONENTS ***************************/
 const SignUpForm = ({setShowModal}) => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
   const inputRef = useRef(null)
   const {setModalOpen} = useSearch()
 
@@ -33,12 +35,39 @@ const SignUpForm = ({setShowModal}) => {
 
   const onSignUp = async (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
+
+    if(/\s/.test(username)){
+      setErrors(['Username cannot contain spaces'])
+      return
+    }
+
+    if(password.length<5){
+      setErrors(['Password must be longer than 4 characters'])
+      return
+    }
+
+    if(!/\d/.test(password)){
+      setErrors(['Password must contain number'])
+      return
+    }
+
+    if(!/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.test(password)){
+      setErrors(['Password must contain a special character'])
+      return
+    }
+
+    if(password !== confirmPassword){
+      setErrors(['Passwords must match'])
+      return
+    }
+
+    if (errors.length<1) {
 			await dispatch(signUp({username, email, firstname, lastname, photo, password}))
       setModalOpen(false)
-    } else {
-      setErrors(['Passwords Do Not Match'])
     }
+
+    history.push('/')
+
   };
 
   const updateUsername = (e) => {
@@ -85,11 +114,12 @@ const SignUpForm = ({setShowModal}) => {
           Signup and Play!
         </h2>
       </div>
+      {errors.length>0 &&
       <div className='auth__form-errors'>
         {errors.map((error) => (
           <div>{error}</div>
         ))}
-      </div>
+      </div>}
       <div className='auth__form-divs'>
         <label className='auth__form-labels' htmlFor="username">Username</label>
         <input
@@ -157,7 +187,7 @@ const SignUpForm = ({setShowModal}) => {
         </div>
       </div>
       <div className='auth__form-divs'>
-        <label className='auth__form-labels' htmlFor="password">Password</label>
+        <label className='auth__form-labels' htmlFor="password">Password (Must contain one number, one special character)</label>
         <input
           type="password"
           name="password"
@@ -169,7 +199,7 @@ const SignUpForm = ({setShowModal}) => {
         ></input>
       </div>
       <div className='auth__form-divs'>
-        <label className='auth__form-labels' htmlFor="confirm_password">Confirm Password</label>
+        <label className='auth__form-labels' htmlFor="confirm_password">Confirm Password (Must contain one number, one special character)</label>
         <input
           type="password"
           name="confirm_password"

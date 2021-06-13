@@ -1,7 +1,7 @@
 /*************************** REACT IMPORTS ***************************/
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { StaticRouter, useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 /*************************** COMPONENT IMPORTS ***************************/
@@ -10,7 +10,7 @@ import Stat from './Stat'
 import LogoutButton from "../auth/LogoutButton";
 
 import { acceptRequest, unFriend } from "../../store/friends";
-import { cancelRequest, declineRequest, sendFriendRequest, } from "../../store/users";
+import { cancelRequest, declineRequest, getUser, sendFriendRequest, } from "../../store/users";
 import { popActive } from "../../store/activeMessages";
 import { removeMessageNotification } from "../../store/notifications";
 import { removeMessage } from "../../store/messages";
@@ -25,12 +25,16 @@ import 'swiper/swiper-bundle.css';
 
 /*************************** HELPER COMPONENTS ***************************/
 // ALREADY FRIENDS
-function FriendButtons({profileUser, unfriendOpen, setUnfriendOpen, friend_id}){
+function FriendButtons({setShowModal, profileUser, unfriendOpen, setUnfriendOpen, friend_id, socket}){
 
   const dispatch=useDispatch()
+  const history=useHistory()
+
+  const user = useSelector(state=>state.session.user)
   const friends = useSelector(state=>state.friends)
   const active = useSelector(state=>state.active)
   const notifications = useSelector(state=>state.notifications)
+  const users = useSelector(state=>state.users)
   const messages = useSelector(state=>state.messages)
 
 
@@ -54,7 +58,14 @@ function FriendButtons({profileUser, unfriendOpen, setUnfriendOpen, friend_id}){
     }
     dispatch(unFriend(friends[profileUser.id].id))
     dispatch(unFriendUpdate(profileUser.id))
+    socket.emit('unfriend',{sender_id:user.id, friend_id:profileUser.id, friendship_id: friends[profileUser.id].id, room:`User:${profileUser.id}`})
     setUnfriendOpen(false)
+    setShowModal(false)
+  }
+
+  const handleOpenMessage = ()=>{
+    history.push(`/messages/${profileUser.id}`)
+    setShowModal(false)
   }
 
   if (unfriendOpen){
@@ -74,7 +85,7 @@ function FriendButtons({profileUser, unfriendOpen, setUnfriendOpen, friend_id}){
           <i className="fas fa-user-minus user_info-icon"></i>
           Unfriend
         </button>
-        <button className='user__info-button'>Message</button>
+        <button className='user__info-button' onClick={handleOpenMessage}>Message</button>
       </div>
     )
   }
@@ -82,13 +93,14 @@ function FriendButtons({profileUser, unfriendOpen, setUnfriendOpen, friend_id}){
 
 
 // NOT FRIENDS YET
-function NotFriendButtons({profileUser, user}){
+function NotFriendButtons({profileUser, user, socket}){
 
   const dispatch=useDispatch()
 
-  const handleAccept=()=>{
-    dispatch(acceptRequest(profileUser.id))
-    dispatch(newFriendUpdate(profileUser.id))
+  const handleAccept= async()=>{
+    await dispatch(acceptRequest(profileUser.id))
+    await dispatch(newFriendUpdate(profileUser.id))
+    socket.emit('accept_request', {sender_id:user.id, friend_id:profileUser.id, room:`User:${profileUser.id}`})
   }
 
   const handleDecline=()=>{
@@ -101,6 +113,7 @@ function NotFriendButtons({profileUser, user}){
 
   const handleSendRequest=()=>{
     dispatch(sendFriendRequest(profileUser.id))
+    socket.emit('friend_request',{sender:user, room:`User:${profileUser.id}`})
   }
 
 
@@ -111,24 +124,24 @@ function NotFriendButtons({profileUser, user}){
           <i className="fas fa-user-plus user_info-icon"></i>
           Accept Request
         </button>
-        {!profileUser.friends_requested[user.id].declined &&
+        {/* {!profileUser.friends_requested[user.id].declined &&
           <button className='user__info-button' onClick={handleDecline}>
             <i className="fas fa-user-times user_info-icon"></i>
             Decline
-          </button>}
+          </button>} */}
       </>
     )
   } else if (profileUser.friends_accepted[user.id]){
     return(
       <>
-        <button id='sentRequest' className='user__info-button--disabled'>
-          <i className="fas fa-user-check user_info-icon" disabled></i>
+        <button id='sentRequest' className='user__info-button--disabled' disabled>
+          <i className="fas fa-user-check user_info-icon"></i>
           Friend Request Sent
         </button>
-        <button className='user__info-button'  onClick={handleCancelRequest}>
+        {/* <button className='user__info-button'  onClick={handleCancelRequest}>
           <i className="fas fa-user-times user_info-icon"></i>
           Cancel Request
-        </button>
+        </button> */}
       </>
     )
   }else {
@@ -143,7 +156,7 @@ function NotFriendButtons({profileUser, user}){
 
 
 /*************************** COMPONENT ***************************/
-function User({profileUserId, friend_id,socket}) {
+function User({setShowModal,profileUserId, friend_id, socket}) {
 
   const dispatch = useDispatch()
   const history = useHistory()
@@ -284,9 +297,16 @@ function User({profileUserId, friend_id,socket}) {
             {!isUser &&
             <>
               {!friends[profileUser.id] ?
-                <NotFriendButtons  profileUser={profileUser} user={user}/>
+                <NotFriendButtons  profileUser={profileUser} user={user} socket={socket}/>
                 :
-                <FriendButtons profileUser={profileUser} unfriendOpen={unfriendOpen} setUnfriendOpen={setUnfriendOpen} friend_id={friend_id}/>
+                <FriendButtons
+                  setShowModal={setShowModal}
+                  profileUser={profileUser}
+                  unfriendOpen={unfriendOpen}
+                  setUnfriendOpen={setUnfriendOpen}
+                  friend_id={friend_id}
+                  socket={socket}
+                />
               }
             </>
             }

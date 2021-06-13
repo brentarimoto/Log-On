@@ -16,6 +16,15 @@
     /* background-color: rgba(0,0,0,.05); */
 }
 
+/*** Errors ***/
+.auth__form-errors{
+    width: 100%;
+    border: 3px solid var(--lightRed);
+    background-color: coral;
+    border-radius: 5px;
+    color: darkpu;
+}
+
 
 /* FORM */
 .auth__form-container{
@@ -30,10 +39,15 @@
     max-width: 450px;
 }
 
+.auth__login{
+    width: 250px;
+}
+
 .auth__form-header{
     display: grid;
     grid-template-columns: 130px 1fr;
     padding-bottom: 5px;
+    color: var(--lightViolet);
 }
 
 .auth__form-header-image{

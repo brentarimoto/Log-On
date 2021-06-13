@@ -5,11 +5,13 @@ import { Switch, Route, useParams, NavLink } from 'react-router-dom';
 
 
 /*************************** COMPONENT IMPORTS ***************************/
-import { setSpecificActiveOpen } from '../../store/activeOpen'
-import { getAllMessages, getMessages } from '../../store/messages';
 import Message from '../MessageBar/MessageChat/Message';
 import NotificationBubble from '../NotificationBubble/NotificationBubble';
 import UserModal from '../User/UserModal';
+import { readMessageNotification, resetMessageNotifications } from '../../store/notifications';
+import { setSpecificActiveOpen } from '../../store/activeOpen'
+import { getMessages } from '../../store/messages';
+import { setMessagePage } from '../../store/messagepage';
 
 
 /*************************** CSS ***************************/
@@ -22,6 +24,8 @@ import messageHash from '../../util/messageHash'
 /*************************** HELPER COMPONENT ***************************/
 
 const FriendMessage = ({friend_id}) => {
+    const dispatch = useDispatch()
+
     const friendship = useSelector(state=>state.friends[friend_id])
     const messages = useSelector(state=>state.messages[friend_id])
     const notificationsNum = useSelector(state=>state.notifications.messages[friend_id])
@@ -40,9 +44,15 @@ const FriendMessage = ({friend_id}) => {
         lastMessage = friendship.last_message[0]
     }
 
+    const handleFriendMessageClick  = ()=>{
+        if (notificationsNum){
+            dispatch(readMessageNotification(friend_id))
+        }
+    }
+
 
     return(
-        <NavLink activeClassName='messagespage--active' className='messagespage__friend' to={`/messages/${friend.id}`}>
+        <NavLink activeClassName='messagespage--active' className='messagespage__friend' to={`/messages/${friend.id}`} onClick={handleFriendMessageClick}>
             <div className='messagespage__friend-photo'>
                 <UserModal friend={friend} friend_id={friendship.id}/>
                 <NotificationBubble notificationsNum={notificationsNum} message={true}/>
@@ -73,6 +83,13 @@ const FriendChat = ({socket}) => {
     const [message, setMessage] = useState('')
 
     useEffect(()=>{
+        dispatch(setMessagePage(friend_id))
+        return()=>{
+            dispatch(setMessagePage(null))
+        }
+    },[friend_id])
+
+    useEffect(()=>{
         inputRef.current.focus()
         if(!messages && friendship){
             dispatch(getMessages(friendship.id, friend_id))
@@ -83,7 +100,7 @@ const FriendChat = ({socket}) => {
         if(e.key=='Enter'){
             e.preventDefault()
             if(message.length>0){
-                socket.emit("message", {sender_id:user.id,receiver_id:friend_id,friend_id:friendship.id, message, room:messageHash(user.id, friend_id)})
+                socket.emit("message", {sender_id:user.id,receiver_id:parseInt(friend_id),friend_id:friendship.id, message, room:messageHash(user.id, friend_id)})
                 setMessage('')
             }
         }
@@ -119,6 +136,7 @@ const MessagesPage = ({socket}) => {
 
     const friends = useSelector(state=>state.friends)
     const listOpen = useSelector(state=>state.open.friends)
+    const notifications = useSelector(state=>state.notifications.messages)
 
     useEffect(()=>{
         if(listOpen){
@@ -126,13 +144,20 @@ const MessagesPage = ({socket}) => {
         }
     },[dispatch])
 
+    const handleAllRead = ()=>{
+        if(Object.values(notifications).reduce((el,sum)=>sum+el, 0)>0){
+            dispatch(resetMessageNotifications())
+        }
+    }
+
     return (
     <div className='messagespage-container'>
         <div className='messagespage-div'>
             <div className='messagespage'>
                 <div className='messagespage__friends-div'>
                     <div className='messagespage__friends-header'>
-                        <h2>Chats</h2>
+                        <h2 className='messagespage__friends-header-text'>Chats</h2>
+                        <div className='messagespage__friends-allread' onClick={handleAllRead}>Mark All Read</div>
                         {/* <input type='text'></input> */}
                     </div>
                     <div className='messagespage__friends'>

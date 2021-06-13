@@ -12,6 +12,7 @@ import { resetFriendUpdate } from "./friendUpdate";
 import { resetFours } from "./fours";
 import { resetGameStats } from "./gameStats";
 import { resetOnline } from "./online";
+import { resetMessagePage } from "./messagepage";
 
 
 /*************************** TYPES ***************************/
@@ -80,6 +81,7 @@ export const logout = () => async (dispatch) => {
 
   const data = await response.json();
 
+  dispatch(resetMessagePage())
   dispatch(resetOnline())
   dispatch(resetGameStats())
   dispatch(resetFours())

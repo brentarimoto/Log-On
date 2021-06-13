@@ -18,6 +18,24 @@
     "info game";
 }
 
+/* Image */
+.fours__background-div{
+    position: absolute;
+    top: 100px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    object-fit: cover;
+    z-index: 1;
+    background-color: white;
+}
+.fours__background{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
 /*** Header ***/
 .fours__header{
     grid-area: header;
@@ -28,6 +46,7 @@
     "left vs right";
     align-items: center;
     justify-items: center;
+    z-index: 2;
 }
 
 .fours__join-room-button{

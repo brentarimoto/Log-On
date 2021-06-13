@@ -60,7 +60,42 @@ const FoursPlayer =({user, classname})=>{
     )
 }
 
-const InviteItem =({friendship, inviteOpen, socket})=>{
+const InviteList = ({onlineFriends, setInviteOpen, socket})=>{
+
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+        };
+    }, []);
+
+    const handleClick = (e)=>{
+        if(!e.target.className.includes('fours__invite')){
+            setInviteOpen(false)
+        }
+    }
+
+    if (onlineFriends.length<1){
+        return(
+            <div className='fours__invite-list'>
+                No Friend Online
+            </div>
+        )
+    }
+
+    return(
+        <div className='fours__invite-list'>
+            {onlineFriends.map(([id, friendship])=>(
+                <InviteItem key={id} friendship={friendship} setInviteOpen={setInviteOpen} socket={socket}/>
+            ))}
+        </div>
+    )
+
+}
+
+const InviteItem =({friendship, setInviteOpen, socket})=>{
     const {room_id} = useParams()
 
     const user = useSelector(state=>state.session.user)
@@ -69,6 +104,7 @@ const InviteItem =({friendship, inviteOpen, socket})=>{
 
     const handleInvitation =()=>{
         socket.emit("invitations", {sender:user, game:fours, hash:room_id, room:messageHash(user.id, friend.id)})
+        setInviteOpen(false)
     }
 
     return(
@@ -95,6 +131,7 @@ const Fours = ({socket}) => {
     const friends = useSelector(state=>state.friends)
     const rooms = useSelector(state=>state.rooms)
     const online = useSelector(state=>state.online)
+    const fours = useSelector(state=>state.games['1'])
 
     const [gameStart, setGameStart] = useState(false)
     const [roomOwner, setRoomOwner] = useState(false)
@@ -106,11 +143,13 @@ const Fours = ({socket}) => {
     const [onlineFriends, setOnlineFriends] = useState([])
 
     useEffect(()=>{
-        if(rooms[room_id]?.opponent){
-            setRoomOwner(false)
-        }
         if (room_id!=='home' ){
-            socket.emit('join_fours', {sender_id:user.id, room:room_id})
+            if(rooms[room_id]?.opponent){
+                setRoomOwner(false)
+                socket.emit('join_fours', {sender_id:user.id, room:room_id, opponent:rooms[room_id].opponent})
+            } else{
+                socket.emit('join_fours', {sender_id:user.id, room:room_id})
+            }
 
             socket.on("chatroom", ({message, room}) => {
                 dispatch(addRoomMessage(room, message))
@@ -119,6 +158,7 @@ const Fours = ({socket}) => {
             socket.on("join_fours", ({sender_id, error}) => {
                 if (sender_id !== user.id && !error){
                     dispatch(setOpponent(room_id, sender_id))
+                    setInviteOpen(false)
                     setRoomOwner(true)
                 } else if(error){
                     const notification = {sender:user, error:true, text:error.text, hash:error.hash}
@@ -230,11 +270,14 @@ const Fours = ({socket}) => {
         )
     }
 
-
+    // style={{backgroundImage: `${room_id==='home' ? `url(${fours?.picture})` : ''}`}}
     return (
         <div className={`fours ${room_id==='home' && 'fours--pre'}`}>
             <Switch>
                 <Route path='/games/1/home'>
+                    <div className='fours__background-div' >
+                        <img className='fours__background' src={fours?.picture}></img>
+                    </div>
                     <div className='fours__header'>
                         <button onClick={handleJoinRoom} className='fours__join-room-button'>Create Match</button>
                     </div>
@@ -246,11 +289,8 @@ const Fours = ({socket}) => {
                                 <button onClick={handleOpenInvite} className='fours__invite-button'>
                                     Invite
                                     {inviteOpen &&
-                                    <div className='fours__invite-list'>
-                                        {onlineFriends.map(([id, friendship])=>(
-                                            <InviteItem key={id} friendship={friendship} inviteOpen={inviteOpen} setWinner={setWinner} socket={socket}/>
-                                        ))}
-                                    </div>}
+                                        <InviteList onlineFriends={onlineFriends} setInviteOpen={setInviteOpen} socket={socket} />
+                                    }
                                 </button>
                             </> :
                             <>

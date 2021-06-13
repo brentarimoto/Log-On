@@ -1,7 +1,7 @@
 /*************************** REACT IMPORTS ***************************/
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 
 
@@ -16,6 +16,7 @@ import logo from '../../images/Log-On.png'
 const LoginForm = ({setShowModal}) => {
   const dispatch = useDispatch();
   const inputRef = useRef(null)
+  const history = useHistory()
   const {setModalOpen} = useSearch()
 
 
@@ -31,16 +32,23 @@ const LoginForm = ({setShowModal}) => {
 
   const onLogin = async (e) => {
     e.preventDefault();
+
     const data = await dispatch(login(credential, password));
+
+    setModalOpen(false)
     if (data.errors) {
       setErrors(data.errors);
     }
+    history.push('/')
   };
 
   const demoLogin = async (e) => {
     e.preventDefault();
+
     const data = await dispatch(login('Demo', 'password'));
+
     setModalOpen(false)
+
     if (data.errors) {
       setErrors(data.errors);
     }
@@ -60,17 +68,18 @@ const LoginForm = ({setShowModal}) => {
   }
 
   return (
-    <form onSubmit={onLogin} className='auth__form-container'>
+    <form onSubmit={onLogin} className='auth__form-container auth__login'>
       <div className='auth__form-header'>
         <div className='auth__form-header-image'>
           <img alt='logo' src={logo}></img>
         </div>
       </div>
+      {errors.length>0 &&
       <div className='auth__form-errors'>
         {errors.map((error) => (
-          <div>{error}</div>
+          <div key={error}>{error}</div>
         ))}
-      </div>
+      </div>}
       <div className='auth__form-divs'>
         <label className='auth__form-labels' htmlFor="credential">Username/Email</label>
         <input

@@ -35,9 +35,39 @@
     padding: 5px;
 }
 
+.notification__clear-div{
+    width: 100%;
+    height: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--faintBorder);
+    cursor: initial;
+}
+
+.notification__header{
+    width: min-content;
+    height: 100%;
+    font-size: 90%;
+    color: black;
+    padding: 0 10px;
+    font-weight: bold;
+}
+
+.notification__clear{
+    width: min-content;
+    height: 100%;
+    font-size: 80%;
+    color: grey;
+    padding: 0 10px;
+    cursor: pointer;
+
+}
+
 
 /*** Notification Item ***/
-.notification__list-item-none{
+.notification__list-none{
     height: 40px;
     width: 100%;
     display: flex;

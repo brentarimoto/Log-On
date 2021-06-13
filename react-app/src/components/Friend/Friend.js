@@ -16,7 +16,7 @@ import { newMessageNotification, readMessageNotification } from '../../store/not
 import NotificationBubble from '../NotificationBubble/NotificationBubble';
 
 /*************************** COMPONENTS ***************************/
-const Friend = ({friendship}) => {
+const Friend = ({friendship, socket}) => {
     const dispatch = useDispatch()
     const friend = friendship?.accepter ? friendship?.accepter : friendship?.requester
 
@@ -47,7 +47,7 @@ const Friend = ({friendship}) => {
     return (
     <div className='friend' onClick={handleMessageOpen}>
         <div className='friend__photo'>
-            <UserModal friend={friend} friend_id={friendship.id}/>
+            <UserModal friend={friend} friend_id={friendship.id} socket={socket}/>
             <NotificationBubble notificationsNum={notificationsNum} message={true}/>
         </div>
         <div className='friend__username'>

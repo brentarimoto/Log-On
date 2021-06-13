@@ -12,8 +12,6 @@ const LogoutButton = ({socket}) => {
 
   const onLogout = async e => {
     e.preventDefault();
-    const friend_ids = Object.keys(friends)
-    socket.emit('logoff',{sender_id:user.id, friend_ids})
     await dispatch(logout())
     history.push('/')
   }

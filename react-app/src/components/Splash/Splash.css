@@ -10,8 +10,8 @@
     ". . ."
     ". logo ."
     ". . ."
-    "login about create"
-    ". . .";
+    "login . create"
+    ". about .";
 }
 
 .splash__logo{
@@ -38,9 +38,17 @@
     opacity: .8;
     height: 100%;
     width: 100%;
-    animation: 2.5s ease 0s 1 fadeIn, 2s ease 0s 1 slightInFromRight;
+    animation: 2s ease 0s 1 fadeIn, 2s ease 0s 1 slightInFromRight;
 }
 
+.splash__aboutme{
+    grid-area: about;
+    width: 100%;
+    margin-top: 13%;
+    height: min-content;
+    animation: 2.5s ease 0s 1 fadeIn, 2s ease 0s 1 slightInFromBottom;
+    text-decoration: none;
+}
 /* MODAL BUTTON */
 .splash__modal-button{
     height: 100%;

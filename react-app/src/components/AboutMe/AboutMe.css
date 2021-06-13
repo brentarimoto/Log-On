@@ -1,0 +1,91 @@
+/*** About Me ***/
+.aboutme-container{
+    padding: 20px;
+    width: min-content;
+    height: min-content;
+    box-sizing: border-box;
+    animation: 1s ease 0s 1 fadeIn;
+    min-width: 700px;
+    margin: auto;
+}
+
+.aboutme-div{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: var(--greyBlue);
+}
+
+.aboutme{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border: .5px solid var(--faintBorder);
+    background-color: var(--ghostWhite);
+    display: grid;
+    row-gap: 20px;
+    align-items: center;
+    justify-items: center;
+}
+
+.aboutme__header{
+    animation: 1.4s ease 0s 1 fadeIn;
+}
+
+.aboutme__pic-div{
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    overflow:hidden;
+    animation: 1.4s ease 0s 1 fadeIn;
+}
+
+.aboutme__pic{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.aboutme__repo{
+    animation: 1.4s ease 0s 1 fadeIn;
+}
+
+.aboutme__email{
+    animation: 1.4s ease 0s 1 fadeIn;
+}
+
+.aboutme__links{
+    display: flex;
+    width: 65%;
+    justify-content: space-evenly;
+}
+
+.aboutme__link{
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 300%;
+    animation: 1.4s ease 0s 1 fadeIn;
+}
+
+.aboutme__link-text{
+    color: inherit;
+    font-size: 35%;
+}
+
+.aboutme__repo{
+    text-decoration: underline;
+
+}
+
+.aboutme__link:hover,
+.aboutme__repo:hover{
+    color: var(--deepBlue);
+    -webkit-transition: color .1s linear;
+    -ms-transition: color .1s linear;
+    transition: color .1s linear;
+}

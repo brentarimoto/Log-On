@@ -27,3 +27,14 @@ def all_messages():
 def message(friendship_id):
     messages = Message.query.filter(Message.friend_id==int(friendship_id)).all()
     return {"messages": {f'{message.id}':message.to_dict() for message in messages}}
+
+
+@messages_routes.route('/<int:message_id>', methods=['DELETE'])
+@login_required
+def delete_message(message_id):
+    message = Message.query.get(message_id)
+    if not message:
+        return {'errors':'Message Does Not Exist'}, 400
+    db.session.delete(message)
+    db.session.commit()
+    return {"success": True}

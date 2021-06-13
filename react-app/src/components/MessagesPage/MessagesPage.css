@@ -55,8 +55,27 @@
     padding: 10px;
     border-bottom: 1px solid var(--faintBorder);
     box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 65% 35%;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+    "text allread"
+    "input input";
+}
+
+.messagespage__friends-header-text{
+    grid-area: text;
 
 }
+
+.messagespage__friends-allread{
+    grid-area: allread;
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+}
+
+
 .messagespage__friends{
     position: absolute;
     width: 100%;

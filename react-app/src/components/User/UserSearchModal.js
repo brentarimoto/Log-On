@@ -14,7 +14,7 @@ import './UserSearchModal.css'
 
 /*************************** COMPONENTS ***************************/
 
-function UserSearchModal({user, setSearch, setSearchResults, classname}) {
+function UserSearchModal({user, setSearch, setSearchResults, classname,socket}) {
   const dispatch = useDispatch()
   const users=useSelector(state=>state.users)
 
@@ -22,9 +22,7 @@ function UserSearchModal({user, setSearch, setSearchResults, classname}) {
 
 
   const handleSearchClick = async()=>{
-    if(!users[user.id]){
-      user = await dispatch(getUser(user.id))
-    }
+    await dispatch(getUser(user.id))
     setShowModal(true)
   }
 
@@ -52,7 +50,7 @@ function UserSearchModal({user, setSearch, setSearchResults, classname}) {
         </div>
         {showModal && (
         <Modal onClose={handleSearchClose}>
-            <User setShowModal={setShowModal} profileUserId={user.id}/>
+            <User setShowModal={setShowModal} profileUserId={user.id} socket={socket}/>
         </Modal>
         )}
     </>
