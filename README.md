@@ -79,11 +79,13 @@ This project can be run by following these steps:
 - Run `pipenv shell` command.
 - Run `flask run` command from the root directory and `npm start` from the react-app directory.
 
-
 ## Highlighted Features
 - Ability to, in real time, interact with logged on friends through message and by playing a game.
 - Small implementations meant to simplify user experiences like user modal pop ups to check user stats, notifications, etc.
 
+## Challenges
+- Implementing sockets in a way I haven't before was extremely challenging and fulfilling. Due to my original understanding, the design could definiltey be improved.
+- Correct usage of useEffects was another factor that I had not fully fleshed out till now. I truly got a chance to understand when and how useEffects, and their returns, happen.
 
 ## Future Improvements
 
