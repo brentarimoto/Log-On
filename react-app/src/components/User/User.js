@@ -100,6 +100,7 @@ function NotFriendButtons({profileUser, user, socket}){
     await dispatch(acceptRequest(profileUser.id))
     await dispatch(newFriendUpdate(profileUser.id))
     socket.emit('accept_request', {sender_id:user.id, friend_id:profileUser.id, room:`User:${profileUser.id}`})
+    socket.emit('online')
   }
 
   // const handleDecline=()=>{

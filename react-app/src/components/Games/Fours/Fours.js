@@ -102,6 +102,20 @@ const InviteItem =({friendship, setInviteOpen, socket})=>{
     const friend = friendship.accepter||friendship.requester
     const fours = useSelector(state=>state.games['1'])
 
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+        };
+    }, []);
+
+    const handleClick = (e)=>{
+        if(e.target.className.includes('fours__invite-item')){
+            setInviteOpen(false)
+        }
+    }
+
     const handleInvitation =()=>{
         socket.emit("invitations", {sender:user, game:fours, hash:room_id, room:messageHash(user.id, friend.id)})
         setInviteOpen(false)

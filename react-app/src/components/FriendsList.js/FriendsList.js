@@ -41,8 +41,11 @@ const FriendsList = ({socket}) => {
     },[user, dispatch])
 
     useEffect(()=>{
-        setNotificationCount(Object.values(notifications).reduce((el,sum)=>sum+el, 0))
-    },[notifications])
+        setNotificationCount(Object.keys(online).reduce((sum, id)=>{
+            const add = notifications[id] || 0
+            return sum+add
+        },0))
+    },[notifications, online])
 
     useEffect(()=>{
         const onlineArray = Object.entries(friends).filter(([id, friendship])=>{
@@ -66,7 +69,7 @@ const FriendsList = ({socket}) => {
         className={isHome ? 'home__friends-list' : `friends-list ${open.friends ? 'friends-list--active' : ''}`}
         >
             <div className={`friends-list__header ${notificationCount>0 && 'friends-list__header--active'}`} onClick={handleFriendsList}>
-                Friends
+                Friends {Object.keys(online).length>0 && `(${Object.keys(online).length})`}
                 {(notificationCount>0 && !open.friends) &&
                 <div className='friends-list__notifications'>
                     {notificationCount}

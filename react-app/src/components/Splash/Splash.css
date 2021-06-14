@@ -44,6 +44,7 @@
 .splash__aboutme{
     grid-area: about;
     width: 100%;
+    opacity: .8;
     margin-top: 13%;
     height: min-content;
     animation: 2.5s ease 0s 1 fadeIn, 2s ease 0s 1 slightInFromBottom;

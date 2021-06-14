@@ -55,6 +55,13 @@ function App() {
         socket.emit('logon', {room:`User:${user.id}`})
       })
 
+      socket.on('disconnect', ()=>{
+        setTimeout(() => {
+          socket.connect();
+          socket.emit('logon', {room:`User:${user.id}`})
+        }, 1000);
+      })
+
       socket.on("online", ({friends}) => {
         dispatch(setOnline(friends))
       })
@@ -82,10 +89,12 @@ function App() {
       socket.on("accept_request", ({sender_id, friendship}) => {
         dispatch(addFriend(sender_id, friendship))
         dispatch(newFriendUpdate(sender_id))
+        socket.emit('online')
       })
 
       socket.on("unfriend", ({sender_id}) => {
         dispatch(handleUnFriended(sender_id))
+        socket.emit('online')
       })
 
       socket.on("invitations", ({invitation}) => {

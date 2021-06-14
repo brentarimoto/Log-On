@@ -66,7 +66,9 @@ export const getFriends = (userId) => async (dispatch) => {
 
     data.friends.forEach((friendship)=>{
       const friend = friendship.requester ? friendship.requester : friendship.accepter
-      friendsObj[friend.id] = friendship
+      if (friend?.id){
+        friendsObj[friend.id] = friendship
+      }
     })
 
     dispatch(setFriends(friendsObj))

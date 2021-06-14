@@ -50,11 +50,13 @@ def disconnect():
     print('*******************DISCONNECT*******************', sender_id)
     if sender_id in online:
         online.pop(sender_id, None)
-        friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id)).all()
+        friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id) & (Friend.accepted==True)).all()
         friend_ids = [friend.accept_id if friend.accept_id!=sender_id else friend.request_id for friend in friendships]
         online_friends = [friend_id for friend_id in friend_ids if friend_id in online]
         for friend_id in online_friends:
             emit('logoff', {'sender_id':sender_id}, include_self=False, room=f'User:{friend_id}')
+        emit('disconnect', room=f'User:{sender_id}')
+
 
 
 @socketio.on("logon")
@@ -64,17 +66,20 @@ def on_join(data):
     room=data['room']
     join_room(room)
 
-    friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id)).all()
+    friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id) & (Friend.accepted==True)).all()
     friend_ids = [friend.accept_id if friend.accept_id!=sender_id else friend.request_id for friend in friendships]
     online_friends = {friend_id:True for friend_id in friend_ids if friend_id in online}
     for friend_id in online_friends:
         emit('logon', {'sender_id':sender_id}, include_self=False, room=f'User:{friend_id}')
     emit('online', {'friends':online_friends}, room=f'User:{sender_id}')
 
-@socketio.on("check_online")
-def on_join(data):
+
+
+@socketio.on("online")
+def on_join():
     sender_id = int(session['_user_id'])
-    friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id)).all()
+    print('***********ONLINE*************', 'sender:', sender_id)
+    friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id) & (Friend.accepted==True)).all()
     friend_ids = [friend.accept_id if friend.accept_id!=sender_id else friend.request_id for friend in friendships]
     online_friends = {friend_id:True for friend_id in friend_ids if friend_id in online}
     emit('online', {'friends':online_friends}, room=f'User:{sender_id}')
@@ -115,7 +120,11 @@ def accept_request(data):
     accept_id=data['sender_id']
     request_id=data['friend_id']
     friendship = Friend.query.filter((Friend.accept_id==accept_id) & (Friend.request_id==request_id)).first()
-    emit("accept_request",{'sender_id':accept_id, 'friendship':friendship.to_dict_accepted()}, room=data['room'])
+    if not friendship.accepter or not friendship.requester:
+        friendship = Friend.query.filter((Friend.accept_id==accept_id) & (Friend.request_id==request_id)).first()
+
+    if friendship.accepter or friendship.requester:
+        emit("accept_request",{'sender_id':accept_id, 'friendship':friendship.to_dict_accepted()}, room=data['room'])
 
 @socketio.on("unfriend")
 def unfriend(data):
