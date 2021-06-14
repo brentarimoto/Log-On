@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { signUp } from '../../store/session';
 import { useSearch } from "../../context/Search";
 import logo from '../../images/Log-On.png'
+import { useFirstLoad } from "../../context/FirstLoad";
 
 
 /*************************** COMPONENTS ***************************/
@@ -17,6 +18,7 @@ const SignUpForm = ({setShowModal}) => {
 
   const inputRef = useRef(null)
   const {setModalOpen} = useSearch()
+  const {setFirstLoad} = useFirstLoad()
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -78,9 +80,10 @@ const SignUpForm = ({setShowModal}) => {
 
 
       setModalOpen(false)
+      setFirstLoad(true)
+      history.push('/')
     }
 
-    history.push('/')
 
   };
 

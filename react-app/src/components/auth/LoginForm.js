@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import { login } from "../../store/session";
 import { useSearch } from "../../context/Search";
 import logo from '../../images/Log-On.png'
+import { useFirstLoad } from "../../context/FirstLoad";
 
 
 
@@ -17,7 +18,9 @@ const LoginForm = ({setShowModal}) => {
   const dispatch = useDispatch();
   const inputRef = useRef(null)
   const history = useHistory()
+
   const {setModalOpen} = useSearch()
+  const {setFirstLoad} = useFirstLoad()
 
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
@@ -40,6 +43,7 @@ const LoginForm = ({setShowModal}) => {
   const onLogin = async (e) => {
     e.preventDefault();
 
+    setFirstLoad(true)
     const data = await dispatch(login(credential, password));
 
     if (data.errors) {
@@ -51,6 +55,7 @@ const LoginForm = ({setShowModal}) => {
           setPError(error.split(':')[1])
         }
       });
+      setFirstLoad(false)
       return
     }
 
@@ -62,6 +67,7 @@ const LoginForm = ({setShowModal}) => {
   const demoLogin = async (e) => {
     e.preventDefault();
 
+    setFirstLoad(true)
     const data = await dispatch(login('Demo', 'password'));
 
     if (data.errors) {
@@ -73,6 +79,7 @@ const LoginForm = ({setShowModal}) => {
           setPError(error.split(':')[1])
         }
       });
+      setFirstLoad(false)
       return
     }
 
@@ -84,6 +91,7 @@ const LoginForm = ({setShowModal}) => {
   const demoLogin2 = async (e) => {
     e.preventDefault();
 
+    setFirstLoad(true)
     const data = await dispatch(login('pokewong_go', 'password'));
 
     if (data.errors) {
@@ -95,6 +103,7 @@ const LoginForm = ({setShowModal}) => {
           setPError(error.split(':')[1])
         }
       });
+      setFirstLoad(false)
       return
     }
 

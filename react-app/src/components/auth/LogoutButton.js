@@ -8,11 +8,8 @@ const LogoutButton = ({socket}) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
-  const {setFirstLoad} = useFirstLoad()
-
   const onLogout = async e => {
     e.preventDefault();
-    // socket.disconnect()'
     socket.off('connect')
     socket.off('disconnect')
     socket.off('online')
@@ -24,8 +21,9 @@ const LogoutButton = ({socket}) => {
     socket.off('unfriend')
     socket.off('invitations')
     socket.emit('logoff')
-    setFirstLoad(false)
+    // socket.disconnect()
     await dispatch(logout())
+    // socket=null
     history.push('/')
   }
 

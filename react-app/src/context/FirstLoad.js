@@ -11,7 +11,7 @@ let socket;
 
 export const FirstLoadProvider = (props) => {
 
-  const [firstLoad, setFirstLoad] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
 
   return (
     <FirstLoadContext.Provider

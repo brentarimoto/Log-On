@@ -47,41 +47,44 @@ function App() {
   }, [dispatch]);
 
   useEffect(()=>{
-    if(user && !firstLoad){
+    if(user && firstLoad){
       dispatch(setGameStats(user.stats))
 
       if(!socket){
         socket=io()
+        socket.user=user
       } else{
+        socket.user=user
         socket.emit('logon', {room:`User:${user.id}`})
       }
 
+
       socket.on('connect', ()=>{
-        socket.emit('logon', {room:`User:${user.id}`})
+        socket.emit('logon', {room:`User:${socket.user.id}`})
       })
 
       socket.on('disconnect', ()=>{
         setTimeout(() => {
           socket.connect();
-          socket.emit('logon', {room:`User:${user.id}`})
+          socket.emit('logon', {room:`User:${socket.user.id}`})
         }, 1000);
       })
 
       socket.on("online", ({friends}) => {
-        if (friends[user.id]){
-          delete friends[user.id]
+        if (friends[socket.user.id]){
+          delete friends[socket.user.id]
         }
         dispatch(setOnline(friends))
       })
 
       socket.on("logon", ({sender_id}) => {
-        if(sender_id!==user.id){
+        if(sender_id!==socket.user.id){
           dispatch(addOnline(sender_id))
         }
       })
 
       socket.on("logoff", ({sender_id}) => {
-        if(sender_id!==user.id){
+        if(sender_id!==socket.user.id){
           dispatch(removeOnline(sender_id))
         }
       })
@@ -106,11 +109,14 @@ function App() {
       })
 
       socket.on("invitations", ({invitation}) => {
-        if (invitation.sender.id !== user.id){
+        if (invitation.sender.id !== socket.user.id){
           dispatch(newNotification(invitation))
         }
       })
-      setFirstLoad(true)
+
+      console.log(socket)
+
+      setFirstLoad(false)
     }
   },[user])
 
@@ -133,7 +139,7 @@ function App() {
               }
             </Route>
             <ProtectedRoute path="/friends" exact={true} >
-              <FriendsPage />
+              <FriendsPage socket={socket}/>
             </ProtectedRoute>
             <ProtectedRoute path="/messages">
               <MessagesPage socket={socket}/>
