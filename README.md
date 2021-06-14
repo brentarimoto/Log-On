@@ -22,7 +22,7 @@
 ![home](https://github.com/brentarimoto/Log-On/blob/main/wiki/Home.PNG)
 
 ### Database Schema
-![db](https://github.com/brentarimoto/Log-On/blob/main/wiki/Schema/Log-On%20Database%20Schema.png)
+![db](https://github.com/brentarimoto/Log-On/blob/main/wiki/Schema/Log-On_Database_Schema.png)
 
 ### Authentication
 - Users can sign up, log in, and log out.
