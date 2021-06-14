@@ -47,14 +47,13 @@ function App() {
   }, [dispatch]);
 
   useEffect(()=>{
-    if(user && !firstLoad){
+    if(user && firstLoad){
       dispatch(setGameStats(user.stats))
 
       if(!socket){
         socket=io()
-      } else{
-        socket.emit('logon', {room:`User:${user.id}`})
       }
+      socket.user=user
 
       socket.on('connect', ()=>{
         socket.emit('logon', {room:`User:${user.id}`})
@@ -110,7 +109,10 @@ function App() {
           dispatch(newNotification(invitation))
         }
       })
-      setFirstLoad(true)
+
+      console.log(socket)
+
+      setFirstLoad(false)
     }
   },[user])
 

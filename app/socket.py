@@ -40,6 +40,7 @@ rooms={}
 @socketio.on("connect")
 def connect():
     sender_id = int(session['_user_id'])
+    print('*******************CONNECT*******************', sender_id)
     if sender_id not in online:
         online[sender_id] = True
 
