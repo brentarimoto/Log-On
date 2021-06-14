@@ -62,8 +62,8 @@ def disconnect():
 
 @socketio.on("logon")
 def logon(data):
-    print('*******************LOGON*******************')
     sender_id = int(session['_user_id'])
+    print('*******************LOGON*******************', sender_id)
     room=data['room']
     join_room(room)
 
@@ -75,8 +75,10 @@ def logon(data):
     emit('online', {'friends':online_friends}, room=f'User:{sender_id}')
 
 @socketio.on("logoff")
-def logoff():
+def logoff(data):
     sender_id = int(session['_user_id'])
+    room=data['room']
+    leave_room(room)
     print('*******************LOGOFF*******************', sender_id)
     if sender_id in online:
         online.pop(sender_id, None)

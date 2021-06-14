@@ -1,12 +1,12 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { useFirstLoad } from "../../context/FirstLoad";
 import { logout } from "../../store/session";
 
 const LogoutButton = ({socket}) => {
   const dispatch = useDispatch();
   const history = useHistory()
+  const user = useSelector(state=>state.session.user)
 
   const onLogout = async e => {
     e.preventDefault();
@@ -20,7 +20,7 @@ const LogoutButton = ({socket}) => {
     socket.off('accept_request')
     socket.off('unfriend')
     socket.off('invitations')
-    socket.emit('logoff')
+    socket.emit('logoff', {room:`User:${user.id}`})
     // socket.disconnect()
     await dispatch(logout())
     // socket=null
