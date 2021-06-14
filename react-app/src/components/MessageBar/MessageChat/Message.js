@@ -17,7 +17,11 @@ function DeleteIcon({deleteOpen,setDeleteOpen, message}){
     const dispatch = useDispatch()
     const user = useSelector(state=>state.session.user)
 
-    const friend_id = message.friendship.accept_id!==user.id ? message.friendship.accept_id : message.friendship.request_id
+    let friend_id;
+
+    if (message.friendship){
+        friend_id = message.friendship.accept_id!==user.id ? message.friendship.accept_id : message.friendship.request_id
+    }
 
     const [deleteConfirmation, setDeleteConfirmation] = useState(false)
 
@@ -42,7 +46,9 @@ function DeleteIcon({deleteOpen,setDeleteOpen, message}){
     }
 
     const handleDelete = ()=>{
-        dispatch(deleteMessage(message.id, friend_id))
+        if(friend_id){
+            dispatch(deleteMessage(message.id, friend_id))
+        }
     }
 
     return(
@@ -77,7 +83,7 @@ function Message({message}) {
             </div>
             <div className={isUser ? 'message__text message__text--user' : 'message__text message__text--friend'} onClick={handleDeleteOpen}>
                 {message.message}
-                {isUser &&
+                {(isUser && message.friendship) &&
                 <DeleteIcon deleteOpen={deleteOpen} setDeleteOpen={setDeleteOpen} message={message}/>
                 }
             </div>
