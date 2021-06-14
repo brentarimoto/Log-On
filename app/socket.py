@@ -154,6 +154,7 @@ def invitations(data):
 @socketio.on("chatroom")
 def game_chat(data):
     room=data['room']
+    print(data['sender'])
     emit("chatroom",{'message':{'sender':data['sender'],'message':data['message']}, 'room':room}, room=room)
 
 
