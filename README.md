@@ -4,7 +4,7 @@
    <h1>Welcome to Log On!</h1>
 </div>
 
-[Log On](https://woofwoof-app.herokuapp.com/) is an OMGPOP and [Facebook](https://www.slack.com) inspired website. Here, users can log on to chat with friends and play fun, family-friendly games!
+[Log On](https://log-on.herokuapp.com/) is an OMGPOP and [Facebook](https://www.facebook.com/) inspired website. Here, users can log on to chat with friends and play fun, family-friendly games!
 
 ## Technologies
 - React/Redux
