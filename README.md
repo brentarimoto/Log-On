@@ -4,7 +4,7 @@
    <h1>Welcome to Log On!</h1>
 </div>
 
-[Log On](https://woofwoof-app.herokuapp.com/) is an OMGPOP and [Facebook](https://www.slack.com) inspired website. Here users can log on to chat with friends and play fun, family-friendly games!
+[Log On](https://woofwoof-app.herokuapp.com/) is an OMGPOP and [Facebook](https://www.slack.com) inspired website. Here, users can log on to chat with friends and play fun, family-friendly games!
 
 ## Technologies
 - React/Redux
@@ -45,8 +45,8 @@
 ![messages](https://github.com/brentarimoto/Log-On/blob/main/wiki/Messages.PNG)
 
 ### Search
-- Users can search for any users through the search bar.
-![search](https://github.com/brentarimoto/Log-On/blob/main/wiki/Search.PNG)
+- Users can search for any users that exist within the database using the searchbar.
+- ![search](https://github.com/brentarimoto/Log-On/blob/main/wiki/Search.PNG)
 
 ### Game
 - Users can join and leave gamerooms.
