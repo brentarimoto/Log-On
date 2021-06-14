@@ -1,98 +1,96 @@
-# Flask React Project
 
-This is the backend for the Flask React project.
+<div align="center">
+   <img src="https://github.com/brentarimoto/Log-On/blob/main/react-app/src/images/Log-On-Icon.png">
+   <h1>Welcome to Log On!</h1>
+</div>
 
-## Getting started
+[Log On](https://woofwoof-app.herokuapp.com/) is an OMGPOP and [Facebook](https://www.slack.com) inspired website. Here users can log on to chat with friends and play fun, family-friendly games!
 
-1. Clone this repository (only this branch)
+## Technologies
+- React/Redux
+- Python
+- Flask
+- SQLAlchemy
+- PostgresQL
+- WebSockets
 
-   ```bash
-   git clone https://github.com/appacademy-starters/python-project-starter.git
-   ```
+## Features
+#### Splash Page
+![gif]()
 
-2. Install dependencies
+### Database Schema
+![db]()
 
-      ```bash
-      pipenv install --dev -r dev-requirements.txt && pipenv install -r requirements.txt
-      ```
+### Authentication
+- Users can sign up, log in, and log out.
+- Users can use a demo log in to try the site.
+- Logged out users will only have access to the splash page
+![Auth]()
 
-3. Create a **.env** file based on the example with proper settings for your
-   development environment
-4. Setup your PostgreSQL user, password and database and make sure it matches your **.env** file
+### Friends
+- Users can friend other users on the platform
+- Users can unfriend existing friends
+- Users can see all their friends, and their info
+![friends]()
 
-5. Get into your pipenv, migrate your database, seed your database, and run your flask app
+### Live Chat/Messages
+- Users can see online chats anywhere or all chats on the messages page
+- Users can send and receive messages to/from other users.
+- Useres can delete any of their own messages.
+- Online Users can be seen in online users list.
+- During an active game, users can message with others users in the same game
+![messages]()
 
-   ```bash
-   pipenv shell
-   ```
+### Search
+- Users can search for any users through the search bar.
+![search]()
 
-   ```bash
-   flask db upgrade
-   ```
+### Game
+- Users can join and leave gamerooms.
+- Users can invite other users to games
+- Users can play other users in a game. 
+![game]()
 
-   ```bash
-   flask seed all
-   ```
+### Notifications
+- User will see a red bubble for notifications. 
+- User will receive a notification on a new message, game invitation, game error, or friend request
+- Users can send notifications based on the items listed above
+- Users can remove notifications by either manually removing them, or following the notification to the correct page.
+![notifications]()
 
-   ```bash
-   flask run
-   ```
+### Game Stats
+- Users can see their own and other players games stats.
+- Users can create or edit stats by playing the specified game.
+- Game stats will be updated automatically once a game is played.
+- A ranking system is in place (soon to be improved upon) for each player based on win/loss/tie ratio.
+![notifications]()
 
-6. To run the React App in development, checkout the [README](./react-app/README.md) inside the `react-app` directory.
+## Installation
+This project can be run by following these steps:
 
-***
-*IMPORTANT!*
-   If you add any python dependencies to your pipfiles, you'll need to regenerate your requirements.txt before deployment.
-   You can do this by running:
+- Clone the repo into your desired folder.
+- Run `pipenv install` from the root project directory.
+- Run `npm install` from the react-app directory
+- Create a database with a user.
+- Create a .env file in the root directory (use .env.example).
+- Run `pipenv shell` command
+- Run `flask run` command from the root directory and `npm start` from the react-app directory
 
-   ```bash
-   pipenv lock -r > requirements.txt
-   ```
 
-*ALSO IMPORTANT!*
-   psycopg2-binary MUST remain a dev dependency because you can't install it on apline-linux.
-   There is a layer in the Dockerfile that will install psycopg2 (not binary) for us.
-***
+## Highlighted Features
+- Ability to, in real time, interact with logged on friends through message and by playing a game.
+- Small implementations meant to simplify user experiences like user modal pop ups to check user stats, notifications, etc.
 
-## Deploy to Heroku
 
-1. Create a new project on Heroku
-2. Under Resources click "Find more add-ons" and add the add on called "Heroku Postgres"
-3. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-command-line)
-4. Run
+## Future Improvements
 
-   ```bash
-   heroku login
-   ```
+- Ability to play against random users
+- An improved ranking system
+- Ability to play against the computer (with a self improving algorithm)
+- New Games
+- Permanent notifications without being logged on
+- Improved messaging system with typing notification
 
-5. Login to the heroku container registry
+For additional information, checkout our [Wiki](https://github.com/brentarimoto/Log-On/wiki) page.
 
-   ```bash
-   heroku container:login
-   ```
-
-6. Update the `REACT_APP_BASE_URL` variable in the Dockerfile.
-   This should be the full URL of your Heroku app: i.e. "https://flask-react-aa.herokuapp.com"
-7. Push your docker container to heroku from the root directory of your project.
-   This will build the dockerfile and push the image to your heroku container registry
-
-   ```bash
-   heroku container:push web -a {NAME_OF_HEROKU_APP}
-   ```
-
-8. Release your docker container to heroku
-
-   ```bash
-   heroku container:release web -a {NAME_OF_HEROKU_APP}
-   ```
-
-9. set up your database:
-
-   ```bash
-   heroku run -a {NAME_OF_HEROKU_APP} flask db upgrade
-   heroku run -a {NAME_OF_HEROKU_APP} flask seed all
-   ```
-
-10. Under Settings find "Config Vars" and add any additional/secret .env variables.
-
-11. profit
+> Developed By: [Brent Arimoto](https://github.com/brentarimoto)
