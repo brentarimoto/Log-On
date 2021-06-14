@@ -1,98 +1,88 @@
-# Flask React Project
 
-This is the backend for the Flask React project.
+<div align="center">
+   <h1>Welcome to the Woof Woof <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="25px"> </h1>
+</div>
 
-## Getting started
+<div align="center">
+  <img src="https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/logo.png">
+</div>
 
-1. Clone this repository (only this branch)
+[LiveLink](https://woofwoof-app.herokuapp.com/)
 
-   ```bash
-   git clone https://github.com/appacademy-starters/python-project-starter.git
-   ```
+Woof Woof is a clone of [Slack](https://www.slack.com), a popular chat application that allows people to post messages to public channels or send private Direct Messages.
 
-2. Install dependencies
+## Technologies
+- React/Redux
+- Python
+- Flask
+- SQLAlchemy
+- PostgresQL
+- WebSockets
 
-      ```bash
-      pipenv install --dev -r dev-requirements.txt && pipenv install -r requirements.txt
-      ```
+## Features
+#### Splash Page
+![gif](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/Peek%202021-05-31%2013-59.gif)
 
-3. Create a **.env** file based on the example with proper settings for your
-   development environment
-4. Setup your PostgreSQL user, password and database and make sure it matches your **.env** file
+#### Main Page
+![main](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-main.png)
 
-5. Get into your pipenv, migrate your database, seed your database, and run your flask app
+#### User Modal Form
+![modal](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-modal-profile.png)
 
-   ```bash
-   pipenv shell
-   ```
 
-   ```bash
-   flask db upgrade
-   ```
+### Database Schema
+![db](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/Slack_Schema.JPG)
 
-   ```bash
-   flask seed all
-   ```
+### Authentication
+- Users can sign up, and log in
 
-   ```bash
-   flask run
-   ```
+![register](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-register.png)
 
-6. To run the React App in development, checkout the [README](./react-app/README.md) inside the `react-app` directory.
 
-***
-*IMPORTANT!*
-   If you add any python dependencies to your pipfiles, you'll need to regenerate your requirements.txt before deployment.
-   You can do this by running:
+### Channels
+- Users can see all channels to which he/she belongs
+- Users can leave a channel
+- Users can create a channel
+![channels](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-channels.png)
 
-   ```bash
-   pipenv lock -r > requirements.txt
-   ```
+### DMs
+- Users can see all conversations on the side bar
+- Users can send and receive messages from other users.
+- Users with whom you communicate will have green status if they are online.
+![dms](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-dms.png)
 
-*ALSO IMPORTANT!*
-   psycopg2-binary MUST remain a dev dependency because you can't install it on apline-linux.
-   There is a layer in the Dockerfile that will install psycopg2 (not binary) for us.
-***
+### Search
+- Users can search all channels, including channels that user does not belongs to
+- Users can search all other users
+![search](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-search.png)
 
-## Deploy to Heroku
+### Notifications
+- User can see red notifications with the number of unread messages on the sidebar to the right of the dm or channel.
 
-1. Create a new project on Heroku
-2. Under Resources click "Find more add-ons" and add the add on called "Heroku Postgres"
-3. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-command-line)
-4. Run
+![notifications](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-notifications.png)
 
-   ```bash
-   heroku login
-   ```
+### Live chat
+- Live chat is implemented by using Socket.io library. It enables real-time, bidirectional and event-based communication.
+- It works in both channels and DMs
 
-5. Login to the heroku container registry
 
-   ```bash
-   heroku container:login
-   ```
+## Installation
+This project can be run by following these steps:
 
-6. Update the `REACT_APP_BASE_URL` variable in the Dockerfile.
-   This should be the full URL of your Heroku app: i.e. "https://flask-react-aa.herokuapp.com"
-7. Push your docker container to heroku from the root directory of your project.
-   This will build the dockerfile and push the image to your heroku container registry
+- Clone the repo into your desired folder.
+- Run `pipenv install` from the root project directory.
+- Run `npm install` from the react-app directory
+- Create a .env file in the root directory (use .env.example).
+- Run `pipenv shell` command
+- Run `flask run` command from the root directory and `npm start` from the react-app directory
 
-   ```bash
-   heroku container:push web -a {NAME_OF_HEROKU_APP}
-   ```
+## Future Improvements
 
-8. Release your docker container to heroku
+- Ability to create private channels
+- Implement event-based fetching on scrolled
+- Bookmark the messages
+- live `typing ...` notification
 
-   ```bash
-   heroku container:release web -a {NAME_OF_HEROKU_APP}
-   ```
+For additional information, checkout our [Wiki](https://github.com/CodingInRhythm/slack_clone/wiki) page.
 
-9. set up your database:
-
-   ```bash
-   heroku run -a {NAME_OF_HEROKU_APP} flask db upgrade
-   heroku run -a {NAME_OF_HEROKU_APP} flask seed all
-   ```
-
-10. Under Settings find "Config Vars" and add any additional/secret .env variables.
-
-11. profit
+> Developed By: [Brent Arimoto](https://github.com/brentarimoto), [Nurs Asanov](https://github.com/nasanov), [Alex Clough](https://github.com/CodingInRhythm), [Zane Preudhomme](https://github.com/zpreudhomme)
