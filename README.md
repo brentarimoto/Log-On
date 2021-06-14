@@ -7,7 +7,7 @@
   <img src="https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/logo.png">
 </div>
 
-[Log On](https://woofwoof-app.herokuapp.com/) is a clone of [Slack](https://www.slack.com), a popular chat application that allows people to post messages to public channels or send private Direct Messages.
+[Log On](https://woofwoof-app.herokuapp.com/) is an OMGPOP(RIP) and [Facebook](https://www.slack.com) inspired website. Here users can log on to chat with friends and play fun, family-friendly games!
 
 ## Technologies
 - React/Redux
@@ -19,29 +19,18 @@
 
 ## Features
 #### Splash Page
-![gif](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/Peek%202021-05-31%2013-59.gif)
-
-#### Main Page
-![main](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-main.png)
-
-#### User Modal Form
-![modal](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-modal-profile.png)
-
+![gif]()
 
 ### Database Schema
-![db](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/Slack_Schema.JPG)
+![db]()
 
 ### Authentication
 - Users can sign up, and log in
 
-![register](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-register.png)
-
-
-### Channels
-- Users can see all channels to which he/she belongs
-- Users can leave a channel
-- Users can create a channel
-![channels](https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/ui-channels.png)
+### Friends
+- Users can see all their friends
+- Users can send and accept friend requests
+- Users can unfriend any existing friends
 
 ### DMs
 - Users can see all conversations on the side bar
