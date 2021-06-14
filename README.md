@@ -27,21 +27,21 @@
 ### Authentication
 - Users can sign up, log in, and log out.
 - Users can use a demo log in to try the site.
-- Logged out users will only have access to the splash page
+- Logged out users will only have access to the splash page.
 ![Auth](https://github.com/brentarimoto/Log-On/blob/main/wiki/Auth.PNG)
 
 ### Friends
-- Users can friend other users on the platform
-- Users can unfriend existing friends
-- Users can see all their friends, and their info
+- Users can friend other users on the platform.
+- Users can unfriend existing friends.
+- Users can see all their friends, and their info.
 ![friends](https://github.com/brentarimoto/Log-On/blob/main/wiki/Friends.PNG)
 
 ### Live Chat/Messages
-- Users can see online chats anywhere or all chats on the messages page
+- Users can see online chats anywhere or all chats on the messages page.
 - Users can send and receive messages to/from other users.
 - Useres can delete any of their own messages.
 - Online Users can be seen in online users list.
-- During an active game, users can message with others users in the same game
+- During an active game, users can message with others users in the same game.
 ![messages](https://github.com/brentarimoto/Log-On/blob/main/wiki/Messages.PNG)
 
 ### Search
@@ -56,8 +56,8 @@
 
 ### Notifications
 - User will see a red bubble for notifications. 
-- User will receive a notification on a new message, game invitation, game error, or friend request
-- Users can send notifications based on the items listed above
+- User will receive a notification on a new message, game invitation, game error, or friend request.
+- Users can send notifications based on the items listed above.
 - Users can remove notifications by either manually removing them, or following the notification to the correct page.
 ![notifications](https://github.com/brentarimoto/Log-On/blob/main/wiki/Notifications.PNG)
 
@@ -76,8 +76,8 @@ This project can be run by following these steps:
 - Run `npm install` from the react-app directory
 - Create a database with a user.
 - Create a .env file in the root directory (use .env.example).
-- Run `pipenv shell` command
-- Run `flask run` command from the root directory and `npm start` from the react-app directory
+- Run `pipenv shell` command.
+- Run `flask run` command from the root directory and `npm start` from the react-app directory.
 
 
 ## Highlighted Features
