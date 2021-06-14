@@ -64,6 +64,9 @@ function App() {
       })
 
       socket.on("online", ({friends}) => {
+        if (friends[user.id]){
+          delete friends[user.id]
+        }
         dispatch(setOnline(friends))
       })
 

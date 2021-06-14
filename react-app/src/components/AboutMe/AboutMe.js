@@ -21,7 +21,7 @@ const AboutMe = () => {
         if(listOpen){
             dispatch(setSpecificActiveOpen('friends', false))
         }
-    },[dispatch, listOpen])
+    },[dispatch])
 
     return (
     <div className='aboutme-container'>
