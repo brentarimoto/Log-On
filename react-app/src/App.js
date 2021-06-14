@@ -139,7 +139,7 @@ function App() {
               }
             </Route>
             <ProtectedRoute path="/friends" exact={true} >
-              <FriendsPage />
+              <FriendsPage socket={socket}/>
             </ProtectedRoute>
             <ProtectedRoute path="/messages">
               <MessagesPage socket={socket}/>

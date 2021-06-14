@@ -12,7 +12,7 @@ import UserSearchModal from '../User/UserSearchModal';
 import './FriendsPage.css'
 
 /*************************** COMPONENTS ***************************/
-const FriendsPage = () => {
+const FriendsPage = ({socket}) => {
     const dispatch = useDispatch()
 
     const friends = useSelector(state=>state.friends)
@@ -37,7 +37,7 @@ const FriendsPage = () => {
                         {Object.entries(friends).map(([id, friendship])=>{
                             const friend = friendship.accepter || friendship.requester
                             return(
-                                <UserSearchModal key={friend.id} user={friend} classname='friendspage'/>
+                                <UserSearchModal key={friend.id} user={friend} classname='friendspage' socket={socket}/>
                             )
                         })}
                     </div>
