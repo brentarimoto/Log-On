@@ -52,35 +52,39 @@ function App() {
 
       if(!socket){
         socket=io()
+        socket.user=user
+      } else{
+        socket.user=user
+        socket.emit('logon', {room:`User:${user.id}`})
       }
-      socket.user=user
+
 
       socket.on('connect', ()=>{
-        socket.emit('logon', {room:`User:${user.id}`})
+        socket.emit('logon', {room:`User:${socket.user.id}`})
       })
 
       socket.on('disconnect', ()=>{
         setTimeout(() => {
           socket.connect();
-          socket.emit('logon', {room:`User:${user.id}`})
+          socket.emit('logon', {room:`User:${socket.user.id}`})
         }, 1000);
       })
 
       socket.on("online", ({friends}) => {
-        if (friends[user.id]){
-          delete friends[user.id]
+        if (friends[socket.user.id]){
+          delete friends[socket.user.id]
         }
         dispatch(setOnline(friends))
       })
 
       socket.on("logon", ({sender_id}) => {
-        if(sender_id!==user.id){
+        if(sender_id!==socket.user.id){
           dispatch(addOnline(sender_id))
         }
       })
 
       socket.on("logoff", ({sender_id}) => {
-        if(sender_id!==user.id){
+        if(sender_id!==socket.user.id){
           dispatch(removeOnline(sender_id))
         }
       })
@@ -105,7 +109,7 @@ function App() {
       })
 
       socket.on("invitations", ({invitation}) => {
-        if (invitation.sender.id !== user.id){
+        if (invitation.sender.id !== socket.user.id){
           dispatch(newNotification(invitation))
         }
       })

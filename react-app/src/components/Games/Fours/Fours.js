@@ -170,25 +170,25 @@ const Fours = ({socket}) => {
             })
 
             socket.on("join_fours", ({sender_id, error}) => {
-                if (sender_id !== user.id && !error){
+                if (sender_id !== socket.user.id && !error){
                     dispatch(setOpponent(room_id, sender_id))
                     setInviteOpen(false)
                     setRoomOwner(true)
                 } else if(error){
-                    const notification = {sender:user, error:true, text:error.text, hash:error.hash}
+                    const notification = {sender:socket.user, error:true, text:error.text, hash:error.hash}
                     dispatch(newNotification(notification))
                     setError(true)
                 }
             })
 
             socket.on("start_game", ({sender_id, gamestart}) => {
-                if(sender_id!==user.id && gamestart){
+                if(sender_id!==socket.user.id && gamestart){
                     setGameStart(true)
                 }
             })
 
             socket.on("reset_game", ({sender_id, reset}) => {
-                if(sender_id!==user.id && reset){
+                if(sender_id!==socket.user.id && reset){
                     dispatch(resetFours())
                     setWinner(null)
                     setGameStart(true)
@@ -196,7 +196,7 @@ const Fours = ({socket}) => {
             })
 
             socket.on("leave_game",({sender_id, winnerStats, loserStats, loser})=>{
-                if (sender_id !== user.id){
+                if (sender_id !== socket.user.id){
 
                     if(winnerStats){
                         dispatch(updateGameStats(1, winnerStats))

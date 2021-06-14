@@ -30,17 +30,17 @@ const FoursGame = ({socket, userTurn, setUserTurn, setWinner, setGameStart, erro
         socket.on("fours_move", ({move, player, winner, loser, tie, winnerStats, loserStats, p1, p2, p1Stats, p2Stats}) => {
             if(move){
                 dispatch(foursMove(move[0], move[1], player))
-                if(player!==user.id){
+                if(player!==socket.user.id){
                     setUserTurn(true)
                 }
             }
 
             if(winner){
-                setWinner(`${user.id===winner ? user.username : rooms[room_id].opponent.username}  Wins!`)
+                setWinner(`${socket.user.id===winner ? socket.user.username : rooms[room_id].opponent.username}  Wins!`)
 
-                const userStats= user.id===winner ? winnerStats : loserStats
-                const otherStats = user.id===winner ? loserStats : winnerStats
-                const opponent_id = user.id===winner ? loser : winner
+                const userStats= socket.user.id===winner ? winnerStats : loserStats
+                const otherStats = socket.user.id===winner ? loserStats : winnerStats
+                const opponent_id = socket.user.id===winner ? loser : winner
 
                 dispatch(updateGameStats(1, userStats))
                 dispatch(updateFriendStats(opponent_id, 1, otherStats))
@@ -51,9 +51,9 @@ const FoursGame = ({socket, userTurn, setUserTurn, setWinner, setGameStart, erro
             if(tie){
                 setWinner('Game is a Tie!')
 
-                const userStats= user.id===p1 ? p1Stats : p2Stats
-                const otherStats = user.id===p1 ? p2Stats : p1Stats
-                const opponent_id = user.id===p1 ? p2 : p1
+                const userStats= socket.user.id===p1 ? p1Stats : p2Stats
+                const otherStats = socket.user.id===p1 ? p2Stats : p1Stats
+                const opponent_id = socket.user.id===p1 ? p2 : p1
 
                 dispatch(updateGameStats(1, userStats))
                 dispatch(updateFriendStats(opponent_id, 1, otherStats))
