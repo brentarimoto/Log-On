@@ -1,27 +1,26 @@
 /*************************** REACT IMPORTS ***************************/
 import React from "react";
 import { createContext, useContext, useState } from "react";
-import { io } from "socket.io-client";
 
 /*************************** CONTEXT ***************************/
-export const SocketContext = createContext();
-export const useSocket = () => useContext(SocketContext);
+export const FirstLoadContext = createContext();
+export const useFirstLoad = () => useContext(FirstLoadContext);
 
 let socket;
 /*************************** PROVIDER ***************************/
 
-export const SocketProvider = (props) => {
+export const FirstLoadProvider = (props) => {
 
-  const [socket, setSocket] = useState(io());
+  const [firstLoad, setFirstLoad] = useState(false);
 
   return (
-    <SocketContext.Provider
-      value={{ socket}}
+    <FirstLoadContext.Provider
+      value={{ firstLoad, setFirstLoad }}
     >
       {props.children}
-    </SocketContext.Provider>
+    </FirstLoadContext.Provider>
   );
 };
 
 /*************************** EXPORT ***************************/
-export default SocketProvider;
+export default FirstLoadProvider;

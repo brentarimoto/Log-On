@@ -12,7 +12,7 @@ import './UserModal.css'
 
 /*************************** COMPONENTS ***************************/
 
-function UserModal({friend,friend_id, socket}) {
+function UserModal({friend,friend_id, socket, setLoaded}) {
   const [showModal, setShowModal] = useState(false);
 
   return (

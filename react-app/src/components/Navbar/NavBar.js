@@ -18,7 +18,7 @@ import './NavBar.css'
 import UserModal from '../User/UserModal';
 
 /*************************** COMPONENTS ***************************/
-const NavBar = ({socket}) => {
+const NavBar = ({socket, setLoaded}) => {
   const location = useLocation()
 
   const user = useSelector(state=>state.session.user)

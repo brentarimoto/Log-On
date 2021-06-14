@@ -24,6 +24,7 @@ import { setGameStats } from "./store/gameStats";
 import { addOnline, removeOnline, setOnline } from "./store/online";
 import { newFriendUpdate } from "./store/friendUpdate";
 import { addFriend, handleUnFriended } from './store/friends'
+import { useFirstLoad } from "./context/FirstLoad";
 
 import background from "./images/background_image.jpg";
 
@@ -37,7 +38,7 @@ function App() {
   const dispatch = useDispatch();
 
   const user = useSelector(state => state.session.user)
-  const [loaded, setLoaded] = useState(false)
+  const {firstLoad, setFirstLoad} = useFirstLoad()
 
   useEffect(() => {
     (() => {
@@ -46,7 +47,7 @@ function App() {
   }, [dispatch]);
 
   useEffect(()=>{
-    if(user && !loaded){
+    if(user && !firstLoad){
       dispatch(setGameStats(user.stats))
 
       socket=io()
@@ -102,7 +103,7 @@ function App() {
           dispatch(newNotification(invitation))
         }
       })
-      setLoaded(true)
+      setFirstLoad(true)
     }
   },[user])
 

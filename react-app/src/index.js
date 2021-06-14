@@ -9,6 +9,7 @@ import App from './App';
 import configureStore from './store';
 import ModalProvider from './context/Modal';
 import SearchProvider from './context/Search';
+import FirstLoadProvider from './context/FirstLoad';
 
 
 /*************************** CSS ***************************/
@@ -21,11 +22,13 @@ const store = configureStore();
 ReactDOM.render(
   <React.StrictMode>
     <ModalProvider>
-      <SearchProvider>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </SearchProvider>
+      <FirstLoadProvider>
+        <SearchProvider>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </SearchProvider>
+      </FirstLoadProvider>
     </ModalProvider>
   </React.StrictMode>,
   document.getElementById('root')
