@@ -7,9 +7,7 @@
   <img src="https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/logo.png">
 </div>
 
-[LiveLink](https://woofwoof-app.herokuapp.com/)
-
-Woof Woof is a clone of [Slack](https://www.slack.com), a popular chat application that allows people to post messages to public channels or send private Direct Messages.
+[Log On](https://woofwoof-app.herokuapp.com/) is a clone of [Slack](https://www.slack.com), a popular chat application that allows people to post messages to public channels or send private Direct Messages.
 
 ## Technologies
 - React/Redux
