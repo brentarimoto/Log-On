@@ -69,7 +69,7 @@ const FriendsList = ({socket}) => {
         className={isHome ? 'home__friends-list' : `friends-list ${open.friends ? 'friends-list--active' : ''}`}
         >
             <div className={`friends-list__header ${notificationCount>0 && 'friends-list__header--active'}`} onClick={handleFriendsList}>
-                Friends {Object.keys(online).length>0 && `(${Object.keys(online).length})`}
+                Friends {Object.keys(online).length>0 && `(${Object.keys(online).length})${Object.keys(online)}`}
                 {(notificationCount>0 && !open.friends) &&
                 <div className='friends-list__notifications'>
                     {notificationCount}
