@@ -60,7 +60,7 @@ def disconnect():
 
 
 @socketio.on("logon")
-def on_join(data):
+def logon(data):
     print('*******************LOGON*******************')
     sender_id = int(session['_user_id'])
     room=data['room']
@@ -72,6 +72,19 @@ def on_join(data):
     for friend_id in online_friends:
         emit('logon', {'sender_id':sender_id}, include_self=False, room=f'User:{friend_id}')
     emit('online', {'friends':online_friends}, room=f'User:{sender_id}')
+
+@socketio.on("logoff")
+def logoff():
+    sender_id = int(session['_user_id'])
+    print('*******************LOGOFF*******************', sender_id)
+    if sender_id in online:
+        online.pop(sender_id, None)
+        friendships = Friend.query.filter((Friend.accept_id==sender_id) | (Friend.request_id==sender_id) & (Friend.accepted==True)).all()
+        friend_ids = [friend.accept_id if friend.accept_id!=sender_id else friend.request_id for friend in friendships]
+        online_friends = [friend_id for friend_id in friend_ids if friend_id in online]
+        for friend_id in online_friends:
+            emit('logoff', {'sender_id':sender_id}, include_self=False, room=f'User:{friend_id}')
+        emit('disconnect', room=f'User:{sender_id}')
 
 
 

@@ -12,7 +12,18 @@ const LogoutButton = ({socket}) => {
 
   const onLogout = async e => {
     e.preventDefault();
-    socket.disconnect()
+    // socket.disconnect()'
+    socket.off('connect')
+    socket.off('disconnect')
+    socket.off('online')
+    socket.off('logon')
+    socket.off('logoff')
+    socket.off('message')
+    socket.off('friend_request')
+    socket.off('accept_request')
+    socket.off('unfriend')
+    socket.off('invitations')
+    socket.emit('logoff')
     setFirstLoad(false)
     await dispatch(logout())
     history.push('/')

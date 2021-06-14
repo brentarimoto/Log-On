@@ -50,7 +50,11 @@ function App() {
     if(user && !firstLoad){
       dispatch(setGameStats(user.stats))
 
-      socket=io()
+      if(!socket){
+        socket=io()
+      } else{
+        socket.emit('logon', {room:`User:${user.id}`})
+      }
 
       socket.on('connect', ()=>{
         socket.emit('logon', {room:`User:${user.id}`})
