@@ -114,8 +114,6 @@ function App() {
         }
       })
 
-      console.log(socket)
-
       setFirstLoad(false)
     }
   },[user])
