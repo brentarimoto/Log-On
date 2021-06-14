@@ -1,10 +1,7 @@
 
 <div align="center">
+   <img src="https://github.com/brentarimoto/Log-On/blob/main/react-app/src/images/Log-On-Icon.png">
    <h1>Welcome to Log On!</h1>
-</div>
-
-<div align="center">
-  <img src="https://github.com/CodingInRhythm/slack_clone/blob/main/wiki/images/logo.png">
 </div>
 
 [Log On](https://woofwoof-app.herokuapp.com/) is an OMGPOP(RIP) and [Facebook](https://www.slack.com) inspired website. Here users can log on to chat with friends and play fun, family-friendly games!
