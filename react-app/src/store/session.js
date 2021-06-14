@@ -144,12 +144,13 @@ export const editUser = ({id, username, email, firstname, lastname, photo}) => a
   });
 
   const data = await response.json();
+
   if (data.errors) {
       return data;
   }
 
   dispatch(setUser(data))
-  return {};
+  return data
 }
 
 /*************************** REDUCER ***************************/

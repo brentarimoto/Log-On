@@ -210,10 +210,8 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
 
     let editedUser = await dispatch(editUser(userInfo))
 
-    if (editedUser.username) {
-        // setShowModal(false)
-    } else {
-        setErrors(editedUser.errors)
+    if (editedUser.errors) {
+      setErrors(editedUser.errors)
     }
   }
 
