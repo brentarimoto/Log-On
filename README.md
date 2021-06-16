@@ -4,7 +4,7 @@
    <h1>Welcome to Log On!</h1>
 </div>
 
-[Log On](https://woofwoof-app.herokuapp.com/) is an OMGPOP and [Facebook](https://www.slack.com) inspired website. Here, users can log on to chat with friends and play fun, family-friendly games!
+[Log On](https://log-on.herokuapp.com/) is an OMGPOP and [Facebook](https://www.facebook.com/) inspired website. Here, users can log on to chat with friends and play fun, family-friendly games!
 
 ## Technologies
 - React/Redux
@@ -22,7 +22,7 @@
 ![home](https://github.com/brentarimoto/Log-On/blob/main/wiki/Home.PNG)
 
 ### Database Schema
-![db](https://github.com/brentarimoto/Log-On/blob/main/wiki/Schema/Log-On%20Database%20Schema.png)
+![db](https://github.com/brentarimoto/Log-On/blob/main/wiki/Schema/Log-On_Database_Schema.png)
 
 ### Authentication
 - Users can sign up, log in, and log out.
@@ -79,11 +79,13 @@ This project can be run by following these steps:
 - Run `pipenv shell` command.
 - Run `flask run` command from the root directory and `npm start` from the react-app directory.
 
-
 ## Highlighted Features
 - Ability to, in real time, interact with logged on friends through message and by playing a game.
 - Small implementations meant to simplify user experiences like user modal pop ups to check user stats, notifications, etc.
 
+## Challenges
+- Implementing sockets in a way I haven't before was extremely challenging and fulfilling. Due to my original understanding, the design could definiltey be improved.
+- Correct usage of useEffects was another factor that I had not fully fleshed out till now. I truly got a chance to understand when and how useEffects, and their returns, happen.
 
 ## Future Improvements
 
