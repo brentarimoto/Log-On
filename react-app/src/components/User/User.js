@@ -333,7 +333,7 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
       </div>
       <div className='user__stats'>
         <Swiper
-        style = {{width: '100%', height: '100%'}}
+          style = {{width: '100%', height: '100%'}}
           spaceBetween={50}
           slidesPerView={1}
         >
