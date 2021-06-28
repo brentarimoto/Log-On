@@ -18,11 +18,12 @@
 #### Splash Page & Site Demonstration
 ![gif](https://github.com/brentarimoto/Log-On/blob/main/wiki/LogOn.gif)
 
-#### Home Page
-![home](https://github.com/brentarimoto/Log-On/blob/main/wiki/Home.PNG)
-
 ### Database Schema
 ![db](https://github.com/brentarimoto/Log-On/blob/main/wiki/Schema/Log-On_Database_Schema.png)
+
+
+### Home Page
+![home](https://github.com/brentarimoto/Log-On/blob/main/wiki/Home.PNG)
 
 ### Authentication
 - Users can sign up, log in, and log out.
