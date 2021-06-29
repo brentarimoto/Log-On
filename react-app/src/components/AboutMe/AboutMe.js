@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 /*************************** COMPONENT IMPORTS ***************************/
 import { setSpecificActiveOpen } from '../../store/activeOpen';
-import Headshot from '../../images/Headshot.jpg'
 
 
 /*************************** CSS ***************************/
@@ -29,7 +28,7 @@ const AboutMe = () => {
             <div className='aboutme'>
                 <h1 className='aboutme__header'>Developer: Brent Arimoto</h1>
                 <div className='aboutme__pic-div'>
-                    <img className='aboutme__pic' src={Headshot} alt='headshot'></img>
+                    <img className='aboutme__pic' src='https://brentarimoto.s3.us-west-1.amazonaws.com/Headshot.jpg' alt='headshot'></img>
                 </div>
                 <h2 className='aboutme__repo'>
                     <a href='https://github.com/brentarimoto' target="_blank" rel="noopener noreferrer">Log On Github Repo</a>
