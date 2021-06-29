@@ -21,9 +21,9 @@ def allowed_file(filename):
            filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def get_unique_filename(filename):
+def get_unique_filename(filename, username):
     ext = filename.rsplit(".", 1)[1].lower()
-    unique_filename = uuid.uuid4().hex
+    unique_filename = username+'_'+uuid.uuid4().hex
     return f"{unique_filename}.{ext}"
 
 
@@ -43,3 +43,15 @@ def upload_file_to_s3(file, acl="public-read"):
         return {"errors": str(e)}
 
     return {"url": f"{S3_LOCATION}{file.filename}"}
+
+
+
+def delete_file_from_s3(key):
+    try:
+        s3.delete_object(Bucket=BUCKET_NAME, Key=key)
+    except Exception as e:
+        # in case the our s3 upload fails
+        print('***********Errors*********',e)
+        return {"errors": str(e)}
+
+    return {"success": True}

@@ -37,9 +37,9 @@ const NavBar = ({socket, setLoaded}) => {
         {user && <SearchBar socket={socket}/>}
       </div>
       <div className='navbar__logo-div noselect'>
-        {(user || location.pathname.includes('aboutme')) && <NavLink to="/" exact={true} activeClassName="active" className='navbar__logo-link'>
+        {(user || location.pathname.includes('aboutme')) && <Link to="/" exact={true} className='navbar__logo-link'>
             <img className='navbar__logo'alt='logo' src={logo}></img>
-        </NavLink>}
+        </Link>}
       </div>
       <div className='navbar__links-div'>
         {user ?
