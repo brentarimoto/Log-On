@@ -5,7 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 ## FILES
 from app.models import User, db
-from app.aws import allowed_file, get_unique_filename, upload_file_to_s3
+from app.aws import allowed_file, get_unique_filename, upload_file_to_s3, delete_file_from_s3
 from app.forms import LoginForm
 from app.forms import SignUpForm
 from app.forms import EditForm
@@ -87,7 +87,7 @@ def sign_up():
         if not allowed_file(image.filename):
             return {"errors": "file type not permitted"}, 400
 
-        image.filename = get_unique_filename(image.filename)
+        image.filename = get_unique_filename(image.filename, form.data['username'])
 
         upload = upload_file_to_s3(image)
 
@@ -139,7 +139,10 @@ def edit_user(id):
         if not allowed_file(image.filename):
             return {"errors": "file type not permitted"}, 400
 
-        image.filename = get_unique_filename(image.filename)
+        if form.data['username'] and form.data['username']!= user.username:
+            image.filename = get_unique_filename(image.filename, form.data['username'])
+        else:
+            image.filename = get_unique_filename(image.filename, user.username)
 
         upload = upload_file_to_s3(image)
 
@@ -172,6 +175,10 @@ def edit_user(id):
         if form.data['lastname'] and form.data['lastname']!= user.lastname:
             user.lastname=form.data['lastname']
         if url and url!= user.profile_photo:
+            key=user.profile_photo.split('/')[-1]
+            res = delete_file_from_s3(key)
+            if 'success' not in res:
+                return res, 400
             user.profile_photo=url
         db.session.commit()
         login_user(user)
