@@ -140,6 +140,7 @@
 
 .messagespage__friend-lastmessage{
     font-size: 90%;
+    padding: 2px 3px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

@@ -131,40 +131,44 @@ const LoginForm = ({setShowModal}) => {
           <img alt='logo' src={logo}></img>
         </div>
       </div>
-      {cError &&
-      <div className='auth__form-errors-login auth__form-errors-login--credential'>
-        <div class="auth__form-errors-arrow"></div>
-        <div>{cError}</div>
-      </div>}
-      {pError &&
-      <div className='auth__form-errors-login auth__form-errors-login--password'>
-        <div class="auth__form-errors-arrow"></div>
-        <div>{pError}</div>
-      </div>}
       <div className='auth__form-divs'>
         <label className='auth__form-labels' htmlFor="credential">Username/Email</label>
-        <input
-          ref={inputRef}
-          name="credential"
-          type="text"
-          value={credential}
-          onChange={updateCredential}
-          placeholder="Username/Email"
-          className="auth__form-input"
-          required
-          />
+        <div className="auth__form-input-div">
+          <input
+            ref={inputRef}
+            name="credential"
+            type="text"
+            value={credential}
+            onChange={updateCredential}
+            placeholder="Username/Email"
+            className="auth__form-input"
+            required
+            />
+            {cError &&
+            <div className='auth__form-errors-login auth__form-errors-login--credential'>
+              <div className="auth__form-errors-arrow"></div>
+              <div className='auth__form-errors-text'>{cError}</div>
+            </div>}
+        </div>
       </div>
       <div className='auth__form-divs'>
         <label className='auth__form-labels' htmlFor="password">Password</label>
-        <input
-          name="password"
-          type="password"
-          value={password}
-          onChange={updatePassword}
-          placeholder="Password"
-          className="auth__form-input"
-          required
-        />
+        <div className="auth__form-input-div">
+          <input
+            name="password"
+            type="password"
+            value={password}
+            onChange={updatePassword}
+            placeholder="Password"
+            className="auth__form-input"
+            required
+          />
+          {pError &&
+          <div className='auth__form-errors-login auth__form-errors-login--password'>
+            <div className="auth__form-errors-arrow"></div>
+            <div className='auth__form-errors-text'>{pError}</div>
+          </div>}
+        </div>
       </div>
       <button type="submit" className='auth__form-button'>Login</button>
       <button type="submit" className='auth__form-button' onClick={demoLogin}>Demo</button>

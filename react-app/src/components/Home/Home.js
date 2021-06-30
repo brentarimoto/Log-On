@@ -53,14 +53,14 @@ const Home = () => {
                         </div>
                     </Link>
                 ))}
-                {['','','','','',''].map((el, id)=>(
+                {/* {['','','','','',''].map((el, id)=>(
                     <Link key={id} to='/' className='home__game-link'>
                         <img className='home__game-link-image' src={commingSoon} alt='game'></img>
                         <div className='home__game-link-header'>
                             New Game Coming Soon
                         </div>
                     </Link>
-                ))}
+                ))} */}
             </div>
         </div>
     </div>

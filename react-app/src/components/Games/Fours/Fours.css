@@ -49,6 +49,12 @@
     z-index: 2;
 }
 
+.fours__header-title{
+    grid-area: vs;
+    display: flex;
+    justify-content: center;
+}
+
 .fours__join-room-button{
     grid-area: right;
 	border-radius: 3px;
@@ -138,6 +144,7 @@
 .fours__invite-username{
     justify-self: start;
     align-self: center;
+
 }
 
 
@@ -186,6 +193,10 @@
 .fours__players-username{
     font-size: 130%;
     font-weight: bold;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .fours__players-rank{

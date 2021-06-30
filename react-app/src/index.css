@@ -100,6 +100,7 @@ body{
 
     /* Rank Colors */
     --deepBlue: #304EE4;
+    --darkBlue: #082ce2;
     --lightBlue: rgba(133,195,253,1);
     --lightViolet: #8368FE;
     --lightRed: rgb(255, 105, 98);
@@ -124,7 +125,8 @@ body{
     --navLinkColor: var(--deepBlue);
 
     /* Search */
-    --searchActiveColor: var(--lightViolet);
+    --searchColor: black;
+    --searchActiveColor: var(--darkBlue);
 
     /* Notification */
     --notificationColor: var(--lightRed);

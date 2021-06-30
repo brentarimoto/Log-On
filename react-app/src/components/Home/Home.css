@@ -24,14 +24,14 @@
   border-radius: 10px;
   border: .5px solid var(--faintBorder);
   background-color: var(--friendsListBackground);
-  display: grid;
+  /* display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-template-areas:
   "one one two"
   "one one three"
   "one one four"
-  "five six seven";
+  "five six seven"; */
   min-width: 650px;
 }
 

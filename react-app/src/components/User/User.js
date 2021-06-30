@@ -11,7 +11,7 @@ import LogoutButton from "../auth/LogoutButton";
 
 import { acceptRequest, unFriend } from "../../store/friends";
 import { sendFriendRequest, } from "../../store/users";
-import { popActive } from "../../store/activeMessages";
+import { popActive, updateActive } from "../../store/activeMessages";
 import { removeMessageNotification } from "../../store/notifications";
 import { removeMessage } from "../../store/messages";
 import { newFriendUpdate, unFriendUpdate } from "../../store/friendUpdate";
@@ -187,6 +187,12 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
   const [errors, setErrors] = useState([])
   const [unfriendOpen, setUnfriendOpen] = useState(false);
 
+  const [firstSuccess, setFirstSuccess] = useState(false)
+  const [lastSuccess, setLastSuccess] = useState(false)
+  const [userSuccess, setUserSuccess] = useState(false)
+  const [emailSuccess, setEmailSuccess] = useState(false)
+
+
 
   // Functions
 
@@ -194,25 +200,72 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
     if(errors.length>0){
       setErrors([])
     }
+
+    if(firstSuccess){
+      setFirstSuccess(false)
+    }
+
+    if(lastSuccess){
+      setLastSuccess(false)
+    }
+
+    if(userSuccess){
+      setUserSuccess(false)
+    }
+
+    if(emailSuccess){
+      setEmailSuccess(false)
+    }
   },[username, email, firstname, lastname, photo])
 
 
   const handleSubmit= async (e)=>{
     e.preventDefault();
-    const userInfo = {
-        id:user.id,
-        firstname,
-        lastname,
-        username,
-        email,
-        photo,
-    }
+    (async()=>{
+      if(/\s/.test(username)){
+        setErrors(['Username cannot contain spaces'])
+        return
+      } else if (username.length>28){
+        setErrors(['Username must be less than 28 characters'])
+        return
+      } else if (username.length<1){
+        setErrors(['Please provide a username'])
+        return
+      }
 
-    let editedUser = await dispatch(editUser(userInfo))
 
-    if (editedUser.errors) {
-      setErrors(editedUser.errors)
-    }
+      const userInfo = {
+          id:user.id,
+          firstname,
+          lastname,
+          username,
+          email,
+          photo,
+      }
+
+      let editedUser = await dispatch(editUser(userInfo))
+
+      if (editedUser.errors) {
+        setErrors(editedUser.errors)
+      } else {
+        if(firstname!==user.firstname){
+          setFirstSuccess(true)
+        }
+
+        if(lastname!==user.lastname){
+          setLastSuccess(true)
+        }
+
+        if(username!==user.username){
+          setUserSuccess(true)
+        }
+
+        if(email!==user.email){
+          setEmailSuccess(true)
+        }
+      }
+
+    })()
   }
 
 
@@ -222,13 +275,13 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
           <ProfilePhoto profileUser={profileUser}/>
           {isUser && <div className='user__profile-photo-input'>
               <input type="file" id="profpic-btn" onChange={(e)=>setPhoto(e.target.files[0])} hidden/>
-              <label htmlFor="profpic-btn" className="user__profile-photo-button">{photo?.name ? photo?.name : 'New Image'}</label>
+              <label tabIndex='0' htmlFor="profpic-btn" className="user__profile-photo-button">{photo?.name ? photo?.name : 'New Image'}</label>
           </div>}
       </div>
       <div className='user__info-container'>
         {errors.length>0 &&
           <div className='user__profile-errors'>
-          <div class="user__profile-errors-arrow"></div>
+          <div className="user__profile-errors-arrow"></div>
           {errors.map((error) => (
             <div key={error}>{error}</div>
           ))}
@@ -238,6 +291,7 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
             <div className='user__info-divs'>
               <label className='user__info-labels' htmlFor="firstname">First Name</label>
               {isUser ?
+              <div className='user__info-inputs-div'>
                 <input
                     className='user__info-inputs'
                     autoComplete = 'off'
@@ -245,8 +299,11 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
                     type='text'
                     placeholder='(First Name)'
                     value={firstname}
-                    onChange={(e)=>setFirstname(e.target.value)}
+                    onChange={(e)=>{setFirstname(e.target.value)}}
                 ></input>
+                {firstSuccess && <i className="user__info-inputs--success fas fa-check"></i>}
+              </div>
+
                 :
                 <div className='user__info-text' name='firstname'>{profileUser.firstname}</div>
               }
@@ -254,15 +311,18 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
             <div className='user__info-divs'>
               <label className='user__info-labels' htmlFor="lastname">Last Name</label>
               {isUser ?
-                <input
-                    className='user__info-inputs'
-                    autoComplete = 'off'
-                    name='lastname'
-                    type='text'
-                    placeholder='(Last Name)'
-                    value={lastname}
-                    onChange={(e)=>setLastname(e.target.value)}
-                ></input>
+              <div className='user__info-inputs-div'>
+                  <input
+                      className='user__info-inputs'
+                      autoComplete = 'off'
+                      name='lastname'
+                      type='text'
+                      placeholder='(Last Name)'
+                      value={lastname}
+                      onChange={(e)=>setLastname(e.target.value)}
+                  ></input>
+                  {lastSuccess && <i className="user__info-inputs--success fas fa-check"></i>}
+                </div>
                 :
                 <div className='user__info-text' name='lastname'>{profileUser.lastname}</div>
               }
@@ -271,15 +331,18 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
           <div className='user__info-divs'>
             <label className='user__info-labels' htmlFor="username">Username</label>
             {isUser ?
-              <input
-                  className='user__info-inputs'
-                  autoComplete = 'off'
-                  name='username'
-                  type='text'
-                  placeholder='Username'
-                  value={username}
-                  onChange={(e)=>setUsername(e.target.value)}
-              ></input>
+              <div className='user__info-inputs-div'>
+                <input
+                    className='user__info-inputs'
+                    autoComplete = 'off'
+                    name='username'
+                    type='text'
+                    placeholder='Username'
+                    value={username}
+                    onChange={(e)=>setUsername(e.target.value)}
+                ></input>
+                {userSuccess && <i className="user__info-inputs--success fas fa-check"></i>}
+              </div>
               :
               <div className='user__info-text' name='username'>{profileUser.username}</div>
             }
@@ -287,15 +350,18 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
           <div className='user__info-divs'>
             <label className='user__info-labels' htmlFor="email">Email</label>
             {isUser ?
-              <input
-                  className='user__info-inputs'
-                  autoComplete = 'off'
-                  name='email'
-                  type='email'
-                  placeholder='Email'
-                  value={email}
-                  onChange={(e)=>setEmail(e.target.value)}
-              ></input>
+              <div className='user__info-inputs-div'>
+                <input
+                    className='user__info-inputs'
+                    autoComplete = 'off'
+                    name='email'
+                    type='email'
+                    placeholder='Email'
+                    value={email}
+                    onChange={(e)=>setEmail(e.target.value)}
+                ></input>
+                {emailSuccess && <i className="user__info-inputs--success fas fa-check"></i>}
+              </div>
               :
               <div className='user__info-text' name='email'>{profileUser.email}</div>
             }

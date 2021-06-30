@@ -81,11 +81,13 @@ function Message({message}) {
             <div className='message__profpic'>
                 <ProfilePhoto profileUser={message.sender.id===user.id ? user : friend}/>
             </div>
-            <div className={isUser ? 'message__text message__text--user' : 'message__text message__text--friend'} onClick={handleDeleteOpen}>
-                {message.message}
-                {(isUser && message.friendship) &&
-                <DeleteIcon deleteOpen={deleteOpen} setDeleteOpen={setDeleteOpen} message={message}/>
-                }
+            <div className={isUser ? 'message__text-div message__text-div--user' : 'message__text-div message__text-div--friend'} onClick={handleDeleteOpen}>
+                <div className={isUser ? 'message__text message__text--user' : 'message__text message__text--friend'}>
+                    {message.message}
+                    {(isUser && message.friendship) &&
+                    <DeleteIcon deleteOpen={deleteOpen} setDeleteOpen={setDeleteOpen} message={message}/>
+                    }
+                </div>
             </div>
         </div>
     );

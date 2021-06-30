@@ -292,6 +292,7 @@ const Fours = ({socket}) => {
                         <img className='fours__background' src={fours?.picture} alt='fours'></img>
                     </div>
                     <div className='fours__header'>
+                        <h1 className='fours__header-title'>Fours</h1>
                         <button onClick={handleJoinRoom} className='fours__join-room-button'>Create Match</button>
                     </div>
                 </Route>

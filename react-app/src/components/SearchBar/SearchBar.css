@@ -11,7 +11,7 @@
 
 .navbar__search-label{
 	position: absolute;
-	color: var(--navLinkColor);
+	color: var(--searchColor);
 	top: 0;
 	left: 10px;
 	right: 0;

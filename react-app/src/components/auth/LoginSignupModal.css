@@ -33,33 +33,32 @@
 /*** Login Errors ***/
 .auth__form-errors-login{
     position: absolute;
-    right: -205px;
+    top: 0px;
+    right: -212px;
     width: 200px;
+    min-height: 30px;
+    padding: 1px;
+    box-sizing: border-box;
     border: 3px solid var(--lightRed);
     background-color: lightsalmon;
     border-radius: 5px;
-    color: darkred;
+    color: #610000;
     animation: 1s ease 0s 1 fadeIn;
 }
 
-.auth__form-errors-login--credential{
-    top: 123px;
-}
-
-
-.auth__form-errors-login--password{
-    top: 177px;
+.auth__form-errors-text{
+    text-align: center;
 }
 
 .auth__form-errors-arrow{
     position: absolute;
-    top: -0px;
-    left: -12px;
+    top: 0px;
+    left: -13px;
     width: 0;
     height: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-right:10px solid var(--lightRed);
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-right:12px solid var(--lightRed);
 }
 
 /* FORM */
@@ -122,6 +121,11 @@
     font-size: 85%;
 }
 
+.auth__form-input-div{
+    width: 100%;
+    position: relative;
+}
+
 .auth__form-input{
 	height: 30px;
 	border-radius: 5px;
@@ -129,6 +133,8 @@
 	border: 1px solid #cccccc;
 	font-size: 14px;
     padding: 0 5px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .auth__form-profpic-div{

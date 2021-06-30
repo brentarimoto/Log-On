@@ -43,11 +43,28 @@
     max-width: 100%;
 }
 
+.message__text-div--friend{
+
+    padding-right: 30px;
+    padding-left: 1px;
+    padding-bottom: 7.5px;
+    border-radius: 5px 5px 5px 0;
+    color: var(--otherText);
+    justify-self: start;
+}
+
+.message__text-div--user{
+
+    padding-left: 30px;
+    padding-right: 1px;
+    padding-bottom: 7.5px;
+    border-radius: 5px 5px 0 5px;
+    color: var(--userText);
+    justify-self: end;
+}
+
 .message__text--friend{
     padding: 3px 10px;
-    margin-right: 30px;
-    margin-left: 1px;
-    margin-bottom: 7.5px;
     border-radius: 5px 5px 5px 0;
     background-color: var(--otherMessage);
     color: var(--otherText);
@@ -57,9 +74,6 @@
 
 .message__text--user{
     padding: 3px 10px;
-    margin-left: 30px;
-    margin-right: 1px;
-    margin-bottom: 7.5px;
     border-radius: 5px 5px 0 5px;
     background-color: var(--userMessage);
     color: var(--userText);
@@ -67,7 +81,7 @@
     justify-self: end;
 }
 
-.message__text:hover .message__delete{
+.message__text-div:hover .message__delete{
     display: flex;
 }
 

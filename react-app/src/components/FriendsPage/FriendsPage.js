@@ -30,7 +30,6 @@ const FriendsPage = ({socket}) => {
             <div className='friendspage'>
                 <div className='friendspage__header'>
                     <h1>Friends</h1>
-                    {/* <input type='text'></input> */}
                 </div>
                 <div className='friendspage__friends-div'>
                     <div className='friendspage__friends'>
