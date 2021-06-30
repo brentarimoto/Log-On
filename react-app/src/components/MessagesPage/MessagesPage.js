@@ -123,7 +123,7 @@ const FriendChat = ({socket}) => {
 					<div ref={bottomRef}/>
                     {messages &&
                         Object.entries(messages).reverse().map(([id, message])=>(
-                            <Message key={id} message={message}/>
+                            <Message key={id} message={message} friend_id={friend_id}/>
                         ))
                     }
                 </div>

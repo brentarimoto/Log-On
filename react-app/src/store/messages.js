@@ -10,6 +10,8 @@ const SET_MESSAGES = "messages/SET_MESSAGES";
 
 const ADD_MESSAGE = "messages/ADD_MESSAGE";
 
+const EDIT_MESSAGE = "messages/EDIT_MESSAGE";
+
 const REMOVE_MESSAGE = "messages/REMOVE_MESSAGE";
 
 const REMOVE_SPECIFIC_MESSAGE = "messages/REMOVE_SPECIFIC_MESSAGE";

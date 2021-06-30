@@ -18,7 +18,7 @@ import MessagesPage from "./components/MessagesPage/MessagesPage";
 import AboutMe from "./components/AboutMe/AboutMe";
 
 import { authenticate } from "./store/session";
-import { handleNewSocketMessage } from "./store/messages";
+import { addMessage, handleNewSocketMessage } from "./store/messages";
 import { newNotification } from "./store/notifications";
 import { setGameStats } from "./store/gameStats";
 import { addOnline, removeOnline, setOnline } from "./store/online";
@@ -27,6 +27,7 @@ import { addFriend, handleUnFriended } from './store/friends'
 import { useFirstLoad } from "./context/FirstLoad";
 
 import background from "./images/background_image.jpg";
+import { setSocket } from "./store/socket";
 
 
 /*************************** SOCKET VARIABLE ***************************/
@@ -53,6 +54,7 @@ function App() {
       if(!socket){
         socket=io()
         socket.user=user
+        dispatch(setSocket(socket))
       } else{
         socket.user=user
         socket.emit('logon', {room:`User:${user.id}`})
