@@ -28,6 +28,7 @@ import { useFirstLoad } from "./context/FirstLoad";
 
 import background from "./images/background_image.jpg";
 import { setSocket } from "./store/socket";
+import { getUser } from "./store/users";
 
 
 /*************************** SOCKET VARIABLE ***************************/
@@ -100,14 +101,20 @@ function App() {
       })
 
       socket.on("accept_request", ({sender_id, friendship}) => {
-        dispatch(addFriend(sender_id, friendship))
-        dispatch(newFriendUpdate(sender_id))
-        socket.emit('online')
+        (async()=>{
+          await dispatch(addFriend(sender_id, friendship))
+          await dispatch(newFriendUpdate(sender_id))
+          socket.emit('online')
+        })()
       })
 
       socket.on("unfriend", ({sender_id}) => {
-        dispatch(handleUnFriended(sender_id))
-        socket.emit('online')
+        (async()=>{
+          await dispatch(handleUnFriended(sender_id))
+          await dispatch(removeOnline(sender_id))
+          await dispatch(getUser(sender_id))
+          socket.emit('online')
+        })()
       })
 
       socket.on("invitations", ({invitation}) => {

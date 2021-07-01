@@ -149,6 +149,10 @@ function Message({message, friend_id}) {
                     {optionsOpen &&
                     <Options setOptionsOpen={setOptionsOpen} setEditOn={setEditOn} message={message} setCurrentMessage={setCurrentMessage}/>}
                 </div>
+                {message.edited &&
+                <div className={isUser ? 'message__text-edited message__text-edited--user' : 'message__text-edited message__text-edited--friend'}>
+                    Edited
+                </div>}
             </div>
         </div>
     );

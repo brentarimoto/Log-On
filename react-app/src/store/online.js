@@ -27,7 +27,6 @@ export const removeOnline= (friend_id) => ({
     friend_id,
 });
 
-
 export const resetOnline = () => ({
     type: RESET_ONLINE
 });

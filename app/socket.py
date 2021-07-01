@@ -132,6 +132,7 @@ def message(data):
 def edit_message(data):
     message = Message.query.get(data['id'])
     message.message = data['message']
+    message.edited=True
     db.session.commit()
 
     emit("message",{'sender_id':data['sender_id'],'receiver_id':data['receiver_id'],'message':message.to_dict()}, room=data['room'])
@@ -140,7 +141,7 @@ def edit_message(data):
 #################### REQUESTS ####################
 @socketio.on("friend_request")
 def friend_request(data):
-    text=f'Invited sent you a Friend Request'
+    text=f'Sent you a Friend Request'
     emit("friend_request",{'friend_request':{'sender':data['sender'],'request':True, 'text':text, 'hash': f'FriendRequest:{data["sender"]["id"]}'}}, room=data['room'])
 
 @socketio.on("accept_request")
