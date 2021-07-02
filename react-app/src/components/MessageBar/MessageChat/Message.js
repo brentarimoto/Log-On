@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteMessage } from "../../../store/messages";
+import messagesReducer, { addMessage, deleteMessage } from "../../../store/messages";
+import messageHash from "../../../util/messageHash";
 import ProfilePhoto from "../../ProfilePhoto/ProfilePhoto";
 
 
@@ -13,7 +14,7 @@ import './Message.css'
 
 /*************************** HELPER COMPONENT ***************************/
 
-function DeleteIcon({deleteOpen,setDeleteOpen, message}){
+function DeleteIcon({message}){
     const dispatch = useDispatch()
     const user = useSelector(state=>state.session.user)
 
@@ -24,22 +25,6 @@ function DeleteIcon({deleteOpen,setDeleteOpen, message}){
     }
 
     const [deleteConfirmation, setDeleteConfirmation] = useState(false)
-
-
-    useEffect(() => {
-        document.addEventListener("mousedown", handleClick);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClick);
-        };
-    }, []);
-
-    const handleClick = (e)=>{
-        if(!/^message__delete-icon/.test(e.target.className)){
-            setDeleteOpen(false)
-            setDeleteConfirmation(false)
-        }
-    }
 
     const handleConfirmOpen = ()=>{
         setDeleteConfirmation(true)
@@ -52,7 +37,7 @@ function DeleteIcon({deleteOpen,setDeleteOpen, message}){
     }
 
     return(
-        <div className={`message__delete ${deleteConfirmation && 'message__delete-confirmation'}`} style={{display: deleteOpen && 'flex'}} onClick={deleteConfirmation ? handleDelete : handleConfirmOpen}>
+        <div className={`message__delete ${deleteConfirmation && 'message__delete-confirmation'}`} onClick={deleteConfirmation ? handleDelete : handleConfirmOpen}>
             {deleteConfirmation ?
             <i className="message__delete-icon fas fa-minus"></i> :
             <i className="message__delete-icon-confirmation fas fa-trash-alt"></i>}
@@ -61,18 +46,84 @@ function DeleteIcon({deleteOpen,setDeleteOpen, message}){
 
 }
 
+function EditIcon({message, setEditOn}){
+    const dispatch = useDispatch()
+    const user = useSelector(state=>state.session.user)
+
+    let friend_id;
+
+    if (message.friendship){
+        friend_id = message.friendship.accept_id!==user.id ? message.friendship.accept_id : message.friendship.request_id
+    }
+
+    const handleEditOpen = (e)=>{
+        setEditOn(true)
+    }
+
+    return(
+        <div className={`message__edit`} onClick={handleEditOpen}>
+            <i className="message__edit-icon fas fa-edit"></i>
+        </div>
+    )
+
+}
+
+function Options({setOptionsOpen, setEditOn, setCurrentMessage, message}){
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClick);
+        };
+    }, []);
+
+    const handleClick = (e)=>{
+        if(!/^message__delete-icon/.test(e.target.className) && !/^message__edit/.test(e.target.className) && !/^message__input/.test(e.target.className)){
+            setOptionsOpen(false)
+            setEditOn(false)
+            setCurrentMessage(message.message)
+        }
+    }
+
+    return(
+        <div className='message__options'>
+            <DeleteIcon message={message}/>
+            <EditIcon message={message} setEditOn={setEditOn}/>
+        </div>
+    )
+}
+
 /*************************** COMPONENTS ***************************/
-function Message({message}) {
+function Message({message, friend_id}) {
+    const dispatch = useDispatch()
+
+
     const user = useSelector(state=>state.session.user)
     const friends = useSelector(state=>state.friends)
-    const friend = friends[message.sender.id]?.accepter || friends[message.sender.id]?.requester
+    const socket = useSelector(state=>state.socket)
+    const friend = friends[message.sender_id]?.accepter || friends[message.sender_id]?.requester
     const isUser = message.sender.id===user.id
+    // const inputRef = useRef(null)
 
-    const [deleteOpen, setDeleteOpen] = useState(false)
+    const [optionsOpen, setOptionsOpen] = useState(false)
+    const [currentMessage, setCurrentMessage] = useState(message.message)
+    const [editOn, setEditOn] = useState(false)
 
-    const handleDeleteOpen = (e)=>{
+    const handleOptionsOpen = (e)=>{
         if(!e.target.className.includes('message__delete')){
-            setDeleteOpen(prev=>!prev)
+            setOptionsOpen(prev=>!prev)
+        }
+    }
+
+    const onEnterPress =(e)=>{
+        if(e.key==='Enter'){
+            e.preventDefault()
+            if(currentMessage.length>0 && currentMessage!==message.message){
+                socket.emit("edit_message", {sender_id:user.id, receiver_id:parseInt(friend_id), id:message.id, message:currentMessage, room:messageHash(parseInt(friend_id), user.id)})
+                setEditOn(false)
+                setOptionsOpen(false)
+            }
         }
     }
 
@@ -81,13 +132,27 @@ function Message({message}) {
             <div className='message__profpic'>
                 <ProfilePhoto profileUser={message.sender.id===user.id ? user : friend}/>
             </div>
-            <div className={isUser ? 'message__text-div message__text-div--user' : 'message__text-div message__text-div--friend'} onClick={handleDeleteOpen}>
-                <div className={isUser ? 'message__text message__text--user' : 'message__text message__text--friend'}>
-                    {message.message}
+            <div className={isUser ? 'message__text-div message__text-div--user' : 'message__text-div message__text-div--friend'} style={editOn ? {width:'100%'}:{}}>
+                <div className={isUser ? 'message__text message__text--user' : 'message__text message__text--friend'} style={editOn ? {display:'flex', padding: '5px'}:{}}>
+                    {editOn &&
+                    <textarea
+                        // ref={inputRef}
+                        className='message__input'
+                        value={currentMessage}
+                        onChange={(e)=>setCurrentMessage(e.target.value)}
+                        onKeyDown={onEnterPress}
+                    ></textarea>}
+                    {!editOn && message.message}
                     {(isUser && message.friendship) &&
-                    <DeleteIcon deleteOpen={deleteOpen} setDeleteOpen={setDeleteOpen} message={message}/>
+                    <div className="message__options-button" onClick={handleOptionsOpen}><i className="fas fa-ellipsis-v"></i></div>
                     }
+                    {optionsOpen &&
+                    <Options setOptionsOpen={setOptionsOpen} setEditOn={setEditOn} message={message} setCurrentMessage={setCurrentMessage}/>}
                 </div>
+                {message.edited &&
+                <div className={isUser ? 'message__text-edited message__text-edited--user' : 'message__text-edited message__text-edited--friend'}>
+                    Edited
+                </div>}
             </div>
         </div>
     );

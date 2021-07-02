@@ -11,7 +11,7 @@ import LogoutButton from "../auth/LogoutButton";
 
 import { acceptRequest, unFriend } from "../../store/friends";
 import { sendFriendRequest, } from "../../store/users";
-import { popActive, updateActive } from "../../store/activeMessages";
+import { popActive } from "../../store/activeMessages";
 import { removeMessageNotification } from "../../store/notifications";
 import { removeMessage } from "../../store/messages";
 import { newFriendUpdate, unFriendUpdate } from "../../store/friendUpdate";
@@ -21,6 +21,7 @@ import { editUser } from '../../store/session'
 /*************************** CSS ***************************/
 import './User.css'
 import 'swiper/swiper-bundle.css';
+import { removeOnline } from "../../store/online";
 
 
 /*************************** HELPER COMPONENTS ***************************/
@@ -46,20 +47,22 @@ function FriendButtons({setShowModal, profileUser, unfriendOpen, setUnfriendOpen
   }
 
   const handleUnfriend=()=>{
-    if(active.find(el=>el.user_id===profileUser.id)){
-      dispatch(popActive(profileUser.id))
-    }
-    if(notifications[profileUser.id]){
-      dispatch(removeMessageNotification(profileUser.id))
-    }
-    if(messages[profileUser.id]){
-      dispatch(removeMessage(profileUser.id))
-    }
-    dispatch(unFriend(friends[profileUser.id].id))
-    dispatch(unFriendUpdate(profileUser.id))
-    socket.emit('unfriend',{sender_id:user.id, friend_id:profileUser.id, friendship_id: friends[profileUser.id].id, room:`User:${profileUser.id}`})
-    setUnfriendOpen(false)
-    setShowModal(false)
+    (async()=>{
+      setShowModal(false)
+      if(active.find(el=>el.user_id===profileUser.id)){
+        await dispatch(popActive(profileUser.id))
+      }
+      if(notifications[profileUser.id]){
+        await dispatch(removeMessageNotification(profileUser.id))
+      }
+      if(messages[profileUser.id]){
+        await dispatch(removeMessage(profileUser.id))
+      }
+      socket.emit('unfriend',{sender_id:user.id, friend_id:profileUser.id, friendship_id: friends[profileUser.id].id, room:`User:${profileUser.id}`})
+      await dispatch(unFriend(friends[profileUser.id].id))
+      await dispatch(unFriendUpdate(profileUser.id))
+      await dispatch(removeOnline(profileUser.id))
+    })()
   }
 
   const handleOpenMessage = ()=>{
@@ -103,14 +106,6 @@ function NotFriendButtons({profileUser, user, socket}){
     socket.emit('online')
   }
 
-  // const handleDecline=()=>{
-  //   dispatch(declineRequest(profileUser.id))
-  // }
-
-  // const handleCancelRequest=()=>{
-  //   dispatch(cancelRequest(profileUser.friends_accepted[user.id].id))
-  // }
-
   const handleSendRequest=()=>{
     dispatch(sendFriendRequest(profileUser.id))
     socket.emit('friend_request',{sender:user, room:`User:${profileUser.id}`})
@@ -124,11 +119,6 @@ function NotFriendButtons({profileUser, user, socket}){
           <i className="fas fa-user-plus user_info-icon"></i>
           Accept Request
         </button>
-        {/* {!profileUser.friends_requested[user.id].declined &&
-          <button className='user__info-button' onClick={handleDecline}>
-            <i className="fas fa-user-times user_info-icon"></i>
-            Decline
-          </button>} */}
       </>
     )
   } else if (profileUser.friends_accepted[user.id]){
@@ -138,10 +128,6 @@ function NotFriendButtons({profileUser, user, socket}){
           <i className="fas fa-user-check user_info-icon"></i>
           Friend Request Sent
         </button>
-        {/* <button className='user__info-button'  onClick={handleCancelRequest}>
-          <i className="fas fa-user-times user_info-icon"></i>
-          Cancel Request
-        </button> */}
       </>
     )
   }else {
@@ -156,7 +142,7 @@ function NotFriendButtons({profileUser, user, socket}){
 
 
 /*************************** COMPONENT ***************************/
-function User({setShowModal,profileUserId, friend_id, socket}) {
+function User({setShowModal,profileUserId, friend_id}) {
 
   const dispatch = useDispatch()
 
@@ -164,6 +150,7 @@ function User({setShowModal,profileUserId, friend_id, socket}) {
   const friends = useSelector(state=>state.friends)
   const users= useSelector(state=>state.users)
   const gameStats = useSelector(state=>state.gameStats)
+  const socket = useSelector(state=>state.socket)
 
   const isUser = user.id===profileUserId
 

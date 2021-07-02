@@ -14,6 +14,7 @@ import foursReducer from './fours'
 import gamesStatsReducer from './gameStats'
 import onlineReducer from './online'
 import messagepageReducer from './messagepage'
+import socketReducer from "./socket";
 
 const rootReducer = combineReducers({
     session,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
     gameStats:gamesStatsReducer,
     online:onlineReducer,
     messagepage: messagepageReducer,
+    socket: socketReducer,
 });
 
 

@@ -11,7 +11,8 @@ import { joinRoom } from '../../../store/rooms';
 
 /*************************** CSS ***************************/
 import './Notifications.css'
-import UserNotificationModal from '../../User/UserNotificationModal';
+import { acceptRequest } from '../../../store/friends';
+import { newFriendUpdate } from '../../../store/friendUpdate';
 
 /*************************** INNER COMPONENTS ***************************/
 const NoNotificationItem = ()=>{
@@ -25,6 +26,8 @@ const NoNotificationItem = ()=>{
 const NotificationItem = ({notification,setNotificationOpen, socket})=>{
     const dispatch = useDispatch()
     const location = useLocation()
+
+    const user= useSelector(state=>state.session.user)
 
     const handleNotificationClick=(e)=>{
         if(e.target.className.includes('delete')){
@@ -41,6 +44,17 @@ const NotificationItem = ({notification,setNotificationOpen, socket})=>{
         setNotificationOpen(false)
     }
 
+    const handleAccept= ()=>{
+        (async()=>{
+            await dispatch(acceptRequest(notification.sender.id))
+            await dispatch(newFriendUpdate(notification.sender.id))
+            socket.emit('accept_request', {sender_id:user.id, friend_id:notification.sender.id, room:`User:${notification.sender.id}`})
+            socket.emit('online')
+            dispatch(deleteNotification(notification.hash))
+            setNotificationOpen(false)
+        })()
+    }
+
     let link;
 
     if (notification.game){
@@ -51,7 +65,24 @@ const NotificationItem = ({notification,setNotificationOpen, socket})=>{
 
     if (notification.request){
         return(
-            <UserNotificationModal notification={notification} setNotificationOpen={setNotificationOpen} handleDeleteNotification={handleDeleteNotification} socket={socket}/>
+            <div className='notification__list-item'>
+                 <div className='notification__list-item-profpic'>
+                    <ProfilePhoto profileUser={notification.sender}/>
+                </div>
+                <div className='notification__list-item-name'>
+                    {notification.sender.username}
+                </div>
+                <div className='notification__list-item-text'>
+                    {notification.text}
+                    <button className='notification__list-item-accept' onClick={handleAccept}>
+                        <i className="fas fa-user-plus user_info-icon"></i>
+                        Accept Request
+                    </button>
+                </div>
+                <div className='notification__list-item-delete' onClick={handleDeleteNotification}>
+                    <i className="notification__list-item-delete-icon fas fa-trash"></i>
+                </div>
+            </div>
         )
     }
 
@@ -118,10 +149,11 @@ const NotificationList = ({setNotificationOpen, socket}) =>{
 
 
 /*************************** COMPONENTS ***************************/
-const Notifications = ({notification, socket}) => {
+const Notifications = ({notification}) => {
     const dispatch = useDispatch()
 
     const notifications = useSelector(state=>state.notifications.notifications)
+    const socket = useSelector(state=>state.socket)
 
     const [notificationOpen, setNotificationOpen] = useState(false)
 

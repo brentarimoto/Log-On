@@ -98,7 +98,7 @@ function MessageChat({messages, userId, socket}) {
 					<div ref={bottomRef}/>
                     {Object.keys(messages).length>0 &&
                         Object.entries(messages).reverse().map(([id, message])=>(
-                            <Message key={id} message={message}/>
+                            <Message key={id} message={message} friend_id={userId}/>
                         ))
                     }
                 </div>

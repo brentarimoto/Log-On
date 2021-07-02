@@ -15,6 +15,7 @@ class Message(db.Model):
   friend_id = db.Column(db.Integer, db.ForeignKey("friends.id"), nullable=False)
   message = db.Column(db.Text, nullable = False)
   created_at=db.Column(db.DateTime(timezone=True), default=datetime.now())
+  edited=db.Column(db.Boolean, nullable = False, default=False)
 
   sender = db.relationship(
     "User",
@@ -33,6 +34,7 @@ class Message(db.Model):
       "friend_id": self.friend_id,
       'message' : self.message,
       'created_at' : str(self.created_at),
+      'edited': self.edited,
       'sender' : self.sender.to_dict_basic(),
       'friendship' :self.friendship.to_dict_basic(),
     }
@@ -44,4 +46,5 @@ class Message(db.Model):
       "friend_id": self.friend_id,
       'message' : self.message,
       'created_at' : str(self.created_at),
+      'edited': self.edited,
     }

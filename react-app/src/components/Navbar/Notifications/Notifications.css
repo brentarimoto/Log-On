@@ -120,6 +120,32 @@
     font-size: 70%;
 }
 
+
+/* Accept */
+.notification__list-item-accept{
+	border-radius: 3px;
+    background-color: var(--button);
+	color: #fff;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	width: 100px;
+	height: 35px;
+    font-size: 75%;
+	border-radius: 5px;
+	outline: 0;
+	border: none;
+	transition: all 1s;
+	text-align: center;
+    display: flex;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/* Delete */
 .notification__list-item-delete{
     grid-area: trash;
     display: flex;

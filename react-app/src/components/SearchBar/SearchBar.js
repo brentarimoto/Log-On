@@ -39,11 +39,13 @@ const SearchBar = ({socket}) => {
             autoComplete='off'
             ></input>
             <label htmlFor='navSearch' className="navbar__search-label">Search</label>
+            <div className='navbar__search-background'>
+
+            </div>
             {searchResults.length>0 && <div className='navbar__search-list'>
                 {searchResults.map(user=>(
                     <UserSearchModal key={user.id} user={user} setSearch={setSearch} setSearchResults={setSearchResults} classname='navbar' socket={socket}/>
                 ))}
-
             </div>}
         </form>
     );

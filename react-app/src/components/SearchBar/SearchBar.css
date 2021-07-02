@@ -9,6 +9,20 @@
 	padding-left: 10px;
 }
 
+.navbar__search-background{
+	position: absolute;
+	top: -2px;
+	bottom: -2px;
+	right: -5px;
+	left: 3px;
+	background-color: var(--friendsListBackground);
+	border-radius: 5px;
+	border: 3px solid var(--faintBorder);
+	width: 55px;
+	z-index: -1;
+	transition: .2s;
+}
+
 .navbar__search-label{
 	position: absolute;
 	color: var(--searchColor);
@@ -32,27 +46,39 @@
 	outline: none;
 	height: 24px;
 	border: none;
-	border-bottom: 1px solid var(--navLinkColor);
 	background-color: transparent;
-	color: whitesmoke;
+	color: var(--searchColor);
 	font-size: 100%;
+	transition: .2s;
+}
+
+.navbar__search-input:focus~.navbar__search-background{
+	width: 100%;
+	top: -10px;
 	transition: .2s;
 }
 
 .navbar__search-input:focus,
 .navbar__search-active{
 	width: 100%;
-	border-bottom: 1px solid var(--searchActiveColor);
 	transition: .2s;
 }
 
 
-.navbar__search-input:focus+.navbar__search-label,
-.navbar__search-active+.navbar__search-label{
+.navbar__search-input:focus~.navbar__search-label,
+.navbar__search-active~.navbar__search-label{
 	color: var(--searchActiveColor);
 	font-size: 65%;
 	transform: translateY(-15px);
 	transition: .3s;
+}
+
+
+
+.navbar__search-active~.navbar__search-background{
+	width: 100%;
+	top: -10px;
+	transition: .2s;
 }
 
 .navbar__search-list{

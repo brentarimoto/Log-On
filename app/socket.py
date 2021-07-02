@@ -101,6 +101,7 @@ def on_join():
     emit('online', {'friends':online_friends}, room=f'User:{sender_id}')
 
 
+#################### ROOMS ####################
 @socketio.on("join")
 def on_join(data):
     room=data['room']
@@ -113,6 +114,7 @@ def on_leave(data):
     leave_room(room)
 
 
+#################### MESSAGING ####################
 @socketio.on("message")
 def message(data):
     '''
@@ -126,9 +128,20 @@ def message(data):
 
     emit("message",{'sender_id':data['sender_id'],'receiver_id':data['receiver_id'],'message':message.to_dict()}, room=data['room'])
 
+@socketio.on("edit_message")
+def edit_message(data):
+    message = Message.query.get(data['id'])
+    message.message = data['message']
+    message.edited=True
+    db.session.commit()
+
+    emit("message",{'sender_id':data['sender_id'],'receiver_id':data['receiver_id'],'message':message.to_dict()}, room=data['room'])
+
+
+#################### REQUESTS ####################
 @socketio.on("friend_request")
 def friend_request(data):
-    text=f'Invited sent you a Friend Request'
+    text=f'Sent you a Friend Request'
     emit("friend_request",{'friend_request':{'sender':data['sender'],'request':True, 'text':text, 'hash': f'FriendRequest:{data["sender"]["id"]}'}}, room=data['room'])
 
 @socketio.on("accept_request")
@@ -147,6 +160,8 @@ def unfriend(data):
     print('***********UNFRIEND*************')
     emit("unfriend",{'sender_id':data['sender_id']}, room=data['room'])
 
+
+#################### GAMES ####################
 
 @socketio.on("invitations")
 def invitations(data):
