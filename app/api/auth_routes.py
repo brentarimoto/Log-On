@@ -175,7 +175,7 @@ def edit_user(id):
         if form.data['lastname'] and form.data['lastname']!= user.lastname:
             user.lastname=form.data['lastname']
         if url and url!= user.profile_photo:
-            if 'amazonaws' in user.profile_photo:
+            if user.profile_photo and ('amazonaws' in user.profile_photo):
                 key=user.profile_photo.split('/')[-1]
                 res = delete_file_from_s3(key)
                 if 'success' not in res:
